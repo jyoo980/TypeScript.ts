@@ -1,0 +1,14 @@
+# All credits to CPSC 310
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+
+node_modules/
+coverage/
+src/*.js
+src/*.map
+src/**/*.js
+src/**/*.map
+test/*.js
+test/*.map
+.DS_Store
+.env

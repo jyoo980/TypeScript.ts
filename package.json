@@ -1,0 +1,12 @@
+{
+  "name": "ts-dsl",
+  "version": "1.0.0",
+  "description": "a DSL for TypeScript project generation",
+  "main": "index.js",
+  "repository": "https://github.com/jyoo980/ts-dsl",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^12.7.8",
+    "fs-extra": "^8.1.0"
+  }
+}
