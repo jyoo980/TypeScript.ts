@@ -23,15 +23,6 @@ export class FileReadError extends Error {
 
 export default class FileSystem {
 
-    /**
-     * The directory to which all files should be written to.
-     */
-    private readonly rootDir: string;
-
-    constructor(rootDir: string) {
-        this.rootDir = rootDir;
-    }
-
     // TODO: implement basic file IO methods.
 
     /**
@@ -45,6 +36,7 @@ export default class FileSystem {
     public async generateFile(fileName: string, path: string, content: string): Promise<string> {
         const fullPath: string = this.createFullPath(fileName, path);
         try {
+            await fs.ensureDir(path);
             await fs.writeFile(fullPath, content);
             return fullPath;
         } catch (err) {
@@ -52,11 +44,9 @@ export default class FileSystem {
         }
     }
 
-    public getRootDir(): string {
-        return this.rootDir;
-    }
+    // TODO: create delete method.
 
     private createFullPath(fileName: string, path: string): string {
-        return `${this.rootDir}/${path}/${fileName}.ts`;
+        return `${path}/${fileName}.ts`;
     }
 }
