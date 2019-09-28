@@ -23,8 +23,6 @@ export class FileReadError extends Error {
 
 export default class FileSystem {
 
-    // TODO: implement basic file IO methods.
-
     /**
      *
      * Resolves with the full path to the file written, else, rejects with a FileWriteError
@@ -40,11 +38,29 @@ export default class FileSystem {
             await fs.writeFile(fullPath, content);
             return fullPath;
         } catch (err) {
-            throw new FileWriteError(`FileSystem::file generation of ${fullPath} failed with error: ${err}`);
+            const msg: string = `FileSystem::file generation of ${fullPath} failed with error: ${err}`;
+            console.warn(msg);
+            throw new FileWriteError(msg);
         }
     }
 
-    // TODO: create delete method.
+    /**
+     * Resolves with the full path to the deleted file, else, rejects with a FileDeleteError
+     *
+     * @param fileName  of the TypeScript file to be deleted, does not need to end in .ts
+     * @param path      path to the directory in which the file exists
+     */
+    public async deleteFile(fileName: string, path: string): Promise<string> {
+        const fullPath: string = this.createFullPath(fileName, path);
+        try {
+            await fs.unlink(fullPath);
+            return fullPath;
+        } catch (err) {
+            const msg: string = `FileSystem::deleting file: ${fullPath} failed with error: ${err}`;
+            console.warn(msg);
+            throw new FileDeleteError(msg);
+        }
+    }
 
     private createFullPath(fileName: string, path: string): string {
         return `${path}/${fileName}.ts`;

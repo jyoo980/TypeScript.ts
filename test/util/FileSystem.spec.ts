@@ -1,5 +1,5 @@
 import * as nodeFs from "fs-extra";
-import FileSystem from "../../src/util/FileSystem";
+import FileSystem, {FileDeleteError} from "../../src/util/FileSystem";
 import { expect } from "chai";
 
 describe("FileSystem write/delete tests", () => {
@@ -17,7 +17,7 @@ describe("FileSystem write/delete tests", () => {
             const deleteOps: Array<Promise<void>> = createdFiles.map((toDelete: string) => nodeFs.unlink(toDelete));
             await Promise.all(deleteOps);
         } catch (err) {
-            // TODO: make logging class
+            console.warn(`FileSystemSpec::cleanup failed with error: ${err}`);
         }
     });
 
@@ -44,6 +44,30 @@ describe("FileSystem write/delete tests", () => {
         } finally {
             expect(result).to.equal("./codegen/test/src/InsightFacade.ts");
             createdFiles.push(result);
+        }
+    });
+
+    it("should successfully delete a file (one level deep, e.g. codegen/test/Bar.ts", async () => {
+        const file: string = "Bar";
+        let result: string;
+        try {
+            await fs.generateFile(file, testDir, "trust the natural recursion");
+            await fs.deleteFile(file, testDir);
+        } catch (err) {
+            expect(result).to.equal("./codegen/test/Bar.ts");
+        }
+    });
+
+    it("should successfully delete a file (> 1 level deep, e.g. codegen/test/src/Alice.ts", async () => {
+        const file: string = "Alice";
+        let result: string;
+        try {
+            await fs.generateFile(file, "./codegen/test/src", "this is not a test file");
+            result = await fs.deleteFile(file, "./codegen/test/src");
+        } catch (err) {
+            result = err;
+        } finally {
+            expect(result).to.equal("./codegen/test/src/Alice.ts");
         }
     });
 });
