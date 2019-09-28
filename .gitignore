@@ -6,11 +6,12 @@ node_modules/
 coverage/
 src/*.js
 src/*.map
-src/**/*.js
-src/**/*.map
-test/*.js
-test/**/*.js
+src/**/**.js
+src/**/**.map
+test/**.js
+test/**/**.js*
 test/**/**.spec.js
+test/**/*.spec.js.map
 test/*.map
 .DS_Store
 .env

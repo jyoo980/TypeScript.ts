@@ -14,13 +14,6 @@ export class FileDeleteError extends Error {
     }
 }
 
-export class FileReadError extends Error {
-    constructor(...args: any[]) {
-        super(...args);
-        Error.captureStackTrace(this, FileReadError);
-    }
-}
-
 export default class FileSystem {
 
     /**
