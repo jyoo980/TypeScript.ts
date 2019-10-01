@@ -1,3 +1,6 @@
+import * as ts from "typescript";
+import { TypeNode } from "typescript";
+
 /**
  * Represents the types we have available in our language. It acts as a basic map from a type name
  * to its "type", i.e. is it a primitive, class, interface?
@@ -6,21 +9,22 @@
  */
 export class TypeTable {
 
-    table: Map<String, String>;
+    // TODO: consider whether this needs to be a singleton
+    table: Map<String, TypeNode>;
 
     constructor() {
         this.table = new Map();
-        this.table.set("number", "primitive");
-        this.table.set("boolean", "primitive");
-        this.table.set("string", "primitive");
+        this.table.set("number", ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword));
+        this.table.set("boolean", ts.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword));
+        this.table.set("string", ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword));
     }
 
     public addClass(name: string): void {
-        this.table.set(name, "class");
+        this.table.set(name, ts.createTypeReferenceNode(name, undefined));
     }
 
     public addInterface(name: string): void {
-        this.table.set(name, "interface");
+        this.table.set(name, ts.createTypeReferenceNode(name, undefined));
     }
 
     public isValidType(candidate: string): boolean {
