@@ -6,7 +6,7 @@ describe("TypeTable tests", () => {
     let table: TypeTable;
 
     before(() => {
-        table = new TypeTable();
+        table = TypeTable.getInstance();
     });
 
     it("should contain TypeScript's primitive types", () => {

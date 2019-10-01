@@ -4,7 +4,7 @@
  * e.g. [foo string, bar boolean, baz IInsightFacade]
  */
 export class VarList {
-    nameToType: Map<String, String>;
+    nameToType: Map<string, string>;
 
     constructor() {
         this.nameToType = new Map();
