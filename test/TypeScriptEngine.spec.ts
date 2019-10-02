@@ -3,6 +3,7 @@ import { expect } from "chai";
 import TypeScriptEngine from "../src/codegen/TypeScriptEngine";
 import {VarList} from "../src/ast/VarList";
 import { ParameterDeclaration, Modifier, SyntaxKind, FunctionDeclaration } from "typescript";
+import {TypeTable} from "../src/ast/symbols/TypeTable";
 
 describe("TypeScriptEngine tests", () => {
 
@@ -56,6 +57,41 @@ describe("TypeScriptEngine tests", () => {
             /* typeParameters */ undefined,
             [],
             ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
+            undefined
+        ));
+    });
+
+    it("should create a parameterized function declaration", () => {
+        // public makeParamDecl(name: string, type: string): ParameterDecl;
+        const funName: string = "makeParamDecl";
+        const varList: VarList = new VarList();
+        varList.addPair("name", "string");
+        varList.addPair("type", "string");
+        TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
+        const result: FunctionDeclaration = engine.createFun(funName, ["public"], varList, "ParameterDecl");
+        expect(result).to.deep.equal(ts.createFunctionDeclaration(
+            /* decorators */ undefined,
+            /* modifiers */ [ts.createModifier(ts.SyntaxKind.PublicKeyword)],
+            /* asteriskToken */ undefined,
+            funName,
+            /* typeParameters */ undefined,
+            [
+                ts.createParameter(
+                /* decorators */ undefined,
+                /* modifiers */ undefined,
+                /* dotDotToken */ undefined,
+                "name",
+                /* questionToken */ undefined,
+                    ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
+                ts.createParameter(
+                    /* decorators */ undefined,
+                    /* modifiers */ undefined,
+                    /* dotDotToken */ undefined,
+                    "type",
+                    /* questionToken */ undefined,
+                    ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+                )],
+            ts.createTypeReferenceNode("ParameterDecl", undefined),
             undefined
         ));
     });

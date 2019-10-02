@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import {Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, FunctionDeclaration} from "typescript";
+import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 
@@ -52,13 +52,19 @@ export default class TypeScriptEngine {
     }
 
     private makeModifierNodes(modifiers: string[]): Modifier[] {
-        // TODO: add more cases as we support abstract, async, etc...
-        return modifiers.map((modifierString) => {
-            switch (modifierString) {
-                case "public": return ts.createModifier(SyntaxKind.PublicKeyword);
-                case "protected": return ts.createModifier(SyntaxKind.ProtectedKeyword);
-                case "private": return ts.createModifier(SyntaxKind.PrivateKeyword);
-            }
+        return modifiers.map((modifierAsString) => {
+            return ts.createModifier(this.mapToSyntaxKind(modifierAsString));
         });
+    }
+
+    private mapToSyntaxKind(modifierString: string) {
+        switch (modifierString) {
+            case "public": return SyntaxKind.PublicKeyword;
+            case "protected": return SyntaxKind.ProtectedKeyword;
+            case "private": return SyntaxKind.PrivateKeyword;
+            case "async": return SyntaxKind.AsyncKeyword;
+            case "static": return SyntaxKind.StaticKeyword;
+            case "abstract": return SyntaxKind.AbstractKeyword;
+        }
     }
 }
