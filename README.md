@@ -6,6 +6,11 @@ This is a repository for CPSC 410: Advanced Software Engineering. The TS-DSL sho
 * yarn (>= v1.17.3)
 * tsc (>= 3.6.3)
 
+## Working with ts-dsl
+
+* To build: `yarn build`
+* To execute all tests: `yarn test`
+
 ## Contributors
 
 * [Sam Veloso](https://github.com/scveloso)
