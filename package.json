@@ -12,7 +12,8 @@
     "@types/node": "^12.7.8"
   },
   "scripts": {
-    "build": "tsc src/**/*.ts test/**/*.ts"
+    "build": "tsc src/**/*.ts test/**/*.ts",
+    "test": "yarn build && mocha --require ts-node/register"
   },
   "devDependencies": {
     "chai": "^4.2.0",
