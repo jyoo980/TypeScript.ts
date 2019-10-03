@@ -1,13 +1,20 @@
 /**
  * Represents the dependencies a TypeScript project may have. Development dependencies by default.
  *
- * e.g. modules [@types/chai: 4.0.8, chai: 4.1.2, mocha: 4.1.0]
+ * e.g. modules ["@types/chai: 4.0.8", "chai: 4.1.2", "mocha: 4.1.0"]
  */
-export class ModuleDecl {
+import {AstNode} from "./AstNode";
 
-    modules: string[] = [];
+export class ModuleDecl extends AstNode {
 
-    constructor(modules: string[]) {
-        this.modules = modules;
+    modules: string[];
+
+    public parse(): any {
+        // TODO: implement the rest.
+        this.modules = [];
+    }
+
+    public evaluate(): any {
+        // TODO: implement this.
     }
 }

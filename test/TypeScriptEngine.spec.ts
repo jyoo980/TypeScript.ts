@@ -15,6 +15,7 @@ describe("TypeScriptEngine tests", () => {
 
     it("should convert a VarList to a ParamDeclaration[]", () => {
         const vars: VarList = new VarList();
+        vars.nameToType = new Map();
         const expected: ParameterDeclaration[] = [
             ts.createParameter(
             /* decorators */ undefined,
@@ -48,7 +49,9 @@ describe("TypeScriptEngine tests", () => {
 
     it("should create a simple function declaration - foo(): number", () => {
         const funName: string = "foo";
-        const result: FunctionDeclaration = engine.createFun(funName, [], new VarList(), "number");
+        const emptyVarList: VarList = new VarList();
+        emptyVarList.nameToType = new Map();
+        const result: FunctionDeclaration = engine.createFun(funName, [], emptyVarList, "number");
         expect(result).to.deep.equal(ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ [],
@@ -65,6 +68,7 @@ describe("TypeScriptEngine tests", () => {
         // public makeParamDecl(name: string, type: string): ParameterDecl;
         const funName: string = "makeParamDecl";
         const varList: VarList = new VarList();
+        varList.nameToType = new Map();
         varList.addPair("name", "string");
         varList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test

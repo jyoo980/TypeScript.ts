@@ -1,24 +1,25 @@
 import {VarList} from "./VarList";
+import {AstNode} from "./AstNode";
 
 /**
  * Represents a field declaration in the TypeScript DSL.
  *
- * e.g. fields [bar string, baz boolean] as public
+ * e.g. fields modifier [string bar, boolean baz]
+ *
  */
-export class FieldDecl {
+export class FieldDecl extends AstNode {
 
     fields: VarList;
-    visibility: string;
+    modifier: string;
+    generateGetter: boolean;
+    generateSetter: boolean;
 
-    constructor() {
+    public parse(): any {
+        // TODO: implement the rest.
         this.fields = new VarList();
     }
 
-    public addField(fieldName: string, fieldType: string): void {
-        this.fields.addPair(fieldName, fieldType);
-    }
-
-    public setVisibility(modifier: string): void {
-        this.visibility = modifier;
+    public evaluate(): any {
+        // TODO: implement this.
     }
 }
