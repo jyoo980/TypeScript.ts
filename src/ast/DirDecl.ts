@@ -10,7 +10,7 @@ export class DirDecl extends Content {
     directory: string;
 
     // The contents of this directory
-    components: Content[];
+    contents: Content[];
 
     public parse(): any {
         // TODO: implement this.
