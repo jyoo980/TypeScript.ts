@@ -21,4 +21,16 @@ describe("TypeTable tests", () => {
         table.addInterface(insightFacadeInterface);
         expect(table.isValidType(insightFacadeInterface));
     });
+
+    it("should return false when given an invalid type for isValidType", () => {
+        expect(table.isValidType("not valid type")).to.equal(false);
+    });
+
+    it("should return true if every given type is valid", () => {
+        expect(table.areValidTypes(["number", "boolean"])).to.equal(true);
+    });
+
+    it("should return false is at least one given type is invalid", () => {
+        expect(table.areValidTypes(["number", "not a valid type", "string"])).to.equal(false);
+    });
 });

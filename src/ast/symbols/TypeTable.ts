@@ -76,8 +76,6 @@ export class TypeTable {
      * @param candidates
      */
     public areValidTypes(candidates: string[]): boolean {
-        return candidates.reduce((acc, val) => {
-            return this.isValidType(val);
-        }, false);
+        return candidates.every((candidate) => this.isValidType(candidate));
     }
 }
