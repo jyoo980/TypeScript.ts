@@ -5,7 +5,7 @@ import {AstNode} from "./AstNode";
  *
  * e.g. ind "comments" STRLIST ded
  */
-export default class Comment extends AstNode {
+export default class CommentDecl extends AstNode {
 
     comments: string[];
 
