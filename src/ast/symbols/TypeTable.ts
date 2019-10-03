@@ -46,7 +46,7 @@ export class TypeTable {
     }
 
     public static getInstance(): TypeTable {
-        if (this.instance === null) {
+        if (this.instance === null || this.instance === undefined) {
             this.instance = new TypeTable();
         }
         return this.instance;
