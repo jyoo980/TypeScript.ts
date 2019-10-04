@@ -3,12 +3,14 @@
  *
  * e.g. dir str (DIR | CLASS| INTERFACE)+
  */
-import {AstNode} from "./AstNode";
+import {Content} from "./Content";
 
-export class DirDecl extends AstNode {
+export class DirDecl extends Content {
 
     directory: string;
-    // TODO: add members for the nested directory or class or interface
+
+    // The contents of this directory
+    contents: Content[];
 
     public parse(): any {
         // TODO: implement this.
