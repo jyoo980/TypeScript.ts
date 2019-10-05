@@ -1,4 +1,5 @@
 import npmi = require('npmi');
+import * as got from 'got';
 import * as nodeFs from "fs-extra";
 
 export default class PackageJson {
@@ -19,20 +20,25 @@ export default class PackageJson {
      * @param module    the module to install
      * @param version   verison of the module to install
      */
-    public addModule(module: string, version?: string): Promise<any> {
+    public async addModule(module: string, version?: string): Promise<any> {
+        if (!module.startsWith('@types/')) {
+            await this.addTypeModule(module);
+        }
+
         return new Promise((resolve, reject) => {
             const options: any = {
                 name: module,
                 version: version ? version : undefined,
-                path: this.path
+                path: this.path,
+                forceInstall: true
             };
 
             npmi(options, (err: any) => {
                 if (err) {
                     if (err.code === npmi.LOAD_ERR) {
-                        reject(`NPM::npm failed to load when installing ${module} with: ${err.message}`);
+                        reject(`npm failed to load when installing ${module} with: ${err.message}`);
                     } else if (err.code === npmi.INSTALL_ERR) {
-                        reject(`NPM::npm failed when installing ${module} with: ${err.message}`);
+                        reject(`npm failed when installing ${module} with: ${err.message}`);
                     }
                 }
                 resolve();
@@ -80,5 +86,22 @@ export default class PackageJson {
             license: 'ISC'
         };
         nodeFs.writeJsonSync(`${this.path}/package.json`, contents);
+    }
+
+    /**
+     *
+     * Checks if a type pacakge exists and if so, installs it
+     *
+     * @param module    name of module to check for type package
+     */
+    private async addTypeModule(module: string): Promise<any> {
+        const typeModule: string = `@types/${module}`;
+        const url: string = `https://www.npmjs.org/package/${typeModule}`;
+        try {
+            await got(url);
+            await this.addModule(typeModule);
+        } catch (err) {
+            console.log(`No type package exists for ${module}`);
+        }
     }
 } 

@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as nodeFs from "fs-extra";
 
 describe('PackageJson generation and add modules test', function() {
-    this.timeout(10000);
+    this.timeout(20000);
     const dir: string = 'packageJsonTest';
 
     beforeEach(() => {	
@@ -32,6 +32,7 @@ describe('PackageJson generation and add modules test', function() {
             expect.fail(err);
         } finally {
             expect(verifiyDependency(module)).to.not.equal(null);
+            
         }
     });
 
@@ -44,12 +45,12 @@ describe('PackageJson generation and add modules test', function() {
         } catch (err) {
             result = err;
         } finally {
-            expect(result).to.equal('NPM::npm failed when installing abcabcabcabc with: 404 Not Found - GET https://registry.yarnpkg.com/abcabcabcabc - Not found');
+            expect(result).to.equal('npm failed when installing abcabcabcabc with: 404 Not Found - GET https://registry.yarnpkg.com/abcabcabcabc - Not found');
             expect(verifiyDependency(module)).to.equal(null);
         }
     });
 
-    it('should add modules ["left-pad: 1.1.1", "pad"]', async () => {
+    it('should add modules ["left-pad: 1.1.1", "pad"] and automatically add @types/left-pad and @types/pad', async () => {
         const modules: string[] = ['left-pad: 1.1.1', 'pad'];
         try {
             const packageJson = new PackageJson(dir, 'project');
@@ -58,9 +59,9 @@ describe('PackageJson generation and add modules test', function() {
             expect.fail(err);
         } finally {
             expect(verifiyDependency('left-pad')).to.equal('^1.1.1');
-            expect(verifiyDependency('pad')).to.equal('^3.2.0');
+            expect(verifiyDependency('pad')).to.not.equal(null);
+            expect(verifiyDependency('@types/left-pad')).to.not.equal(null);
+            expect(verifiyDependency('@types/pad')).to.not.equal(null);
         }
     });
-
-    
 });
