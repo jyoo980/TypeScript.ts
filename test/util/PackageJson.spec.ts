@@ -1,7 +1,7 @@
 import PackageJson from '../../src/util/PackageJson';
 import { expect } from 'chai';
 import * as fs from "fs";
-import del = require('del');
+import * as nodeFs from "fs-extra";
 
 describe('PackageJson generation and add modules test', function() {
     this.timeout(10000);
@@ -14,7 +14,7 @@ describe('PackageJson generation and add modules test', function() {
     });
 
     afterEach(() => {
-        del.sync([dir]);
+        nodeFs.removeSync(dir);
     });
 
     function verifiyDependency(module: string): any {

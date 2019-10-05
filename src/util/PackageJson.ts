@@ -1,5 +1,5 @@
 import npmi = require('npmi');
-import writePackage = require('write-pkg');
+import * as nodeFs from "fs-extra";
 
 export default class PackageJson {
     private path: string;
@@ -9,7 +9,7 @@ export default class PackageJson {
      */
     constructor(path: string, project: string) {
         this.path = path;
-        this.generatePackageJson(path, project);
+        this.generatePackageJson(project);
     }
 
     /**
@@ -18,7 +18,6 @@ export default class PackageJson {
      *
      * @param module    the module to install
      * @param version   verison of the module to install
-     * @return Promise  resolve if successful, reject otherwise
      */
     public addModule(module: string, version?: string): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -46,7 +45,6 @@ export default class PackageJson {
      * Adds and installs all listed npm modules
      *
      * @param modules   array of modules to install (with or without versions), ex. ["module1: 1.0.0", "module2"]
-     * @return Promise  resolve if successful, reject otherwise
      */
     public addModules(modules: string[]): Promise<any> {
         const promises = modules.map(async (module: string) => {
@@ -69,7 +67,7 @@ export default class PackageJson {
      * @param path      path to place package.json
      * @param project   name of the project
      */
-    private generatePackageJson(path: string, project: string): void {
+    private generatePackageJson(project: string): void {
         const contents: any = {
             name: project,
             version: '1.0.0',
@@ -81,6 +79,6 @@ export default class PackageJson {
             author: '',
             license: 'ISC'
         };
-        writePackage.sync(path, contents);
+        nodeFs.writeJsonSync(`${this.path}/package.json`, contents);
     }
 } 

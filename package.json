@@ -10,9 +10,7 @@
     "@types/fs-extra": "^8.0.0",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.8",
-    "del": "^5.1.0",
-    "npmi": "^4.0.0",
-    "write-pkg": "^4.0.0"
+    "npmi": "^4.0.0"
   },
   "scripts": {
     "build": "tsc src/**/*.ts test/**/*.ts",
