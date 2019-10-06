@@ -4,6 +4,7 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {ImplementsDecl} from "./ImplementsDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
+import {Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents a Class a TypeScript project may have.
@@ -20,33 +21,33 @@ export class ClassDecl extends Content {
     functions: FuncDecl[];
 
 
-    public parse(): any {
-        this.isAbstract = this.tokenizer.checkToken("abstract");
-        this.tokenizer.getAndCheckNext("class");
-        this.className = this.tokenizer.getNext();
+    public parse(context: Tokenizer): any {
+        this.isAbstract = context.checkToken("abstract");
+        context.getAndCheckNext("class");
+        this.className = context.getNext();
 
-        if(this.tokenizer.checkToken("implements")) {
+        if(context.checkToken("implements")) {
             this.implementsNodes = new ImplementsDecl();
             this.implementsNodes.parse();
         }
 
-        if(this.tokenizer.checkToken("extends")) {
+        if(context.checkToken("extends")) {
             this.extendsNodes = new ExtendsDecl();
-            this.extendsNodes.parse();
+            this.extendsNodes.parse(context);
         }
 
         // TODO: implement the rest of this
         this.comments = new CommentDecl();
-        this.comments.parse();
+        this.comments.parse(context);
 
         this.fields = [];
         this.fields.forEach((field) => {
-            field.parse();
+            field.parse(context);
         });
 
         this.functions = [];
         this.functions.forEach((fn) => {
-            fn.parse();
+            fn.parse(context);
         });
     }
 

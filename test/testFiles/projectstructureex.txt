@@ -2,3 +2,6 @@ dir src
 	class Time
 	dir TransitModels
 dir tests
+
+dir util
+

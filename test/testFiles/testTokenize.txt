@@ -1,3 +1,0 @@
-dir 'test single quote       quote'
-dir "test double quote"
-dir "encapsulated 'quote'" dir
