@@ -16,3 +16,14 @@ describe("Tokenizer makeInstance/getInstance/destroyInstance", () => {
         expect(() => {Tokenizer.getInstance()}).to.throw(TokenizerError);
     });
 });
+
+describe("Tokenizer tokenize", () => {
+    after(() => {
+        Tokenizer.destroyInstance();
+    });
+
+    it("tokenizes successfully", () => {
+        Tokenizer.makeInstance("testTokenize.txt", "./test/testFiles");
+    });
+
+});
