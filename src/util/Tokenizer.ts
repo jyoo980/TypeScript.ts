@@ -42,6 +42,7 @@ export class Tokenizer {
         Protected: {val: "protected", isSpecial: false},
         SingleQuote: {val: "\'", isSpecial: true},
         DoubleQuote: {val: "\"", isSpecial: true},
+        Constructor: {val: "constructor", isSpecial: false}
     });
     public static NO_MORE_TOKENS = "NO_MORE_TOKENS";
     private static reservedTokenWord = "_RESERVED_";
@@ -140,6 +141,11 @@ export class Tokenizer {
         return count;
     }
 
+    /**
+     * Gets the next token from non-blank line. Modifies current position in tokens.
+     *
+     * @returns string      next token, NO_MORE_TOKENS if next token does not exist.
+     */
     public getNext(): string {
         let next = "";
         if (this.tokens.length > this.currentToken.arr
@@ -162,16 +168,26 @@ export class Tokenizer {
         return Tokenizer.NO_MORE_TOKENS;
     }
 
-    public checkToken(regexp: string): boolean {
-        return RegExp(regexp).test(this.checkNext());
+    private goToNextNonBlankLine() {
+        while (this.currentToken.arr < this.tokens.length && this.isBlankLine()) {
+            this.currentToken.arr++;
+        }
     }
 
-    public getAndCheckNext(regexp: string): string {
-        let next = this.getNext();
-        if(!RegExp(regexp).test(next)) {
-            throw new TokenizerError(next + " did not match regex value " + regexp);
-        }
-        return next;
+    private isBlankLine(): boolean {
+        let currLine = this.tokens[this.currentToken.arr];
+        // format blank line:  [ '_INDENT_LEVEL=[0-9]+_' ]
+        return currLine.length == 1 && RegExp("_INDENT_LEVEL=").test(currLine[0]);
+    }
+
+    /**
+     * Checks whether token matches regexp
+     *
+     * @param regexp    string to compare next token against
+     * @returns boolean indicating whether regexp matches the next token
+     */
+    public checkToken(regexp: string): boolean {
+        return RegExp(regexp).test(this.checkNext());
     }
 
     private checkNext(): string {
@@ -182,15 +198,18 @@ export class Tokenizer {
         return Tokenizer.NO_MORE_TOKENS;
     }
 
-    public goToNextNonBlankLine() {
-        while (this.currentToken.arr < this.tokens.length && this.isBlankLine()) {
-            this.currentToken.arr++;
+    /**
+     * Gets the next token from non-blank line and checks it against regexp.
+     * Modifies current position in tokens. Throws a TokenizerError if the token does not match regexp.
+     *
+     * @param regexp    string to compare next token against
+     * @returns string  next token, NO_MORE_TOKENS if next token does not exist.
+     */
+    public getAndCheckNext(regexp: string): string {
+        let next = this.getNext();
+        if(!RegExp(regexp).test(next)) {
+            throw new TokenizerError(next + " did not match regex value " + regexp);
         }
-    }
-
-    private isBlankLine(): boolean {
-        let currLine = this.tokens[this.currentToken.arr];
-        // format blank line:  [ '_INDENT_LEVEL=[0-9]+_' ]
-        return currLine.length == 1 && RegExp("_INDENT_LEVEL=").test(currLine[0]);
+        return next;
     }
 }

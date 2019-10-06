@@ -23,6 +23,7 @@ describe("Tokenizer tokenize", () => {
         // blank line, goto dir util
         tokenizer.getNext();
         expect(tokenizer.getNext()).to.equal("dir");
+        expect(tokenizer.checkToken("util")).to.equal(true);
         expect(tokenizer.getNext()).to.equal("util");
         // blank line
         expect(tokenizer.getNext()).to.equal(Tokenizer.NO_MORE_TOKENS);
