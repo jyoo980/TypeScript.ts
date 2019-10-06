@@ -64,12 +64,12 @@ export class Tokenizer {
 
     private tokenize() {
         // TODO: add ALL valid tokens here.
-        let literals = [",", "\"", "\'", " ", "implements"];
+        let literals = [",", "\"", "\'", "implements", "dir"];
         // split program into subarrays for every nl
         let programLines: string[] = Tokenizer.program.split("\n");
 
+        // const reservedTokenWord = "_RESERVED_";
         const reservedTokenWord = "_RESERVED_";
-
         programLines.forEach((line) => {
             // add token for indentation level of line, and remove whitespace at end of line.
             line = "_INDENT_LEVEL=" + this.countTabs(line) + "_ " + line.trim();
@@ -78,33 +78,52 @@ export class Tokenizer {
             let isSingleQuote = false;
             let isDoubleQuote = false;
 
-            let splitLine = Array.from(line);
-            splitLine.forEach((str, index) => {
-                if(str === "\'") {
-                    splitLine[index] = "REPLACE QUOTE"
+            //replace literals and spaces outside of quotations
 
+            // split on quotation marks
+            let splitLine = line.split(/("|')/g);
+            splitLine.forEach((sub, index) => {
+                let quoteEntered = false;
+                if (sub === "\'" && !isDoubleQuote) { // str is ' and not encapsulated in "
+                    if(!isSingleQuote) {
+                        quoteEntered = true;
+                        isSingleQuote = true;
+                    }else if(isSingleQuote) {
+                        isSingleQuote = false;
+                    }
                 }
-                if(str === "\"") {
-                    splitLine[index] = "REPLACE DOUBLE QUOTE"
+
+                if(sub === "\"" && !isSingleQuote) {
+                    if(!isDoubleQuote) {
+                        quoteEntered = true;
+                        isDoubleQuote = true;
+                    }else if(isDoubleQuote) {
+                        isDoubleQuote = false;
+                    }
+                }
+
+                if(isSingleQuote || isDoubleQuote) {
+                    if(quoteEntered) {
+                        splitLine[index] = sub.replace(sub, reservedTokenWord + sub + reservedTokenWord);
+                    }
+
+                } else {
+                    literals.forEach((lit) => {
+                       sub = sub.replace(lit, reservedTokenWord + lit + reservedTokenWord);
+
+                    });
+                    splitLine[index] = sub.replace(/ /g, "");
                 }
             });
-
-            // create array from the string.
-            // if we are in a quote, do not add a quote (one of the quotes = true
-            // once we hit another quote of same kind, exit the skipping of any tokenizing.
-            // if both are false, then we can continue to tokenize the things we want to tokenize.
-            // split on the token.
-
-
-            // Tokenizer.literals.forEach((lit) => {
-            //     let litReg = new RegExp(lit, 'g');
-            //     line = line.replace(litReg, reservedTokenWord + lit + reservedTokenWord);
-            // });
+            let splitLineStr = splitLine.join("");
 
             // TODO: have to better handle this for case where we have strings for comments
-            // line = line.replace(/[ ]+/g, " ");
-            // Tokenizer.tokens.push(line.split(" "));
-            Tokenizer.tokens.push(splitLine);
+            let regex = new RegExp("(" + reservedTokenWord + ")+", 'g');
+            // console.log("2\n" +splitLineStr);
+            splitLineStr = splitLineStr.replace(regex, reservedTokenWord);
+            // console.log("3 \n" +splitLineStr);
+            Tokenizer.tokens.push(splitLineStr.split(reservedTokenWord).filter((str) => str !==''));
+            // console.log("4 \n" +splitLineStr.split(reservedTokenWord));
         });
         console.log(Tokenizer.tokens);
     }

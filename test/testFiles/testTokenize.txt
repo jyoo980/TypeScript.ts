@@ -1,5 +1,3 @@
-Testing if this gets read.
-        testing tab! implements
-
-more tests double line
-testing "doubel quote"
+dir 'test single quote       quote'
+dir "test double quote"
+dir "encapsulated 'quote'" dir
