@@ -1,5 +1,4 @@
 import npmi = require('npmi');
-import * as got from 'got';
 import * as nodeFs from "fs-extra";
 
 export default class PackageJson {
@@ -70,7 +69,6 @@ export default class PackageJson {
      *
      * Generates a default package.json at path
      *
-     * @param path      path to place package.json
      * @param project   name of the project
      */
     private generatePackageJson(project: string): void {
@@ -96,12 +94,10 @@ export default class PackageJson {
      */
     private async addTypeModule(module: string): Promise<any> {
         const typeModule: string = `@types/${module}`;
-        const url: string = `https://www.npmjs.org/package/${typeModule}`;
         try {
-            await got(url);
             await this.addModule(typeModule);
         } catch (err) {
-            console.log(`No type package exists for ${module}`);
+            console.log(`No type package found for ${module}.`);
         }
     }
 } 

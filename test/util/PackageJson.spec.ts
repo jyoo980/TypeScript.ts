@@ -17,6 +17,12 @@ describe('PackageJson generation and add modules test', function() {
         nodeFs.removeSync(dir);
     });
 
+    after(() => {
+        if (fs.existsSync(dir)) {
+            nodeFs.removeSync(dir);
+        }
+    })
+
     function verifiyDependency(module: string): any {
         const content: any = JSON.parse(fs.readFileSync(dir + '/package.json', 'utf-8'));
         const dependencies: any = content.dependencies;
