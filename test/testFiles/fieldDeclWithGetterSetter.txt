@@ -1,0 +1,3 @@
+fields private [string foo, IInsightFacade facade]
+    generate setter
+    generate getter
