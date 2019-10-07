@@ -3,6 +3,7 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
+import {Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -18,26 +19,26 @@ export class InterfaceDecl extends Content {
 
 
 
-    public parse(): any {
-        this.tokenizer.getAndCheckNext("interface");
-        this.interfaceName = this.tokenizer.getNext();
+    public parse(context: Tokenizer): any {
+        context.getAndCheckNext("interface");
+        this.interfaceName = context.getNext();
 
-        if(this.tokenizer.checkToken("extends")) {
+        if(context.checkToken("extends")) {
             this.extendsNodes = new ExtendsDecl();
         }
 
         // TODO: implement the rest of this.
         this.comments = new CommentDecl();
-        this.comments.parse();
+        this.comments.parse(context);
 
         this.fields = [];
         this.fields.forEach((field) => {
-            field.parse();
+            field.parse(context);
         });
 
         this.functions = [];
         this.functions.forEach((fn) => {
-            fn.parse();
+            fn.parse(context);
         });
     }
 

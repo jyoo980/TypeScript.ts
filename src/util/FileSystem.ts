@@ -1,5 +1,12 @@
 import * as fs from "fs-extra";
 
+export class FileReadError extends Error {
+    constructor(...args: any[]) {
+        super(...args);
+        Error.captureStackTrace(this, FileReadError);
+    }
+}
+
 export class FileWriteError extends Error {
     constructor(...args: any[]) {
         super(...args);
@@ -57,5 +64,22 @@ export default class FileSystem {
 
     private createFullPath(fileName: string, path: string): string {
         return `${path}/${fileName}.ts`;
+    }
+
+    /**
+     * Reads in file contents at path/fileName synchronously, throws a FileReadError
+     *
+     * @param fileName  of the file to be read, must include extension
+     * @param path      path to the directory in which the file exists
+     */
+    public readFileSync(fileName: string, path: string): Buffer {
+        const fullPath: string = `${path}/${fileName}`;
+        try {
+            return fs.readFileSync(fullPath);
+        } catch (err) {
+            const msg: string = `FileSystem::reading file: ${fullPath} failed with error: ${err}`;
+            console.warn(msg);
+            throw new FileReadError(msg);
+        }
     }
 }

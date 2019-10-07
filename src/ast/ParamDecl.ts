@@ -1,5 +1,6 @@
 import {AstNode} from "./AstNode";
 import {VarList} from "./VarList";
+import {Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents a parameter declaration AST node
@@ -12,7 +13,7 @@ export default class ParamDecl extends AstNode {
 
     params: VarList;
 
-    public parse(): any {
+    public parse(context: Tokenizer): any {
         // TODO: implement the rest.
         this.params = new VarList();
     }

@@ -1,4 +1,5 @@
 import { AstNode } from "./AstNode";
+import {Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents a list of fields and their corresponding type. Used in declaring fields.
@@ -17,7 +18,7 @@ export class VarList extends AstNode {
         return Array.from(this.nameToType.keys());
     }
 
-    public parse(): any {
+    public parse(context: Tokenizer): any {
         // TODO: implement the rest.
         this.nameToType = new Map();
     }

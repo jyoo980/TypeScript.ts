@@ -4,14 +4,15 @@
  * e.g. 'extends' <type>
  */
 import {AstNode} from "./AstNode";
+import {Tokenizer} from "../util/Tokenizer";
 
 export class ExtendsDecl extends AstNode {
     parentName: string;
 
 
-    public parse(): any {
-        this.tokenizer.getAndCheckNext("extends");
-        this.parentName = this.tokenizer.getNext();
+    public parse(context: Tokenizer): any {
+        context.getAndCheckNext("extends");
+        this.parentName = context.getNext();
     }
 
     public evaluate(): any {
