@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration, MethodSignature} from "typescript";
+import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration, TypeElement} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
@@ -36,20 +36,22 @@ export default class TypeScriptEngine {
     // TODO: create class method.
 
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
-        const tsMethodSignatures: MethodSignature[] =
+        const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
+        const tsPropertySignatures: TypeElement[] = this.fieldsToTsProperty(interfaceDecl.fieldDecl.fields);
+        const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         return ts.createInterfaceDeclaration(
+            // TODO: comments!
             /* decorators */ undefined,
             /* modifiers */ undefined,
             interfaceDecl.interfaceName,
             /* typeParams */ undefined,
-            // TODO: implement inheritance
             /* heritageClauses */ undefined,
-            tsMethodSignatures
+            interfaceMembers
         );
     }
 
-    private createMethodSignature(funcDecl: FuncDecl): MethodSignature {
+    private createMethodSignature(funcDecl: FuncDecl): TypeElement {
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnType);
         return ts.createMethodSignature(
@@ -59,6 +61,23 @@ export default class TypeScriptEngine {
             funcDecl.name,
             /* questionToken */ undefined
         )
+    }
+
+    private fieldsToTsProperty(fields: VarList): TypeElement[] {
+        const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
+        return fieldsAsList.map((nameTypePair) => {
+            return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
+        });
+    }
+
+    private makePropertySignature(name: string, type: string): TypeElement {
+        return ts.createPropertySignature(
+            /* modifiers */ undefined,
+            name,
+            /* questionToken */ undefined,
+            this.typeTable.getTypeNode(type),
+            /* initializer */ undefined
+        );
     }
 
     private varsToParamDecl(vars: VarList): ParameterDeclaration[] {

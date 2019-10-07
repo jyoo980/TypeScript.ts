@@ -14,7 +14,7 @@ export class InterfaceDecl extends Content {
     extendsNodes: ExtendsDecl;
     interfaceName: string;
     comments: CommentDecl;
-    fields: FieldDecl[];
+    fieldDecl: FieldDecl;
     functions: FuncDecl[];
 
 
@@ -31,10 +31,8 @@ export class InterfaceDecl extends Content {
         this.comments = new CommentDecl();
         this.comments.parse(context);
 
-        this.fields = [];
-        this.fields.forEach((field) => {
-            field.parse(context);
-        });
+        this.fieldDecl = new FieldDecl();
+        this.fieldDecl.parse(context);
 
         this.functions = [];
         this.functions.forEach((fn) => {

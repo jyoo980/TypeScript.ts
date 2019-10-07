@@ -8,7 +8,7 @@ import {Tokenizer} from "../util/Tokenizer";
  */
 export class VarList extends AstNode {
 
-    nameToType: Map<string, string>;
+    nameToType: Map<string, string> = new Map();
 
     public addPair(name: string, type: string): void {
         this.nameToType.set(name, type);
