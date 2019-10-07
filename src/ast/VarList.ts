@@ -14,13 +14,18 @@ export class VarList extends AstNode {
         this.nameToType.set(name, type);
     }
 
-    public getVars(): String[] {
-        return Array.from(this.nameToType.keys());
-    }
-
     public parse(context: Tokenizer): any {
-        // TODO: implement the rest.
         this.nameToType = new Map();
+        context.getAndCheckNext("\\[");
+        while (!context.checkToken("\\]")) {
+            const type: string = context.getNext();
+            const name: string = context.getNext();
+            this.addPair(type, name);
+            if (!context.checkToken(",")) {
+                break;
+            }
+            context.getAndCheckNext(",");
+        }
     }
 
     public evaluate(): any {
