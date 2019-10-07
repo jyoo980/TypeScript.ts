@@ -22,13 +22,14 @@ export class ClassDecl extends Content {
 
 
     public parse(context: Tokenizer): any {
+        let indentLevel: number = context.getCurrentLineTabLevel();
         this.isAbstract = context.checkToken("abstract");
         context.getAndCheckNext("class");
         this.className = context.getNext();
 
         if(context.checkToken("implements")) {
             this.implementsNodes = new ImplementsDecl();
-            this.implementsNodes.parse();
+            this.implementsNodes.parse(context);
         }
 
         if(context.checkToken("extends")) {
@@ -36,19 +37,32 @@ export class ClassDecl extends Content {
             this.extendsNodes.parse(context);
         }
 
-        // TODO: implement the rest of this
-        this.comments = new CommentDecl();
-        this.comments.parse(context);
+        if(context.getCurrentLineTabLevel() <= indentLevel) {
+            return;
+        }
+
+        if(context.checkToken("comments")) {
+            this.comments = new CommentDecl();
+            this.comments.parse(context);
+        }
+
+        if(context.getCurrentLineTabLevel() > indentLevel) {
+            return;
+        }
 
         this.fields = [];
-        this.fields.forEach((field) => {
+        while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
+            let field: FieldDecl = new FieldDecl();
             field.parse(context);
-        });
+            this.fields.push(field);
+        }
 
         this.functions = [];
-        this.functions.forEach((fn) => {
-            fn.parse(context);
-        });
+        while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("functions")) {
+            let func: FuncDecl = new FuncDecl();
+            func.parse(context);
+            this.functions.push(func);
+        }
     }
 
     public evaluate(): any {

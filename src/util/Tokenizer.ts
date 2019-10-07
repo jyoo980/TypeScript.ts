@@ -52,7 +52,7 @@ export class Tokenizer {
         // initialize fields
         this.tokenizerFile =  `${path}/${fileName}`;
         this.tokens = [];
-        this.currentToken = {arr: 0, pos: 0};
+        this.currentToken = {arr: 0, pos: 1};
         // read contents of program
         let fileSystem = new FileSystem();
         // 1. read whole program to single string
@@ -154,7 +154,7 @@ export class Tokenizer {
             next = this.tokens[this.currentToken.arr][this.currentToken.pos];
 
             if(this.tokens[this.currentToken.arr].length -1 == this.currentToken.pos) { //end of line
-                this.currentToken.pos = 0;
+                this.currentToken.pos = 1;
                 this.currentToken.arr++;
                 this.goToNextNonBlankLine();
                 if(this.tokens.length < this.currentToken.arr) {
@@ -211,5 +211,15 @@ export class Tokenizer {
             throw new TokenizerError(next + " did not match regex value " + regexp);
         }
         return next;
+    }
+    /**
+     * Gets the indentation level of the current line, if out of bounds, returns 0
+     * @returns number  indentation level of current line
+     */
+    public getCurrentLineTabLevel(): number {
+        if(this.currentToken.arr < this.tokens.length) {
+            return parseInt(this.tokens[this.currentToken.arr][0].replace(/\D/g, ''));
+        }
+        return 0;
     }
 }
