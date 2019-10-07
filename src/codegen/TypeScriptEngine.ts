@@ -1,7 +1,8 @@
 import * as ts from "typescript";
-import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode} from "typescript";
+import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
+import FuncDecl from "../ast/FuncDecl";
 
 export default class TypeScriptEngine {
 
@@ -13,10 +14,11 @@ export default class TypeScriptEngine {
         this.typeTable = TypeTable.getInstance();
     }
 
-    public createFun(name: string, modifiers: string[], params: VarList, returnType: string): FunctionDeclaration {
-        const tsModifiers: Modifier[] = this.makeModifierNodes(modifiers);
-        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(params);
-        const tsReturnType: TypeNode = this.typeTable.getTypeNode(returnType);
+    public createFun(funDecl: FuncDecl): FunctionDeclaration {
+        const tsModifiers: Modifier[] = this.makeModifierNodes([funDecl.modifier]);
+        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funDecl.params);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funDecl.returnType);
+        // TODO: comments!
         return ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ tsModifiers,
@@ -31,7 +33,10 @@ export default class TypeScriptEngine {
 
     // TODO: create class method.
 
-    // TODO: create interface method.
+    public createInterface(interfaceDecl: InterfaceDeclaration): InterfaceDeclaration {
+        // TODO: implement this.
+        return null;
+    }
 
     private varsToParamDecl(vars: VarList): ParameterDeclaration[] {
         const varsAsList: [string, string][] = Array.from(vars.nameToType.entries());
