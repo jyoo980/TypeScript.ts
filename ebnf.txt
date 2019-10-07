@@ -13,7 +13,7 @@ COMMENT         ::= ind ‘comments ’ STRLIST ded
 ABS             ::= ‘abstract’
 IMP             ::= ‘implements’ str (‘,’ str)*
 EXT             ::= ‘extends’ str
-VARLIST         ::= ‘[’ (type str (‘,’ type str))? ‘]’  # I think I did this
+VARLIST         ::= ‘[’ (type str (‘,’ type str))? ‘]’
 STRLIST         ::= ‘[‘ str (‘,’ str)* ‘]’
 
 gen             ::= (‘getters’ | ‘setters’)
