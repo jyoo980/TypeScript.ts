@@ -9,7 +9,6 @@ export class TokenizerError extends Error {
 
 
 export class Tokenizer {
-    private tokenizerFile: string;
     private program: string;
     private tokens: string[][];
     private currentToken: {arr: number, pos: number};
@@ -50,7 +49,6 @@ export class Tokenizer {
 
     constructor(fileName: string, path: string) {
         // initialize fields
-        this.tokenizerFile =  `${path}/${fileName}`;
         this.tokens = [];
         this.currentToken = {arr: 0, pos: 1};
         // read contents of program
