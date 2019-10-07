@@ -9,11 +9,12 @@
     "@types/chai": "^4.2.3",
     "@types/fs-extra": "^8.0.0",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.8"
+    "@types/node": "^12.7.8",
+    "npmi": "^4.0.0"
   },
   "scripts": {
     "build": "tsc src/**/*.ts test/**/*.ts",
-    "test": "yarn build && mocha --require ts-node/register"
+    "test": "yarn build && mocha --require ts-node/register test/*.ts test/**/*.ts"
   },
   "devDependencies": {
     "chai": "^4.2.0",
