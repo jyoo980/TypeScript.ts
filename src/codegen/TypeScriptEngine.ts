@@ -1,8 +1,9 @@
 import * as ts from "typescript";
-import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration} from "typescript";
+import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration, MethodSignature} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
+import {InterfaceDecl} from "../ast/InterfaceDecl";
 
 export default class TypeScriptEngine {
 
@@ -15,6 +16,7 @@ export default class TypeScriptEngine {
     }
 
     public createFun(funDecl: FuncDecl): FunctionDeclaration {
+        // TODO: check if modifier is undefined
         const tsModifiers: Modifier[] = this.makeModifierNodes([funDecl.modifier]);
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funDecl.params);
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(funDecl.returnType);
@@ -23,7 +25,7 @@ export default class TypeScriptEngine {
             /* decorators */ undefined,
             /* modifiers */ tsModifiers,
             /* asteriskToken */ undefined,
-            name,
+            funDecl.name,
             /* typeParameters */ undefined,
             tsParams,
             tsReturnType,
@@ -33,9 +35,30 @@ export default class TypeScriptEngine {
 
     // TODO: create class method.
 
-    public createInterface(interfaceDecl: InterfaceDeclaration): InterfaceDeclaration {
-        // TODO: implement this.
-        return null;
+    public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
+        const tsMethodSignatures: MethodSignature[] =
+            interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
+        return ts.createInterfaceDeclaration(
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            interfaceDecl.interfaceName,
+            /* typeParams */ undefined,
+            // TODO: implement inheritance
+            /* heritageClauses */ undefined,
+            tsMethodSignatures
+        );
+    }
+
+    private createMethodSignature(funcDecl: FuncDecl): MethodSignature {
+        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnType);
+        return ts.createMethodSignature(
+            /* typeParameters */ undefined,
+            tsParams,
+            tsReturnType,
+            funcDecl.name,
+            /* questionToken */ undefined
+        )
     }
 
     private varsToParamDecl(vars: VarList): ParameterDeclaration[] {
