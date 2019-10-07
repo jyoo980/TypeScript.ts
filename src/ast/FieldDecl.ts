@@ -1,5 +1,6 @@
 import {VarList} from "./VarList";
 import {AstNode} from "./AstNode";
+import {Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents a field declaration in the TypeScript DSL.
@@ -14,7 +15,7 @@ export class FieldDecl extends AstNode {
     generateGetter: boolean;
     generateSetter: boolean;
 
-    public parse(): any {
+    public parse(context: Tokenizer): any {
         // TODO: implement the rest.
         this.fields = new VarList();
     }

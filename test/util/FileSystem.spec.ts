@@ -1,5 +1,5 @@
 import * as nodeFs from "fs-extra";
-import FileSystem, {FileDeleteError} from "../../src/util/FileSystem";
+import FileSystem, {FileDeleteError, FileReadError} from "../../src/util/FileSystem";
 import { expect } from "chai";
 
 describe("FileSystem write/delete tests", () => {
@@ -69,5 +69,27 @@ describe("FileSystem write/delete tests", () => {
         } finally {
             expect(result).to.equal("./codegen/test/src/Alice.ts");
         }
+    });
+});
+
+describe("FileSystem read tests", () => {
+
+    const testDir: string = "./test/testFiles";
+    let fs: FileSystem;
+
+    it("should successfully read contents of a file", () => {
+        fs = new FileSystem();
+        let contents = fs.readFileSync("projectstructureex.txt", testDir).toString();
+        expect(contents).to.equal("dir src\n" +
+            "\tclass Time\n" +
+            "\tdir TransitModels\n" +
+            "dir tests\n");
+    });
+
+    it("should throw a FileReadError when reading contents of a file that does not exist", () => {
+        fs = new FileSystem();
+        expect(() => {
+            fs.readFileSync("fakename.txt", testDir)
+        }).to.throw(FileReadError);
     });
 });

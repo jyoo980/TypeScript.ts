@@ -1,6 +1,7 @@
 import {AstNode} from "./AstNode";
 import {VarList} from "./VarList";
 import CommentDecl from "./CommentDecl";
+import {Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents a function declaration in our language
@@ -24,7 +25,7 @@ export default class FuncDecl extends AstNode {
     generateSetter: boolean;
     returnType: string;
 
-    public parse(): any {
+    public parse(context: Tokenizer): any {
         this.params = new VarList();
         this.comment = new CommentDecl();
         // TODO: implement the rest.

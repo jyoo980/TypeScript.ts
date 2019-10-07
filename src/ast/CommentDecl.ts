@@ -1,4 +1,5 @@
 import {AstNode} from "./AstNode";
+import {Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents the comments that a class, interface, or method may have
@@ -9,7 +10,7 @@ export default class CommentDecl extends AstNode {
 
     comments: string[];
 
-    public parse(): any {
+    public parse(context: Tokenizer): any {
         // TODO: implement the rest.
         this.comments = [];
     }
