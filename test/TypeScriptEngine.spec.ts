@@ -166,8 +166,6 @@ describe("TypeScriptEngine tests", () => {
         baseClassDecl.functions = [];
         const fieldDecl: FieldDecl = new FieldDecl();
         fieldDecl.fields = new VarList();
-        baseClassDecl.fields = [];
-        baseClassDecl.fields.push(fieldDecl);
         baseClassDecl.fields = [fieldDecl];
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
