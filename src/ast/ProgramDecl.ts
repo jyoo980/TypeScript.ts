@@ -1,7 +1,6 @@
 import {ModuleDecl} from "./ModuleDecl";
 import {DirDecl} from "./DirDecl";
 import {Tokenizer} from "../util/Tokenizer";
-import * as assert from "assert";
 
 /**
  * Represents a TypeScript project to be generated.
@@ -15,7 +14,8 @@ export class ProgramDecl extends DirDecl {
     modules: ModuleDecl;
 
     public parse(context: Tokenizer): any {
-        if (context.getCurrentLineTabLevel() != 0) {
+        this.tabLevel = context.getCurrentLineTabLevel();
+        if (this.tabLevel != 0) {
             throw new Error("Should not have tab level greater than 0 in root program scope.");
         }
 
@@ -24,6 +24,7 @@ export class ProgramDecl extends DirDecl {
         this.directoryName = this.projectName;
 
         if (context.checkToken("modules")) {
+            context.getNext();
             this.modules = new ModuleDecl();
             this.modules.parse(context);
         }

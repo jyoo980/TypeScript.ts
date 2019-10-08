@@ -10,7 +10,7 @@ export class TokenizerError extends Error {
 
 export class Tokenizer {
     private program: string;
-    private tokens: string[][];
+    public tokens: string[][];
     private currentToken: {arr: number, pos: number};
 
     public static literals: {[id: string] : {val: string, isSpecial: boolean}} =

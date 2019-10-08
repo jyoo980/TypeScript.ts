@@ -18,6 +18,8 @@ export class DirDecl extends Content {
     tabLevel: number;
 
     public parse(context: Tokenizer): any {
+        this.tabLevel = context.getCurrentLineTabLevel();
+
         context.getAndCheckNext("dir");
         this.directoryName = context.getNext();
 
@@ -25,9 +27,9 @@ export class DirDecl extends Content {
     }
 
     protected parseContents(context: Tokenizer): any {
-        this.tabLevel = context.getCurrentLineTabLevel();
+        this.contents = [];
 
-        while (this.tabLevel == context.getCurrentLineTabLevel()) {
+        while (context.getCurrentLineTabLevel() > this.tabLevel && !context.checkToken("NO_MORE_TOKENS")) {
             let contentDecl: Content;
 
             if (context.checkToken("dir")) {

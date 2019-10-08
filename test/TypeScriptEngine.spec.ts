@@ -4,7 +4,6 @@ import TypeScriptEngine from "../src/codegen/TypeScriptEngine";
 import {VarList} from "../src/ast/VarList";
 import { ParameterDeclaration, Modifier, SyntaxKind, FunctionDeclaration } from "typescript";
 import {TypeTable} from "../src/ast/symbols/TypeTable";
-import {Tokenizer} from "../src/util/Tokenizer";
 
 describe("TypeScriptEngine tests", () => {
 
@@ -12,7 +11,6 @@ describe("TypeScriptEngine tests", () => {
 
     before(() => {
         engine = new TypeScriptEngine();
-        Tokenizer.makeInstance("");
     });
 
     it("should convert a VarList to a ParamDeclaration[]", () => {
