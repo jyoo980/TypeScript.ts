@@ -12,18 +12,22 @@ import {Tokenizer} from "../util/Tokenizer";
  * e.g. ABS? ‘class’ str IMP? EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
  */
 export class ClassDecl extends Content {
-    isAbstract: boolean;
+    isAbstract: boolean = false;
     className: string;
     implementsNodes: ImplementsDecl;
     extendsNodes: ExtendsDecl;
     comments: CommentDecl;
-    fields: FieldDecl[];
-    functions: FuncDecl[];
+    fields: FieldDecl[] = [];
+    functions: FuncDecl[] = [];
 
 
     public parse(context: Tokenizer): any {
         let indentLevel: number = context.getCurrentLineTabLevel();
-        this.isAbstract = context.checkToken("abstract");
+        if(context.checkToken("abstract")) {
+            context.getNext();
+            this.isAbstract = true;
+        }
+
         context.getAndCheckNext("class");
         this.className = context.getNext();
 
@@ -38,7 +42,7 @@ export class ClassDecl extends Content {
         }
 
         if(context.getCurrentLineTabLevel() <= indentLevel) {
-            return;
+            return this;
         }
 
         if(context.checkToken("comments")) {
@@ -46,24 +50,17 @@ export class ClassDecl extends Content {
             this.comments.parse(context);
         }
 
-        if(context.getCurrentLineTabLevel() > indentLevel) {
-            return;
-        }
-
-        this.fields = [];
         while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
             let field: FieldDecl = new FieldDecl();
             field.parse(context);
             this.fields.push(field);
         }
 
-        this.functions = [];
-        while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("functions")) {
+        while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("function")) {
             let func: FuncDecl = new FuncDecl();
             func.parse(context);
             this.functions.push(func);
         }
-
         return this;
     }
 
