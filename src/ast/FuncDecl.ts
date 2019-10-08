@@ -34,4 +34,11 @@ export default class FuncDecl extends AstNode {
     public evaluate(): any {
         // TODO: implement this.
     }
+
+    public getComments(): string[] {
+        if (this.comment && this.comment.comments) {
+            return this.comment.comments;
+        }
+        return [];
+    }
 }

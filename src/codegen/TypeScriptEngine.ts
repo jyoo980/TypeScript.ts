@@ -32,8 +32,8 @@ export default class TypeScriptEngine {
             undefined
         );
 
-        const comments: string[] = funDecl.comment && funDecl.comment.comments;
-        if (comments && comments.length) {
+        const comments: string[] = funDecl.getComments();
+        if (comments.length) {
             const commentString: string = this.generateCommentString(comments);
             ts.addSyntheticLeadingComment(
                 funcDeclaration,

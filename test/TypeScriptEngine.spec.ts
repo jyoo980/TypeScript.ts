@@ -147,7 +147,7 @@ describe("TypeScriptEngine tests", () => {
         baseFunDecl.comment.comments = ['comment line 1'];
         const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         const resultStr: string = funcDeclarationToString(result);
-        expect(resultStr).to.equal(`/**\n * comment line 1\n */\nfunction foo(): number;`);
+        expect(resultStr).to.equal(`/**\n * comment line 1\n */\npublic function foo(): number;`);
     });
 
     it('should add a multiline comment with multiple lines to the function', () => {
@@ -160,7 +160,7 @@ describe("TypeScriptEngine tests", () => {
         baseFunDecl.comment.comments = ['comment line 1', 'comment line 2', 'comment line 3'];
         const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         const resultStr: string = funcDeclarationToString(result);
-        expect(resultStr).to.equal(`/**\n * comment line 1\n * comment line 2\n * comment line 3\n */\nfunction foo(): number;`);
+        expect(resultStr).to.equal(`/**\n * comment line 1\n * comment line 2\n * comment line 3\n */\npublic function foo(): number;`);
     });
 
     it('should not add a comment to the function', () => {
@@ -173,7 +173,7 @@ describe("TypeScriptEngine tests", () => {
         baseFunDecl.comment.comments = [];
         const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         const resultStr: string = funcDeclarationToString(result);
-        expect(resultStr).to.equal(`function foo(): number;`);
+        expect(resultStr).to.equal(`public function foo(): number;`);
     });
 
     it("should make a basic interface declaration (no members)", () => {
