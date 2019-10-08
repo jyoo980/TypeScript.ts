@@ -1,2 +1,2 @@
 fields private [string foo, IInsightFacade facade]
-    generate getter
+    generate getters

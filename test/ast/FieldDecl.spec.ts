@@ -17,7 +17,7 @@ describe("FieldDecl tokenizer test", () => {
         expect(fieldDecl.fields.nameToType.get("foo")).to.deep.equal("string");
     });
 
-    it("should parse a field declaration with a getter", () => {
+    it("should parse a field declaration with getters", () => {
         const tokenizer: Tokenizer = new Tokenizer("fieldDeclWithGetter.txt", "./test/testFiles");
         fieldDecl.parse(tokenizer);
         expect(fieldDecl.modifier).to.equal("private");
@@ -27,7 +27,7 @@ describe("FieldDecl tokenizer test", () => {
         expect(fieldDecl.generateSetter).to.equal(false);
     });
 
-    it("should parse a field declaration with a getter/setter", () => {
+    it("should parse a field declaration with getters/setters", () => {
         const tokenizer: Tokenizer = new Tokenizer("fieldDeclWithGetterSetter.txt", "./test/testFiles");
         fieldDecl.parse(tokenizer);
         expect(fieldDecl.modifier).to.equal("private");

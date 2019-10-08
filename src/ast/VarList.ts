@@ -16,16 +16,20 @@ export class VarList extends AstNode {
 
     public parse(context: Tokenizer): any {
         this.nameToType = new Map();
+        // See the beginning of the array "["
         context.getAndCheckNext("\\[");
         while (!context.checkToken("\\]")) {
+            // Iterate over the type/name pairs until we see the bracket "]
             const type: string = context.getNext();
             const name: string = context.getNext();
             this.addPair(name, type);
+            // If we only have one type/name pair, break
             if (!context.checkToken(",")) {
                 break;
             }
             context.getAndCheckNext(",");
         }
+        context.getNext();
     }
 
     public evaluate(): any {

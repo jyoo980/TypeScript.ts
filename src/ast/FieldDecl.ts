@@ -22,25 +22,23 @@ export class FieldDecl extends AstNode {
         this.fields = new VarList();
         this.fields.parse(context);
 
-        context.getNext();
-
         if (context.getCurrentLineTabLevel() <= indentLevel) {
             return;
         }
 
         context.getAndCheckNext("generate");
 
-        if (context.getNext() === "getter") {
+        if (context.getNext() === "getters") {
             this.generateGetter = true;
         } else {
             this.generateSetter = true;
         }
 
-        context.getNext();
-
         if (context.getCurrentLineTabLevel() <= indentLevel) {
             return;
         }
+
+        context.getAndCheckNext("generate");
 
         if (this.generateSetter) {
             this.generateGetter = true
