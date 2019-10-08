@@ -1,0 +1,9 @@
+project ts-dsl
+    dir src
+        dir ast
+        dir codegen
+        dir util
+    dir test
+        dir ast
+        dir testFiles
+        dir util
