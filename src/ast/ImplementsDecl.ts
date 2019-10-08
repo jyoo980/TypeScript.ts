@@ -15,7 +15,11 @@ export class ImplementsDecl extends AstNode {
         this.parentNames = [];
         this.parentNames.push(context.getNext());
 
-        // TODO: implement the rest of this
+        while(context.checkToken("\,")) {
+            context.getNext();
+            this.parentNames.push(context.getNext());
+        }
+        return this;
     }
 
     public evaluate(): any {
