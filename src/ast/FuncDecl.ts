@@ -40,7 +40,30 @@ export default class FuncDecl extends AstNode {
             this.isAsync = true;
         }
         this.name = context.getNext();
-        // TODO
+        if (context.getCurrentLineTabLevel() <= indentLevel) return;
+        context.getAndCheckNext("params");
+        this.params = new VarList();
+        this.params.parse(context);
+
+        const commentOrReturn = context.getNext();
+        if (commentOrReturn === "comments") {
+            this.comment = new CommentDecl();
+            this.comment.parse(context);
+            const maybeReturnToken = context.getNext();
+            if (maybeReturnToken === "returns") {
+                this.returnType = context.getNext();
+                return;
+            } else {
+                this.returnType = "void";
+                return;
+            }
+        } else if (commentOrReturn === "returns") {
+            this.returnType = context.getNext();
+            this.comment = null;
+            return;
+        }
+        this.comment = null;
+        this.returnType = "void";
     }
 
     private parseNoModifiers(context: Tokenizer, name: string, indentLevel: number): any {

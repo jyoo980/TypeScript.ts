@@ -48,4 +48,28 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.returnType).to.equal("number");
     });
 
+    it("should parse a function declaration with modifier async", () => {
+        const tokenizer: Tokenizer = new Tokenizer("funcDeclWithModifier.txt", "./test/testFiles");
+        funcDecl.parse(tokenizer);
+        expect(funcDecl.modifier).to.equal("public");
+        expect(funcDecl.name).to.equal("bar");
+        expect(funcDecl.params.nameToType.size).to.equal(2);
+        expect(funcDecl.isAsync).to.equal(true);
+        expect(funcDecl.isStatic).to.equal(false);
+        expect(funcDecl.comment).to.equal(null);
+        expect(funcDecl.returnType).to.equal("void");
+    });
+
+    it("should parse a complex function declaration", () => {
+        const tokenizer: Tokenizer = new Tokenizer("funcDeclComplex.txt", "./test/testFiles");
+        funcDecl.parse(tokenizer);
+        expect(funcDecl.modifier).to.equal("public");
+        expect(funcDecl.name).to.equal("addDataset");
+        expect(funcDecl.params.nameToType.size).to.equal(3);
+        expect(funcDecl.isAsync).to.equal(true);
+        expect(funcDecl.isStatic).to.equal(false);
+        expect(funcDecl.comment.comments).to.deep.equal(["Add Dataset function", "returns ids of datasets on disk"]);
+        expect(funcDecl.returnType).to.equal(`Promise<string>`);
+    });
+
 });
