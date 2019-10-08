@@ -63,6 +63,8 @@ export class ClassDecl extends Content {
             func.parse(context);
             this.functions.push(func);
         }
+
+        return this;
     }
 
     public evaluate(): any {
