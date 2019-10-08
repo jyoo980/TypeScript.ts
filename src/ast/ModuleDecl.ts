@@ -3,8 +3,8 @@
  *
  * e.g. modules ["chai: 4.1.2", "mocha"]
  */
-import { Tokenizer } from "../util/Tokenizer";
 import { AstNode } from "./AstNode";
+import { Tokenizer } from "../util/Tokenizer";
 
 export class ModuleDecl extends AstNode {
 
@@ -17,7 +17,6 @@ export class ModuleDecl extends AstNode {
         context.getNext();
 
         const currentLevel = context.getCurrentLineTabLevel();
-        // this.modules = [];
         context.getAndCheckNext('\\[');
         while (!context.checkToken('\\]')) {
             if (currentLevel && currentLevel > context.getCurrentLineTabLevel()) {
