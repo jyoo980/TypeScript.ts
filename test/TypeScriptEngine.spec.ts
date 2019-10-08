@@ -52,6 +52,7 @@ describe("TypeScriptEngine tests", () => {
         const emptyVarList: VarList = new VarList();
         emptyVarList.nameToType = new Map();
         const result: FunctionDeclaration = engine.createFun(funName, [], emptyVarList, "number");
+        console.log(result);
         expect(result).to.deep.equal(ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ [],
@@ -99,4 +100,30 @@ describe("TypeScriptEngine tests", () => {
             undefined
         ));
     });
+
+    it('should add a multiline comment to the function', () => {
+        // const varList: VarList = new VarList();
+        // const result = engine.createFun('foo', ['public'], varList, 'void', ['comment line 1', 'comment line 2', 'comment line 3']);
+        // console.log(toText(result));
+    });
+
+    function toText(func: FunctionDeclaration) {
+        const resultFile = ts.createSourceFile(
+            "someFileName.ts",
+            "",
+            ts.ScriptTarget.Latest,
+            /*setParentNodes*/ false,
+            ts.ScriptKind.TS
+        );
+        const printer = ts.createPrinter({
+            newLine: ts.NewLineKind.LineFeed
+        });
+        const result = printer.printNode(
+            ts.EmitHint.Unspecified,
+            // replace this line with our call to createFun, or the result of it from the tests
+            func,
+            resultFile
+        );
+        return result;
+    }
 });

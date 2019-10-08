@@ -1,4 +1,5 @@
 import ts = require("typescript");
+import {SyntaxKind} from 'typescript';
 
 // SOURCE: https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API
 

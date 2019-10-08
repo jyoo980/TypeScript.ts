@@ -13,11 +13,13 @@ export default class TypeScriptEngine {
         this.typeTable = TypeTable.getInstance();
     }
 
-    public createFun(name: string, modifiers: string[], params: VarList, returnType: string): FunctionDeclaration {
+    public createFun(name: string, modifiers: string[], params: VarList, returnType: string, comments?: string[]): FunctionDeclaration {
         const tsModifiers: Modifier[] = this.makeModifierNodes(modifiers);
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(params);
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(returnType);
-        return ts.createFunctionDeclaration(
+        console.log('comments: ', comments);
+
+        const funcDeclaration = ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ tsModifiers,
             /* asteriskToken */ undefined,
@@ -26,7 +28,19 @@ export default class TypeScriptEngine {
             tsParams,
             tsReturnType,
             undefined
-        )
+        );
+
+        if (comments && comments.length) {
+            const commentString: string = this.generateCommentString(comments);
+            ts.addSyntheticLeadingComment(
+                funcDeclaration,
+                SyntaxKind.MultiLineCommentTrivia,
+                commentString,
+                true
+            );
+        }
+        
+        return funcDeclaration;
     }
 
     // TODO: create class method.
@@ -66,5 +80,14 @@ export default class TypeScriptEngine {
             case "static": return SyntaxKind.StaticKeyword;
             case "abstract": return SyntaxKind.AbstractKeyword;
         }
+    }
+
+    private generateCommentString(comments: string[]): string {
+        let result: string = '*\n';
+        for (const comment of comments) {
+            result += ` * ${comment}\n`;
+        }
+        result += ' '
+        return result;
     }
 }
