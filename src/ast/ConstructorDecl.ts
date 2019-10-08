@@ -14,8 +14,15 @@ export default class ConstructorDecl extends AstNode {
     params: VarList;
 
     public parse(context: Tokenizer): any {
+        let indentLevel: number = context.getCurrentLineTabLevel();
+        context.getAndCheckNext("constructor");
+        this.modifier = context.getNext();
+
+        if (context.getCurrentLineTabLevel() <= indentLevel) return;
+
+        context.getAndCheckNext("params");
         this.params = new VarList();
-        // TODO: implement the rest.
+        this.params.parse(context);
     }
 
     public evaluate(): any {
