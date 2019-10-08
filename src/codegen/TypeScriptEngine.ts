@@ -43,8 +43,6 @@ export default class TypeScriptEngine {
         )
     }
 
-    // TODO: create class method.
-
     public createClass(classDecl: ClassDecl): ClassDeclaration {
         // Add function declarations
         let classMembers: ClassElement[] =
