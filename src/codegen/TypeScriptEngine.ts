@@ -17,7 +17,6 @@ export default class TypeScriptEngine {
         const tsModifiers: Modifier[] = this.makeModifierNodes(modifiers);
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(params);
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(returnType);
-        console.log('comments: ', comments);
 
         const funcDeclaration = ts.createFunctionDeclaration(
             /* decorators */ undefined,
@@ -82,12 +81,14 @@ export default class TypeScriptEngine {
         }
     }
 
+    /**
+     * Format comments into a single string for TS compiler api
+     *
+     * @param comments      comments to process
+     * @returns string      formatted string for TS compiler api
+     */
     private generateCommentString(comments: string[]): string {
-        let result: string = '*\n';
-        for (const comment of comments) {
-            result += ` * ${comment}\n`;
-        }
-        result += ' '
-        return result;
+        const result: string = comments.reduce((acc, curr) => acc += ` * ${curr}\n`, '');
+        return `*\n${result} `;
     }
 }
