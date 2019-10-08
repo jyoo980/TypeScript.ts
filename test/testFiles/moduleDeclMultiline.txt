@@ -1,0 +1,4 @@
+modules [
+	"someModule1",
+	"someModule2"
+]
