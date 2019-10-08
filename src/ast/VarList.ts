@@ -8,24 +8,27 @@ import {Tokenizer} from "../util/Tokenizer";
  */
 export class VarList extends AstNode {
 
-    nameToType: Map<string, string>;
+    nameToType: Map<string, string> = new Map();
 
     public addPair(name: string, type: string): void {
         this.nameToType.set(name, type);
     }
 
     public parse(context: Tokenizer): any {
-        this.nameToType = new Map();
+        // See the beginning of the array "["
         context.getAndCheckNext("\\[");
         while (!context.checkToken("\\]")) {
+            // Iterate over the type/name pairs until we see the bracket "]
             const type: string = context.getNext();
             const name: string = context.getNext();
-            this.addPair(type, name);
+            this.addPair(name, type);
+            // If we only have one type/name pair, break
             if (!context.checkToken(",")) {
                 break;
             }
             context.getAndCheckNext(",");
         }
+        context.getNext();
     }
 
     public evaluate(): any {

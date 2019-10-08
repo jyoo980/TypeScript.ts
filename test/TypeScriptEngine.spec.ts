@@ -2,12 +2,19 @@ import * as ts from "typescript";
 import { expect } from "chai";
 import TypeScriptEngine from "../src/codegen/TypeScriptEngine";
 import {VarList} from "../src/ast/VarList";
-import { ParameterDeclaration, Modifier, SyntaxKind, FunctionDeclaration } from "typescript";
+import { ParameterDeclaration, Modifier, SyntaxKind, FunctionDeclaration, InterfaceDeclaration } from "typescript";
 import {TypeTable} from "../src/ast/symbols/TypeTable";
+import FuncDecl from "../src/ast/FuncDecl";
+import {InterfaceDecl} from "../src/ast/InterfaceDecl";
+import {FieldDecl} from "../src/ast/FieldDecl";
+import CommentDecl from "../src/ast/CommentDecl";
 
 describe("TypeScriptEngine tests", () => {
 
     let engine: TypeScriptEngine;
+    let baseInterfaceDecl: InterfaceDecl;
+    let baseFunDecl: FuncDecl;
+    let baseVarList: VarList;
 
     function funcDeclarationToString(func: FunctionDeclaration) {
         const resultFile = ts.createSourceFile(
@@ -31,6 +38,11 @@ describe("TypeScriptEngine tests", () => {
 
     before(() => {
         engine = new TypeScriptEngine();
+        baseFunDecl = new FuncDecl();
+        baseVarList = new VarList();
+        baseInterfaceDecl = new InterfaceDecl();
+        baseInterfaceDecl.fieldDecl = new FieldDecl();
+        baseInterfaceDecl.fieldDecl.fields = new VarList();
     });
 
     it("should convert a VarList to a ParamDeclaration[]", () => {
@@ -68,15 +80,17 @@ describe("TypeScriptEngine tests", () => {
     });
 
     it("should create a simple function declaration - foo(): number", () => {
-        const funName: string = "foo";
-        const emptyVarList: VarList = new VarList();
-        emptyVarList.nameToType = new Map();
-        const result: FunctionDeclaration = engine.createFun(funName, [], emptyVarList, "number");
+        baseVarList.nameToType = new Map();
+        baseFunDecl.name = "foo";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnType = "number";
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         expect(result).to.deep.equal(ts.createFunctionDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ [],
+            /* modifiers */ [ts.createModifier(ts.SyntaxKind.PublicKeyword)],
             /* asteriskToken */ undefined,
-            funName,
+            "foo",
             /* typeParameters */ undefined,
             [],
             ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword),
@@ -86,18 +100,21 @@ describe("TypeScriptEngine tests", () => {
 
     it("should create a parameterized function declaration", () => {
         // public makeParamDecl(name: string, type: string): ParameterDecl;
-        const funName: string = "makeParamDecl";
-        const varList: VarList = new VarList();
-        varList.nameToType = new Map();
-        varList.addPair("name", "string");
-        varList.addPair("type", "string");
+        baseVarList.nameToType = new Map();
+        baseVarList.addPair("name", "string");
+        baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
-        const result: FunctionDeclaration = engine.createFun(funName, ["public"], varList, "ParameterDecl");
+        const funDecl: FuncDecl = new FuncDecl();
+        funDecl.name = "makeParamDecl";
+        funDecl.modifier = "public";
+        funDecl.params = baseVarList;
+        funDecl.returnType = "ParameterDecl";
+        const result: FunctionDeclaration = engine.createFun(funDecl);
         expect(result).to.deep.equal(ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ [ts.createModifier(ts.SyntaxKind.PublicKeyword)],
             /* asteriskToken */ undefined,
-            funName,
+            "makeParamDecl",
             /* typeParameters */ undefined,
             [
                 ts.createParameter(
@@ -121,29 +138,167 @@ describe("TypeScriptEngine tests", () => {
     });
 
     it('should add a multiline comment with only one line to the function', () => {
-        const funName: string = "foo";
-        const emptyVarList: VarList = new VarList();
-        emptyVarList.nameToType = new Map();
-        const result: FunctionDeclaration = engine.createFun(funName, [], emptyVarList, 'number', ['comment line 1']);
+        baseVarList.nameToType = new Map();
+        baseFunDecl.name = "foo";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnType = "number";
+        baseFunDecl.comment = new CommentDecl();
+        baseFunDecl.comment.comments = ['comment line 1'];
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         const resultStr: string = funcDeclarationToString(result);
         expect(resultStr).to.equal(`/**\n * comment line 1\n */\nfunction foo(): number;`);
     });
 
     it('should add a multiline comment with multiple lines to the function', () => {
-        const funName: string = "foo";
-        const emptyVarList: VarList = new VarList();
-        emptyVarList.nameToType = new Map();
-        const result: FunctionDeclaration = engine.createFun(funName, [], emptyVarList, 'number', ['comment line 1', 'comment line 2', 'comment line 3']);
+        baseVarList.nameToType = new Map();
+        baseFunDecl.name = "foo";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnType = "number";
+        baseFunDecl.comment = new CommentDecl();
+        baseFunDecl.comment.comments = ['comment line 1', 'comment line 2', 'comment line 3'];
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         const resultStr: string = funcDeclarationToString(result);
         expect(resultStr).to.equal(`/**\n * comment line 1\n * comment line 2\n * comment line 3\n */\nfunction foo(): number;`);
     });
 
     it('should not add a comment to the function', () => {
-        const funName: string = "foo";
-        const emptyVarList: VarList = new VarList();
-        emptyVarList.nameToType = new Map();
-        const result: FunctionDeclaration = engine.createFun(funName, [], emptyVarList, 'number', []);
+        baseVarList.nameToType = new Map();
+        baseFunDecl.name = "foo";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnType = "number";
+        baseFunDecl.comment = new CommentDecl();
+        baseFunDecl.comment.comments = [];
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         const resultStr: string = funcDeclarationToString(result);
         expect(resultStr).to.equal(`function foo(): number;`);
+    });
+
+    it("should make a basic interface declaration (no members)", () => {
+        // interface FooBar { }
+        const name: string = "FooBar";
+        baseInterfaceDecl.interfaceName = name;
+        baseInterfaceDecl.functions = [];
+        baseInterfaceDecl.fieldDecl = new FieldDecl();
+        baseInterfaceDecl.fieldDecl.fields = new VarList();
+        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+        expect(result).to.deep.equal(ts.createInterfaceDeclaration(
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            baseInterfaceDecl.interfaceName,
+            /* typeParams */ undefined,
+            /* heritageClauses */ undefined,
+            []
+        ));
+    });
+
+    it("should make an interface declaration with method signatures", () => {
+        /* interface IInsightFacade {
+         *       makeParamDecl(name: string, type: string): ParameterDecl;
+         * }
+         * */
+        const name: string = "IInsightFacade";
+        const funName: string = "makeParamDecl";
+        baseVarList.nameToType = new Map();
+        baseVarList.addPair("name", "string");
+        baseVarList.addPair("type", "string");
+        TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
+        const funDecl: FuncDecl = new FuncDecl();
+        funDecl.name = funName;
+        funDecl.modifier = "public";
+        funDecl.params = baseVarList;
+        funDecl.returnType = "ParameterDecl";
+        baseInterfaceDecl.interfaceName = name;
+        baseInterfaceDecl.functions = [funDecl];
+        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+        expect(result).to.deep.equal(ts.createInterfaceDeclaration(
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            name,
+            /* typeParams */ undefined,
+            /* heritageClauses */ undefined,
+            [ts.createMethodSignature(
+                /* typeParameters */ undefined,
+                [
+                    ts.createParameter(
+                        /* decorators */ undefined,
+                        /* modifiers */ undefined,
+                        /* dotDotToken */ undefined,
+                        "name",
+                        /* questionToken */ undefined,
+                        ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
+                    ts.createParameter(
+                        /* decorators */ undefined,
+                        /* modifiers */ undefined,
+                        /* dotDotToken */ undefined,
+                        "type",
+                        /* questionToken */ undefined,
+                        ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+                    )],
+                ts.createTypeReferenceNode("ParameterDecl", undefined),
+                funDecl.name,
+                /* questionToken */ undefined
+            )]
+        ));
+    });
+
+    it("should make an interface with method signatures and fields", () => {
+        /* interface IInsightFacade {
+         *       foo: string;
+         *       makeParamDecl(name: string, type: string): ParameterDecl;
+         * }
+         * */
+        const name: string = "IInsightFacade";
+        const funName: string = "makeParamDecl";
+        baseVarList.nameToType = new Map();
+        baseVarList.addPair("name", "string");
+        baseVarList.addPair("type", "string");
+        TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
+        const funDecl: FuncDecl = new FuncDecl();
+        funDecl.name = funName;
+        funDecl.modifier = "public";
+        funDecl.params = baseVarList;
+        funDecl.returnType = "ParameterDecl";
+        baseInterfaceDecl.interfaceName = name;
+        baseInterfaceDecl.functions = [funDecl];
+        baseInterfaceDecl.fieldDecl.fields.addPair("foo", "string");
+        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+        expect(result).to.deep.equal(ts.createInterfaceDeclaration(
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            name,
+            /* typeParams */ undefined,
+            /* heritageClauses */ undefined,
+            [ts.createMethodSignature(
+                /* typeParameters */ undefined,
+                [
+                    ts.createParameter(
+                        /* decorators */ undefined,
+                        /* modifiers */ undefined,
+                        /* dotDotToken */ undefined,
+                        "name",
+                        /* questionToken */ undefined,
+                        ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
+                    ts.createParameter(
+                        /* decorators */ undefined,
+                        /* modifiers */ undefined,
+                        /* dotDotToken */ undefined,
+                        "type",
+                        /* questionToken */ undefined,
+                        ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+                    )],
+                ts.createTypeReferenceNode("ParameterDecl", undefined),
+                funDecl.name,
+                /* questionToken */ undefined
+            ),ts.createPropertySignature(
+                /* modifiers */ undefined,
+                "foo",
+                /* questionToken */ undefined,
+                ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+                /* initializer */ undefined
+            )]
+        ));
     });
 });

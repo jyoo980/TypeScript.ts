@@ -1,7 +1,9 @@
 import * as ts from "typescript";
-import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode} from "typescript";
+import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration, TypeElement} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
+import FuncDecl from "../ast/FuncDecl";
+import {InterfaceDecl} from "../ast/InterfaceDecl";
 
 export default class TypeScriptEngine {
 
@@ -13,22 +15,24 @@ export default class TypeScriptEngine {
         this.typeTable = TypeTable.getInstance();
     }
 
-    public createFun(name: string, modifiers: string[], params: VarList, returnType: string, comments?: string[]): FunctionDeclaration {
-        const tsModifiers: Modifier[] = this.makeModifierNodes(modifiers);
-        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(params);
-        const tsReturnType: TypeNode = this.typeTable.getTypeNode(returnType);
+    public createFun(funDecl: FuncDecl): FunctionDeclaration {
+        // TODO: check if modifier is undefined
+        const tsModifiers: Modifier[] = this.makeModifierNodes([funDecl.modifier]);
+        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funDecl.params);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funDecl.returnType);
 
         const funcDeclaration = ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ tsModifiers,
             /* asteriskToken */ undefined,
-            name,
+            funDecl.name,
             /* typeParameters */ undefined,
             tsParams,
             tsReturnType,
             undefined
         );
 
+        const comments: string[] = funDecl.comment && funDecl.comment.comments;
         if (comments && comments.length) {
             const commentString: string = this.generateCommentString(comments);
             ts.addSyntheticLeadingComment(
@@ -44,7 +48,50 @@ export default class TypeScriptEngine {
 
     // TODO: create class method.
 
-    // TODO: create interface method.
+    public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
+        const tsMethodSignatures: TypeElement[] =
+            interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
+        const tsPropertySignatures: TypeElement[] = this.fieldsToTsProperty(interfaceDecl.fieldDecl.fields);
+        const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
+        return ts.createInterfaceDeclaration(
+            // TODO: comments!
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            interfaceDecl.interfaceName,
+            /* typeParams */ undefined,
+            /* heritageClauses */ undefined,
+            interfaceMembers
+        );
+    }
+
+    private createMethodSignature(funcDecl: FuncDecl): TypeElement {
+        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnType);
+        return ts.createMethodSignature(
+            /* typeParameters */ undefined,
+            tsParams,
+            tsReturnType,
+            funcDecl.name,
+            /* questionToken */ undefined
+        )
+    }
+
+    private fieldsToTsProperty(fields: VarList): TypeElement[] {
+        const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
+        return fieldsAsList.map((nameTypePair) => {
+            return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
+        });
+    }
+
+    private makePropertySignature(name: string, type: string): TypeElement {
+        return ts.createPropertySignature(
+            /* modifiers */ undefined,
+            name,
+            /* questionToken */ undefined,
+            this.typeTable.getTypeNode(type),
+            /* initializer */ undefined
+        );
+    }
 
     private varsToParamDecl(vars: VarList): ParameterDeclaration[] {
         const varsAsList: [string, string][] = Array.from(vars.nameToType.entries());
