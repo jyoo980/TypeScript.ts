@@ -6,7 +6,7 @@ describe("CommentDecl parse test", () => {
 
     let commentDecl: CommentDecl;
 
-    before(() => {
+    beforeEach(() => {
         commentDecl = new CommentDecl();
     });
 

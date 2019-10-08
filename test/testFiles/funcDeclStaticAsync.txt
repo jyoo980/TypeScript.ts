@@ -1,0 +1,2 @@
+function public static async bar
+    params [InsightFacade facade, number foo]
