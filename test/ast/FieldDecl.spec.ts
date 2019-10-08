@@ -1,4 +1,4 @@
-import {Tokenizer} from "../../src/util/Tokenizer";
+import {ParseError, Tokenizer} from "../../src/util/Tokenizer";
 import {FieldDecl} from "../../src/ast/FieldDecl";
 import {expect} from "chai";
 
@@ -35,5 +35,12 @@ describe("FieldDecl tokenizer test", () => {
         expect(fieldDecl.fields.nameToType.get("facade")).to.deep.equal("IInsightFacade");
         expect(fieldDecl.generateGetter).to.equal(true);
         expect(fieldDecl.generateSetter).to.equal(true);
+    });
+
+    it ("should throw a ParseError if it fails to parse a getter/setter", () => {
+        const tokenizer: Tokenizer = new Tokenizer("fieldDeclNotValid.txt", "./test/testFiles");
+        expect(() => {
+            fieldDecl.parse(tokenizer);
+        }).to.throw(ParseError)
     });
 });

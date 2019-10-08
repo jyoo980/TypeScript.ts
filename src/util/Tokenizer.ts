@@ -7,6 +7,12 @@ export class TokenizerError extends Error {
     }
 }
 
+export class ParseError extends Error {
+    constructor(...args: any[]) {
+        super(...args);
+        Error.captureStackTrace(this, ParseError);
+    }
+}
 
 export class Tokenizer {
     private program: string;

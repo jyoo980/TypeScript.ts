@@ -1,6 +1,6 @@
 import {VarList} from "./VarList";
 import {AstNode} from "./AstNode";
-import {Tokenizer} from "../util/Tokenizer";
+import {ParseError, Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents a field declaration in the TypeScript DSL.
@@ -27,23 +27,24 @@ export class FieldDecl extends AstNode {
         }
 
         context.getAndCheckNext("generate");
-
-        if (context.getNext() === "getters") {
-            this.generateGetter = true;
-        } else {
-            this.generateSetter = true;
-        }
+        this.parseGetterSetter(context);
 
         if (context.getCurrentLineTabLevel() <= indentLevel) {
             return;
         }
 
         context.getAndCheckNext("generate");
+        this.parseGetterSetter(context);
+    }
 
-        if (this.generateSetter) {
-            this.generateGetter = true
-        } else {
+    private parseGetterSetter(context: Tokenizer) {
+        const maybeGetterSetter = context.getNext();
+        if (maybeGetterSetter === "getters") {
+            this.generateGetter = true;
+        } else if (maybeGetterSetter === "setters") {
             this.generateSetter = true;
+        } else {
+            throw new ParseError(`FieldDecl::failed to parse getter/setter`);
         }
     }
 
