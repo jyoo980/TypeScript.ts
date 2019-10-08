@@ -96,7 +96,7 @@ export default class TypeScriptEngine {
 
     private createMethod(funcDecl: FuncDecl): ClassElement {
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
-        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnType);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnDecl.returnType);
         return ts.createMethod(
             undefined,
             undefined,
