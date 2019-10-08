@@ -7,6 +7,7 @@ import {TypeTable} from "../src/ast/symbols/TypeTable";
 import FuncDecl from "../src/ast/FuncDecl";
 import {InterfaceDecl} from "../src/ast/InterfaceDecl";
 import {FieldDecl} from "../src/ast/FieldDecl";
+import ReturnDecl from "../src/ast/ReturnDecl";
 
 describe("TypeScriptEngine tests", () => {
 
@@ -18,6 +19,7 @@ describe("TypeScriptEngine tests", () => {
     before(() => {
         engine = new TypeScriptEngine();
         baseFunDecl = new FuncDecl();
+        baseFunDecl.returnDecl = new ReturnDecl();
         baseVarList = new VarList();
         baseInterfaceDecl = new InterfaceDecl();
         baseInterfaceDecl.fieldDecl = new FieldDecl();
@@ -63,7 +65,7 @@ describe("TypeScriptEngine tests", () => {
         baseFunDecl.name = "foo";
         baseFunDecl.modifier = "public";
         baseFunDecl.params = baseVarList;
-        baseFunDecl.returnType = "number";
+        baseFunDecl.returnDecl.returnType = "number";
         const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         expect(result).to.deep.equal(ts.createFunctionDeclaration(
             /* decorators */ undefined,
@@ -83,12 +85,11 @@ describe("TypeScriptEngine tests", () => {
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
-        const funDecl: FuncDecl = new FuncDecl();
-        funDecl.name = "makeParamDecl";
-        funDecl.modifier = "public";
-        funDecl.params = baseVarList;
-        funDecl.returnType = "ParameterDecl";
-        const result: FunctionDeclaration = engine.createFun(funDecl);
+        baseFunDecl.name = "makeParamDecl";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnDecl.returnType = "ParameterDecl";
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
         expect(result).to.deep.equal(ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ [ts.createModifier(ts.SyntaxKind.PublicKeyword)],
@@ -145,13 +146,12 @@ describe("TypeScriptEngine tests", () => {
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
-        const funDecl: FuncDecl = new FuncDecl();
-        funDecl.name = funName;
-        funDecl.modifier = "public";
-        funDecl.params = baseVarList;
-        funDecl.returnType = "ParameterDecl";
+        baseFunDecl.name = funName;
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnDecl.returnType = "ParameterDecl";
         baseInterfaceDecl.interfaceName = name;
-        baseInterfaceDecl.functions = [funDecl];
+        baseInterfaceDecl.functions = [baseFunDecl];
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
             /* decorators */ undefined,
@@ -178,7 +178,7 @@ describe("TypeScriptEngine tests", () => {
                         ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
                     )],
                 ts.createTypeReferenceNode("ParameterDecl", undefined),
-                funDecl.name,
+                baseFunDecl.name,
                 /* questionToken */ undefined
             )]
         ));
@@ -196,13 +196,12 @@ describe("TypeScriptEngine tests", () => {
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
-        const funDecl: FuncDecl = new FuncDecl();
-        funDecl.name = funName;
-        funDecl.modifier = "public";
-        funDecl.params = baseVarList;
-        funDecl.returnType = "ParameterDecl";
+        baseFunDecl.name = funName;
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnDecl.returnType = "ParameterDecl";
         baseInterfaceDecl.interfaceName = name;
-        baseInterfaceDecl.functions = [funDecl];
+        baseInterfaceDecl.functions = [baseFunDecl];
         baseInterfaceDecl.fieldDecl.fields.addPair("foo", "string");
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
@@ -230,7 +229,7 @@ describe("TypeScriptEngine tests", () => {
                         ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
                     )],
                 ts.createTypeReferenceNode("ParameterDecl", undefined),
-                funDecl.name,
+                baseFunDecl.name,
                 /* questionToken */ undefined
             ),ts.createPropertySignature(
                 /* modifiers */ undefined,
