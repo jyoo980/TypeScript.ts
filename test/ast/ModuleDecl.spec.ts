@@ -6,8 +6,12 @@ describe("FieldDecl tokenizer test", () => {
 
     let moduleDecl: ModuleDecl;
 
-    before(() => {
+    beforeEach(() => {
         moduleDecl = new ModuleDecl();
+    });
+
+    afterEach(() => {
+        moduleDecl = null;
     });
 
     it('should parse modules ["someModule1", "someModule2: 1.0.0"]', () => {
@@ -15,7 +19,7 @@ describe("FieldDecl tokenizer test", () => {
         moduleDecl.parse(tokenizer);
         expect(moduleDecl.modules).to.deep.equal(['someModule1', 'someModule2: 1.0.0']);
     });
-    
+
     it('should parse modules []', () => {
         const tokenizer: Tokenizer = new Tokenizer("moduleDeclEmpty.txt", "./test/testFiles");
         moduleDecl.parse(tokenizer);
