@@ -8,7 +8,8 @@ import {FunctionDeclaration,
         ClassDeclaration,
         InterfaceDeclaration,
         ClassElement,
-        TypeElement} from "typescript";
+        TypeElement,
+        NamedDeclaration} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
@@ -52,7 +53,7 @@ export default class TypeScriptEngine {
 
         // Add field declarations
         for (let field of classDecl.fields) {
-            classMembers.concat(this.fieldsToTsProperty(field.fields));
+            classMembers.concat(this.fieldsToNamedDecl(field.fields) as ClassElement[]);
         }
 
         return ts.createClassDeclaration(
@@ -68,7 +69,7 @@ export default class TypeScriptEngine {
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
         const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
-        const tsPropertySignatures: TypeElement[] = this.fieldsToTsProperty(interfaceDecl.fieldDecl.fields);
+        const tsPropertySignatures: TypeElement[] = this.fieldsToNamedDecl(interfaceDecl.fieldDecl.fields) as TypeElement[];
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         return ts.createInterfaceDeclaration(
             // TODO: comments!
@@ -109,14 +110,21 @@ export default class TypeScriptEngine {
         )
     }
 
-    private fieldsToTsProperty(fields: VarList): TypeElement[] {
+    // private fieldsToTypeElement(fields: VarList): TypeElement[] {
+    //     const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
+    //     return fieldsAsList.map((nameTypePair) => {
+    //         return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
+    //     });
+    // }
+
+    private fieldsToNamedDecl(fields: VarList): NamedDeclaration[] {
         const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
         return fieldsAsList.map((nameTypePair) => {
             return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
         });
     }
 
-    private makePropertySignature(name: string, type: string): TypeElement {
+    private makePropertySignature(name: string, type: string): NamedDeclaration {
         return ts.createPropertySignature(
             /* modifiers */ undefined,
             name,
