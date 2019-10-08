@@ -13,6 +13,7 @@ export class ExtendsDecl extends AstNode {
     public parse(context: Tokenizer): any {
         context.getAndCheckNext("extends");
         this.parentName = context.getNext();
+        return this;
     }
 
     public evaluate(): any {
