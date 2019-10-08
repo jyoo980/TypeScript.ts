@@ -15,7 +15,6 @@ export class VarList extends AstNode {
     }
 
     public parse(context: Tokenizer): any {
-        this.nameToType = new Map();
         // See the beginning of the array "["
         context.getAndCheckNext("\\[");
         while (!context.checkToken("\\]")) {
