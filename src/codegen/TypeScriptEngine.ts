@@ -8,8 +8,7 @@ import {FunctionDeclaration,
         ClassDeclaration,
         InterfaceDeclaration,
         ClassElement,
-        TypeElement,
-        NamedDeclaration} from "typescript";
+        TypeElement} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
@@ -48,12 +47,12 @@ export default class TypeScriptEngine {
 
     public createClass(classDecl: ClassDecl): ClassDeclaration {
         // Add function declarations
-        const classMembers: ClassElement[] =
+        let classMembers: ClassElement[] =
             classDecl.functions.map((func: FuncDecl) => this.createMethod(func));
 
         // Add field declarations
         for (let field of classDecl.fields) {
-            classMembers.concat(this.fieldsToNamedDecl(field.fields) as ClassElement[]);
+            classMembers = classMembers.concat(this.fieldsToClassElement(field.fields));
         }
 
         return ts.createClassDeclaration(
@@ -69,7 +68,7 @@ export default class TypeScriptEngine {
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
         const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
-        const tsPropertySignatures: TypeElement[] = this.fieldsToNamedDecl(interfaceDecl.fieldDecl.fields) as TypeElement[];
+        const tsPropertySignatures: TypeElement[] = this.fieldsToTypeElement(interfaceDecl.fieldDecl.fields);
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         return ts.createInterfaceDeclaration(
             // TODO: comments!
@@ -110,22 +109,33 @@ export default class TypeScriptEngine {
         )
     }
 
-    // private fieldsToTypeElement(fields: VarList): TypeElement[] {
-    //     const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
-    //     return fieldsAsList.map((nameTypePair) => {
-    //         return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
-    //     });
-    // }
-
-    private fieldsToNamedDecl(fields: VarList): NamedDeclaration[] {
+    private fieldsToTypeElement(fields: VarList): TypeElement[] {
         const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
         return fieldsAsList.map((nameTypePair) => {
             return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
         });
     }
 
-    private makePropertySignature(name: string, type: string): NamedDeclaration {
+    private fieldsToClassElement(fields: VarList): ClassElement[] {
+        const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
+        return fieldsAsList.map((nameTypePair) => {
+            return this.makeProperty(nameTypePair[0], nameTypePair[1]);
+        });
+    }
+
+    private makePropertySignature(name: string, type: string): TypeElement {
         return ts.createPropertySignature(
+            /* modifiers */ undefined,
+            name,
+            /* questionToken */ undefined,
+            this.typeTable.getTypeNode(type),
+            /* initializer */ undefined
+        );
+    }
+
+    private makeProperty(name: string, type: string): ClassElement {
+        return ts.createProperty(
+            /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
             /* questionToken */ undefined,

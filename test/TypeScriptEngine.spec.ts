@@ -352,4 +352,60 @@ describe("TypeScriptEngine tests", () => {
             )]
         ));
     });
+
+    it("should make a class with method signatures", () => {
+        /* class InsightFacade {
+         *       foo: string;
+         *       makeParamDecl(name: string, type: string): ParameterDecl;
+         * }
+         * */
+        const name: string = "InsightFacade";
+        const funName: string = "makeParamDecl";
+        baseVarList.nameToType = new Map();
+        baseVarList.addPair("name", "string");
+        baseVarList.addPair("type", "string");
+        TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
+        const funDecl: FuncDecl = new FuncDecl();
+        funDecl.name = funName;
+        funDecl.modifier = "public";
+        funDecl.params = baseVarList;
+        funDecl.returnType = "ParameterDecl";
+        baseClassDecl.className = name;
+        baseClassDecl.functions = [funDecl];
+        baseClassDecl.fields = [];
+        const result: ClassDeclaration = engine.createClass(baseClassDecl);
+        expect(result).to.deep.equal(ts.createClassDeclaration(
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            name,
+            /* typeParams */ undefined,
+            /* heritageClauses */ undefined,
+            [ts.createMethod(
+                /* typeParameters */ undefined,
+                undefined,
+                undefined,
+                funDecl.name,
+                undefined,
+                undefined,
+                [
+                    ts.createParameter(
+                        /* decorators */ undefined,
+                        /* modifiers */ undefined,
+                        /* dotDotToken */ undefined,
+                        "name",
+                        /* questionToken */ undefined,
+                        ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
+                    ts.createParameter(
+                        /* decorators */ undefined,
+                        /* modifiers */ undefined,
+                        /* dotDotToken */ undefined,
+                        "type",
+                        /* questionToken */ undefined,
+                        ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+                    )],
+                ts.createTypeReferenceNode("ParameterDecl", undefined),
+                /* body */ undefined
+            )]
+        ));
+    });
 });
