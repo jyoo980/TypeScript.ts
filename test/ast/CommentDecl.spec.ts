@@ -27,4 +27,10 @@ describe("CommentDecl parse test", () => {
         commentDecl.parse(tokenizer);
         expect(commentDecl.comments).to.deep.equal(["this is a", "odd", "multiline"]);
     });
+
+    it("should parse a comment with newlines", () => {
+        const tokenizer: Tokenizer = new Tokenizer("commentWithNewlines.txt", "./test/testFiles");
+        commentDecl.parse(tokenizer);
+        expect(commentDecl.comments).to.deep.equal(["this is a", "multiline comment"]);
+    });
 });
