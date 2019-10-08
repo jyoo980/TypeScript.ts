@@ -53,7 +53,15 @@ export default class FuncDecl extends AstNode {
         const commentOrReturn = context.getNext();
         if (commentOrReturn === "comments") {
             this.comment = new CommentDecl();
-            // TODO: parse return (if it has any)
+            this.comment.parse(context);
+            const maybeReturnToken = context.getNext();
+            if (maybeReturnToken === "returns") {
+                this.returnType = context.getNext();
+                return;
+            } else {
+                this.returnType = "void";
+                return;
+            }
         } else if (commentOrReturn === "returns") {
             this.returnType = context.getNext();
             this.comment = null;

@@ -20,12 +20,13 @@ export class VarList extends AstNode {
         while (!context.checkToken("\\]")) {
             const type: string = context.getNext();
             const name: string = context.getNext();
-            this.addPair(type, name);
+            this.addPair(name, type);
             if (!context.checkToken(",")) {
                 break;
             }
             context.getAndCheckNext(",");
         }
+        context.getNext();
     }
 
     public evaluate(): any {

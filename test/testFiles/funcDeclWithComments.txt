@@ -1,0 +1,4 @@
+function private foo
+    params []
+    comments ["ayy lmao"]
+    returns number
