@@ -1,9 +1,19 @@
 import * as ts from "typescript";
-import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration, TypeElement} from "typescript";
+import {FunctionDeclaration,
+        Modifier,
+        ParameterDeclaration,
+        Printer,
+        SyntaxKind,
+        TypeNode,
+        ClassDeclaration,
+        InterfaceDeclaration,
+        ClassElement,
+        TypeElement} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
 import {InterfaceDecl} from "../ast/InterfaceDecl";
+import {ClassDecl} from "../ast/ClassDecl";
 
 export default class TypeScriptEngine {
 
@@ -35,6 +45,26 @@ export default class TypeScriptEngine {
 
     // TODO: create class method.
 
+    public createClass(classDecl: ClassDecl): ClassDeclaration {
+        // Add function declarations
+        const classMembers: ClassElement[] =
+            classDecl.functions.map((func: FuncDecl) => this.createMethod(func));
+
+        // Add field declarations
+        for (let field of classDecl.fields) {
+            classMembers.concat(this.fieldsToTsProperty(field.fields));
+        }
+
+        return ts.createClassDeclaration(
+            undefined,
+            undefined,
+            classDecl.className,
+            undefined,
+            undefined,
+            classMembers
+        )
+    }
+
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
         const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
@@ -60,6 +90,22 @@ export default class TypeScriptEngine {
             tsReturnType,
             funcDecl.name,
             /* questionToken */ undefined
+        )
+    }
+
+    private createMethod(funcDecl: FuncDecl): ClassElement {
+        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnType);
+        return ts.createMethod(
+            undefined,
+            undefined,
+            undefined,
+            funcDecl.name,
+            undefined,
+            undefined,
+            tsParams,
+            tsReturnType,
+            undefined
         )
     }
 
