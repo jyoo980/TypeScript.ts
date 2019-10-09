@@ -21,9 +21,8 @@ export default class FuncDecl extends AstNode {
     maybeAsync: AsyncDecl;
     name: string;
     params: VarList;
-    comment: CommentDecl;
+    comments: CommentDecl;
     returnDecl: ReturnDecl = new ReturnDecl();
-
 
     public parse(context: Tokenizer): any {
         let indentLevel: number = context.getCurrentLineTabLevel();
@@ -37,7 +36,7 @@ export default class FuncDecl extends AstNode {
         this.maybeAsync.parse(context);
 
         this.params = new VarList();
-        this.comment = new CommentDecl();
+        this.comments = new CommentDecl();
 
         this.name = context.getNext();
         if (context.checkToken("returns")) {
@@ -48,7 +47,7 @@ export default class FuncDecl extends AstNode {
         if (context.checkToken("params")) {
             context.getAndCheckNext("params");
             this.params.parse(context);
-            this.comment.parse(context);
+            this.comments.parse(context);
         }
         this.returnDecl.parse(context);
     }

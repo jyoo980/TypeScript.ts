@@ -19,7 +19,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
-        expect(funcDecl.comment.comments).to.deep.equal([]);
+        expect(funcDecl.comments.comments).to.deep.equal([]);
         expect(funcDecl.returnDecl.returnType).to.equal("number");
     });
 
@@ -32,7 +32,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(2);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
-        expect(funcDecl.comment.comments).to.deep.equal([]);
+        expect(funcDecl.comments.comments).to.deep.equal([]);
         expect(funcDecl.returnDecl.returnType).to.equal("void");
     });
 
@@ -44,7 +44,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
-        expect(funcDecl.comment.comments).to.deep.equal(["ayy lmao"]);
+        expect(funcDecl.comments.comments).to.deep.equal(["ayy lmao"]);
         expect(funcDecl.returnDecl.returnType).to.equal("number");
     });
 
@@ -56,7 +56,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(2);
         expect(funcDecl.maybeAsync.isAsync).to.equal(true);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
-        expect(funcDecl.comment.comments).to.deep.equal([]);
+        expect(funcDecl.comments.comments).to.deep.equal([]);
         expect(funcDecl.returnDecl.returnType).to.equal("void");
     });
 
@@ -68,7 +68,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(2);
         expect(funcDecl.maybeAsync.isAsync).to.equal(true);
         expect(funcDecl.maybeStatic.isStatic).to.equal(true);
-        expect(funcDecl.comment.comments).to.deep.equal([]);
+        expect(funcDecl.comments.comments).to.deep.equal([]);
         expect(funcDecl.returnDecl.returnType).to.equal("void");
     });
 
@@ -80,7 +80,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(3);
         expect(funcDecl.maybeAsync.isAsync).to.equal(true);
         expect(funcDecl.maybeStatic.isStatic).to.equal(true);
-        expect(funcDecl.comment.comments).to.deep.equal(["Add Dataset function", "returns ids of datasets on disk"]);
+        expect(funcDecl.comments.comments).to.deep.equal(["Add Dataset function", "returns ids of datasets on disk"]);
         expect(funcDecl.returnDecl.returnType).to.equal(`Promise<string>`);
     });
 
@@ -93,7 +93,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
-        expect(funcDecl.comment.comments).to.deep.equal([]);
+        expect(funcDecl.comments.comments).to.deep.equal([]);
         expect(funcDecl.returnDecl.returnType).to.equal("number");
     });
 
@@ -106,7 +106,7 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.params.nameToType.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
-        expect(funcDecl.comment.comments).to.deep.equal([]);
+        expect(funcDecl.comments.comments).to.deep.equal([]);
         expect(funcDecl.returnDecl.returnType).to.equal("void");
     });
 });
