@@ -1,9 +1,19 @@
 import * as ts from "typescript";
-import {FunctionDeclaration, Modifier, ParameterDeclaration, Printer, SyntaxKind, TypeNode, InterfaceDeclaration, TypeElement} from "typescript";
+import {FunctionDeclaration,
+        Modifier,
+        ParameterDeclaration,
+        Printer,
+        SyntaxKind,
+        TypeNode,
+        ClassDeclaration,
+        InterfaceDeclaration,
+        ClassElement,
+        TypeElement} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
 import {InterfaceDecl} from "../ast/InterfaceDecl";
+import {ClassDecl} from "../ast/ClassDecl";
 import CommentDecl from "../ast/CommentDecl";
 
 export default class TypeScriptEngine {
@@ -36,12 +46,30 @@ export default class TypeScriptEngine {
         return funcDeclaration;
     }
 
-    // TODO: create class method.
+    public createClass(classDecl: ClassDecl): ClassDeclaration {
+        // Add function declarations
+        let classMembers: ClassElement[] =
+            classDecl.functions.map((func: FuncDecl) => this.createMethod(func));
+
+        // Add field declarations
+        for (let field of classDecl.fields) {
+            classMembers = classMembers.concat(this.fieldsToClassElement(field.fields));
+        }
+
+        return ts.createClassDeclaration(
+            undefined,
+            undefined,
+            classDecl.className,
+            undefined,
+            undefined,
+            classMembers
+        )
+    }
 
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
         const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
-        const tsPropertySignatures: TypeElement[] = this.fieldsToTsProperty(interfaceDecl.fieldDecl.fields);
+        const tsPropertySignatures: TypeElement[] = this.fieldsToTypeElement(interfaceDecl.fieldDecl.fields);
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             // TODO: comments!
@@ -68,15 +96,49 @@ export default class TypeScriptEngine {
         )
     }
 
-    private fieldsToTsProperty(fields: VarList): TypeElement[] {
+    private createMethod(funcDecl: FuncDecl): ClassElement {
+        const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnDecl.returnType);
+        return ts.createMethod(
+            undefined,
+            undefined,
+            undefined,
+            funcDecl.name,
+            undefined,
+            undefined,
+            tsParams,
+            tsReturnType,
+            undefined
+        )
+    }
+
+    private fieldsToTypeElement(fields: VarList): TypeElement[] {
         const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
         return fieldsAsList.map((nameTypePair) => {
             return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
         });
     }
 
+    private fieldsToClassElement(fields: VarList): ClassElement[] {
+        const fieldsAsList: [string, string][] = Array.from(fields.nameToType.entries());
+        return fieldsAsList.map((nameTypePair) => {
+            return this.makeProperty(nameTypePair[0], nameTypePair[1]);
+        });
+    }
+
     private makePropertySignature(name: string, type: string): TypeElement {
         return ts.createPropertySignature(
+            /* modifiers */ undefined,
+            name,
+            /* questionToken */ undefined,
+            this.typeTable.getTypeNode(type),
+            /* initializer */ undefined
+        );
+    }
+
+    private makeProperty(name: string, type: string): ClassElement {
+        return ts.createProperty(
+            /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
             /* questionToken */ undefined,
