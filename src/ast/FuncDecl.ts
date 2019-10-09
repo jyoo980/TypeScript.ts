@@ -20,25 +20,18 @@ export default class FuncDecl extends AstNode {
     isStatic: boolean;
     name: string;
     params: VarList;
-    comment: CommentDecl;
+    comments: CommentDecl;
     generateGetter: boolean;
     generateSetter: boolean;
     returnType: string;
 
     public parse(context: Tokenizer): any {
         this.params = new VarList();
-        this.comment = new CommentDecl();
+        this.comments = new CommentDecl();
         // TODO: implement the rest.
     }
 
     public evaluate(): any {
         // TODO: implement this.
-    }
-
-    public getComments(): string[] {
-        if (this.comment && this.comment.comments) {
-            return this.comment.comments;
-        }
-        return [];
     }
 }
