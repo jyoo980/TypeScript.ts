@@ -41,11 +41,7 @@ export class ClassDecl extends Content {
             this.extendsNodes.parse(context);
         }
 
-        if(context.getCurrentLineTabLevel() <= indentLevel) {
-            return this;
-        }
-
-        if(context.checkToken("comments")) {
+        if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("comments")) {
             this.comments = new CommentDecl();
             this.comments.parse(context);
         }
@@ -61,6 +57,7 @@ export class ClassDecl extends Content {
             func.parse(context);
             this.functions.push(func);
         }
+        this.typeTable.addClass(this.className);
         return this;
     }
 

@@ -3,6 +3,7 @@ import {ClassDecl} from "../../src/ast/ClassDecl";
 import {Tokenizer} from "../../src/util/Tokenizer";
 import {ImplementsDecl} from "../../src/ast/ImplementsDecl";
 import {ExtendsDecl} from "../../src/ast/ExtendsDecl";
+import {TypeTable} from "../../src/ast/symbols/TypeTable";
 
 describe("ClassDecl parse test", () => {
     it("parses single-line, simple class definition", () => {
@@ -14,8 +15,11 @@ describe("ClassDecl parse test", () => {
         expect(classDec.implementsNodes).to.be.undefined;
         expect(classDec.extendsNodes.parentName).to.equal("TimeClass");
         expect(classDec.comments).to.be.undefined;
-        expect(classDec.fields).to.be.undefined;
-        expect(classDec.functions).to.be.undefined;
+        expect(classDec.fields.length).to.equal(0);
+        expect(classDec.functions.length).to.equal(0);
+        let typeTable : TypeTable = TypeTable.getInstance();
+        expect(typeTable.table.size).to.equal(4);
+        expect(typeTable.getTypeNode(classDec.className)).to.not.be.undefined;
     });
 
     it("parses complex class definition", () => {
