@@ -24,7 +24,6 @@ export class ProgramDecl extends DirDecl {
         this.directoryName = this.projectName;
 
         if (context.checkToken("modules")) {
-            context.getNext();
             this.modules = new ModuleDecl();
             this.modules.parse(context);
         }
