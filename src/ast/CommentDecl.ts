@@ -8,11 +8,23 @@ import {Tokenizer} from "../util/Tokenizer";
  */
 export default class CommentDecl extends AstNode {
 
-    comments: string[];
+    comments: string[] = [];
 
     public parse(context: Tokenizer): any {
-        // TODO: implement the rest.
-        this.comments = [];
+        if (context.checkToken("comments")) {
+            context.getNext();
+            context.getAndCheckNext("\\[");
+            while (!context.checkToken("\\]")) {
+                context.getAndCheckNext("\"");
+                this.comments.push(context.getNext());
+                context.getAndCheckNext("\"");
+                if (!context.checkToken(",")) {
+                    break;
+                }
+                context.getAndCheckNext(",");
+            }
+            context.getNext();
+        }
     }
 
     public evaluate(): any {

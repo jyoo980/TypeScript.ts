@@ -20,8 +20,8 @@ export default class TypeScriptEngine {
         // TODO: check if modifier is undefined
         const tsModifiers: Modifier[] = this.makeModifierNodes([funDecl.modifier]);
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funDecl.params);
-        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funDecl.returnType);
 
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funDecl.returnDecl.returnType);
         const funcDeclaration: FunctionDeclaration = ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ tsModifiers,
@@ -58,7 +58,7 @@ export default class TypeScriptEngine {
 
     private createMethodSignature(funcDecl: FuncDecl): TypeElement {
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
-        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnType);
+        const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnDecl.returnType);
         return ts.createMethodSignature(
             /* typeParameters */ undefined,
             tsParams,
