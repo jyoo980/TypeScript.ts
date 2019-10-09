@@ -14,6 +14,7 @@ import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
 import {InterfaceDecl} from "../ast/InterfaceDecl";
 import {ClassDecl} from "../ast/ClassDecl";
+import CommentDecl from "../ast/CommentDecl";
 
 export default class TypeScriptEngine {
 
@@ -29,9 +30,9 @@ export default class TypeScriptEngine {
         // TODO: check if modifier is undefined
         const tsModifiers: Modifier[] = this.makeModifierNodes([funDecl.modifier]);
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funDecl.params);
+
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(funDecl.returnDecl.returnType);
-        // TODO: comments!
-        return ts.createFunctionDeclaration(
+        const funcDeclaration: FunctionDeclaration = ts.createFunctionDeclaration(
             /* decorators */ undefined,
             /* modifiers */ tsModifiers,
             /* asteriskToken */ undefined,
@@ -40,7 +41,9 @@ export default class TypeScriptEngine {
             tsParams,
             tsReturnType,
             undefined
-        )
+        );
+        this.addLeadingComment(funcDeclaration, funDecl.comments);
+        return funcDeclaration;
     }
 
     public createClass(classDecl: ClassDecl): ClassDeclaration {
@@ -68,7 +71,7 @@ export default class TypeScriptEngine {
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
         const tsPropertySignatures: TypeElement[] = this.fieldsToTypeElement(interfaceDecl.fieldDecl.fields);
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
-        return ts.createInterfaceDeclaration(
+        const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             // TODO: comments!
             /* decorators */ undefined,
             /* modifiers */ undefined,
@@ -77,6 +80,8 @@ export default class TypeScriptEngine {
             /* heritageClauses */ undefined,
             interfaceMembers
         );
+        this.addLeadingComment(interfaceDeclaration, interfaceDecl.comments);
+        return interfaceDeclaration;
     }
 
     private createMethodSignature(funcDecl: FuncDecl): TypeElement {
@@ -174,6 +179,36 @@ export default class TypeScriptEngine {
             case "async": return SyntaxKind.AsyncKeyword;
             case "static": return SyntaxKind.StaticKeyword;
             case "abstract": return SyntaxKind.AbstractKeyword;
+        }
+    }
+
+    /**
+     * Format comments into a single string for TS compiler api
+     *
+     * @param comments      comments to process
+     * @returns string      formatted string for TS compiler api
+     */
+    private generateCommentString(comments: string[]): string {
+        const result: string = comments.reduce((acc, curr) => acc += ` * ${curr}\n`, '');
+        return `*\n${result} `;
+    }
+
+    /**
+     * Add a leading comment to node
+     *
+     * @param node          the node to add comments to
+     * @param commentDecl   commentDecl object
+     */
+    private addLeadingComment(node: any, commentDecl: CommentDecl): void {
+        const comments: string[] = commentDecl && commentDecl.comments;
+        if (comments && comments.length) {
+            const commentString: string = this.generateCommentString(comments);
+            ts.addSyntheticLeadingComment(
+                node,
+                SyntaxKind.MultiLineCommentTrivia,
+                commentString,
+                true
+            );
         }
     }
 }

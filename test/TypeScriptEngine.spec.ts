@@ -7,6 +7,7 @@ import {TypeTable} from "../src/ast/symbols/TypeTable";
 import FuncDecl from "../src/ast/FuncDecl";
 import {InterfaceDecl} from "../src/ast/InterfaceDecl";
 import {FieldDecl} from "../src/ast/FieldDecl";
+import CommentDecl from "../src/ast/CommentDecl";
 import ReturnDecl from "../src/ast/ReturnDecl";
 import {ClassDecl} from "../src/ast/ClassDecl";
 
@@ -18,6 +19,25 @@ describe("TypeScriptEngine tests", () => {
     let baseFunDecl: FuncDecl;
     let baseVarList: VarList;
 
+    function nodeToString(node: any) {
+        const resultFile = ts.createSourceFile(
+            "someFileName.ts",
+            "",
+            ts.ScriptTarget.Latest,
+            /*setParentNodes*/ false,
+            ts.ScriptKind.TS
+        );
+        const printer = ts.createPrinter({
+            newLine: ts.NewLineKind.LineFeed
+        });
+        const result = printer.printNode(
+            ts.EmitHint.Unspecified,
+            // replace this line with our call to createFun, or the result of it from the tests
+            node,
+            resultFile
+        );
+        return result;
+    }
 
     beforeEach(() => {
         engine = new TypeScriptEngine();
@@ -119,6 +139,45 @@ describe("TypeScriptEngine tests", () => {
             ts.createTypeReferenceNode("ParameterDecl", undefined),
             undefined
         ));
+    });
+
+    it('should add a multiline comment with only one line to the function', () => {
+        baseVarList.nameToType = new Map();
+        baseFunDecl.name = "foo";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnDecl.returnType = "number";
+        baseFunDecl.comments = new CommentDecl();
+        baseFunDecl.comments.comments = ['comment line 1'];
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
+        const resultStr: string = nodeToString(result);
+        expect(resultStr).to.equal(`/**\n * comment line 1\n */\npublic function foo(): number;`);
+    });
+
+    it('should add a multiline comment with multiple lines to the function', () => {
+        baseVarList.nameToType = new Map();
+        baseFunDecl.name = "foo";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnDecl.returnType = "number";
+        baseFunDecl.comments = new CommentDecl();
+        baseFunDecl.comments.comments = ['comment line 1', 'comment line 2', 'comment line 3'];
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
+        const resultStr: string = nodeToString(result);
+        expect(resultStr).to.equal(`/**\n * comment line 1\n * comment line 2\n * comment line 3\n */\npublic function foo(): number;`);
+    });
+
+    it('should not add a comment to the function', () => {
+        baseVarList.nameToType = new Map();
+        baseFunDecl.name = "foo";
+        baseFunDecl.modifier = "public";
+        baseFunDecl.params = baseVarList;
+        baseFunDecl.returnDecl.returnType = "number";
+        baseFunDecl.comments = new CommentDecl();
+        baseFunDecl.comments.comments = [];
+        const result: FunctionDeclaration = engine.createFun(baseFunDecl);
+        const resultStr: string = nodeToString(result);
+        expect(resultStr).to.equal(`public function foo(): number;`);
     });
 
     it("should make a basic interface declaration (no members)", () => {
@@ -407,5 +466,44 @@ describe("TypeScriptEngine tests", () => {
                 /* body */ undefined
             )]
         ));
+
+    it('should add a multiline comment with only one line to interface declaration', () => {
+        // interface FooBar { }
+        const name: string = "FooBar";
+        baseInterfaceDecl.interfaceName = name;
+        baseInterfaceDecl.functions = [];
+        baseInterfaceDecl.fieldDecl = new FieldDecl();
+        baseInterfaceDecl.fieldDecl.fields = new VarList();
+        baseInterfaceDecl.comments = new CommentDecl();
+        baseInterfaceDecl.comments.comments = ['comment line 1'];
+        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+        const resultStr: string = nodeToString(result);
+        expect(resultStr).to.equal(`/**\n * comment line 1\n */\ninterface FooBar {\n}`);
+    });
+
+    it('should add a multiline comment with multiple lines to interface declaration', () => {
+        const name: string = "FooBar";
+        baseInterfaceDecl.interfaceName = name;
+        baseInterfaceDecl.functions = [];
+        baseInterfaceDecl.fieldDecl = new FieldDecl();
+        baseInterfaceDecl.fieldDecl.fields = new VarList();
+        baseInterfaceDecl.comments = new CommentDecl();
+        baseInterfaceDecl.comments.comments = ['comment line 1', 'comment line 2', 'comment line 3'];
+        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+        const resultStr: string = nodeToString(result);
+        expect(resultStr).to.equal(`/**\n * comment line 1\n * comment line 2\n * comment line 3\n */\ninterface FooBar {\n}`);
+    });
+
+    it('should not add a comment to interface declaration', () => {
+        const name: string = "FooBar";
+        baseInterfaceDecl.interfaceName = name;
+        baseInterfaceDecl.functions = [];
+        baseInterfaceDecl.fieldDecl = new FieldDecl();
+        baseInterfaceDecl.fieldDecl.fields = new VarList();
+        baseInterfaceDecl.comments = new CommentDecl();
+        baseInterfaceDecl.comments.comments = [];
+        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+        const resultStr: string = nodeToString(result);
+        expect(resultStr).to.equal(`interface FooBar {\n}`);
     });
 });
