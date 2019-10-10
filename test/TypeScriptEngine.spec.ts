@@ -44,8 +44,8 @@ describe("TypeScriptEngine tests", () => {
         baseFunDecl = new FuncDecl();
         baseFunDecl.returnDecl = new ReturnDecl();
         baseVarList = new VarList();
-        baseInterfaceDecl = new InterfaceDecl();
-        baseClassDecl = new ClassDecl();
+        baseInterfaceDecl = new InterfaceDecl(".");
+        baseClassDecl = new ClassDecl(".");
         baseInterfaceDecl.fieldDecl = new FieldDecl();
         baseInterfaceDecl.fieldDecl.fields = new VarList();
     });

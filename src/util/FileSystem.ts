@@ -24,7 +24,14 @@ export class FileDeleteError extends Error {
 export class DirectoryWriteError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, FileWriteError);
+        Error.captureStackTrace(this, DirectoryWriteError);
+    }
+}
+
+export class PathExistsError extends Error {
+    constructor(...args: any[]) {
+        super(...args);
+        Error.captureStackTrace(this, PathExistsError);
     }
 }
 
@@ -91,19 +98,34 @@ export default class FileSystem {
     }
 
     /**
-     * Resolves with the full path to the written directory, else, rejects with a DirectoryWriteError
+     * Returns the full path to the written directory - throws a DirectoryWriteError
      * Requires all directories in path to exist
      *
      * @param absolutePath  path of directory to be written
      */
-    public async writeDirectory(absolutePath: string): Promise<string> {
+    public writeDirectory(absolutePath: string): string {
         try {
-            await fs.mkdir(absolutePath);
+            fs.mkdirSync(absolutePath);
             return absolutePath;
         } catch (err) {
             const msg: string = `FileSystem::making directory: ${absolutePath} failed with error: ${err}`;
             console.warn(msg);
             throw new DirectoryWriteError(msg);
+        }
+    }
+
+    /**
+     * Returns true if the given path exists, false otherwise - throws a PathExistsError
+     *
+     * @param path  path to check existence of
+     */
+    public pathExists(path: string): boolean {
+        try {
+            return fs.pathExistsSync(path);
+        } catch (err) {
+            const msg: string = `FileSystem::checking path exists: ${path} failed with error: ${err}`;
+            console.warn(msg);
+            throw new PathExistsError(msg);
         }
     }
 }

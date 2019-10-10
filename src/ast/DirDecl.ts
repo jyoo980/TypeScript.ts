@@ -9,20 +9,12 @@ import {ClassDecl} from "./ClassDecl";
 import {InterfaceDecl} from "./InterfaceDecl";
 
 export class DirDecl extends Content {
-
-    // Path to directory this directory is in
-    parentPath: string;
     directoryName: string;
 
     // The contents of this directory
     contents: Content[];
 
     tabLevel: number;
-
-    public constructor(parentPath: string) {
-        super();
-        this.parentPath = parentPath;
-    }
 
     public parse(context: Tokenizer): any {
         this.tabLevel = context.getCurrentLineTabLevel();
@@ -42,9 +34,9 @@ export class DirDecl extends Content {
             if (context.checkToken("dir")) {
                 contentDecl = new DirDecl(this.getAbsolutePath());
             } else if (context.checkToken("class")) {
-                contentDecl = new ClassDecl();
+                contentDecl = new ClassDecl(this.getAbsolutePath());
             } else if (context.checkToken("interface")) {
-                contentDecl = new InterfaceDecl();
+                contentDecl = new InterfaceDecl(this.getAbsolutePath());
             } else {
                 throw new Error("Unexpected token in Dir declaration.");
             }
@@ -54,15 +46,15 @@ export class DirDecl extends Content {
         }
     }
 
-    public async evaluate(): Promise<any> {
-        await this.fileSystem.writeDirectory(this.getAbsolutePath());
+    public evaluate(): any {
+        this.fileSystem.writeDirectory(this.getAbsolutePath());
 
         for (let content of this.contents) {
             content.evaluate();
         }
     }
 
-    private getAbsolutePath(): string {
+    public getAbsolutePath(): string {
         return this.parentPath + "/" + this.directoryName;
     }
 }
