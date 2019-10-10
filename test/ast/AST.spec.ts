@@ -17,6 +17,7 @@ describe("ProgramDecl should have its appropriate contents", () => {
 
 describe("DirDecl evaluate should write directories", () => {
     const testDir: string = "./testOutput";
+    let dirs: DirDecl[] = []
     let fs: FileSystem;
 
     before(() => {
@@ -25,15 +26,16 @@ describe("DirDecl evaluate should write directories", () => {
 
     after(async () => {
         try {
-            await nodeFs.unlink(testDir);
+            // Go from child dirs because cannot delete non-empty dirs
+            for (let dir of dirs.reverse()) {
+                nodeFs.rmdirSync(dir.getAbsolutePath());
+            }
         } catch (err) {
-            console.warn(`FileSystemSpec::cleanup failed with error: ${err}`);
+            console.warn(`ASTspec::cleanup failed with error: ${err}`);
         }
     });
 
     it("Writes directories in a DirDec", () => {
-        let dirs: DirDecl[] = []
-
         // Establish test file structure
         let rootDir: DirDecl = new DirDecl(testDir);
         rootDir.directoryName = "root";
