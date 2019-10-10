@@ -55,11 +55,11 @@ describe("TypeScriptEngine tests", () => {
         vars.nameToType = new Map();
         const expected: ParameterDeclaration[] = [
             ts.createParameter(
-            /* decorators */ undefined,
-            /* modifiers */ undefined,
-            /* dotDotToken */ undefined,
-            "bar",
-            /* questionToken */ undefined,
+                /* decorators */ undefined,
+                /* modifiers */ undefined,
+                /* dotDotToken */ undefined,
+                "bar",
+                /* questionToken */ undefined,
                 ts.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword)),
             ts.createParameter(
                 /* decorators */ undefined,
@@ -122,11 +122,11 @@ describe("TypeScriptEngine tests", () => {
             /* typeParameters */ undefined,
             [
                 ts.createParameter(
-                /* decorators */ undefined,
-                /* modifiers */ undefined,
-                /* dotDotToken */ undefined,
-                "name",
-                /* questionToken */ undefined,
+                    /* decorators */ undefined,
+                    /* modifiers */ undefined,
+                    /* dotDotToken */ undefined,
+                    "name",
+                    /* questionToken */ undefined,
                     ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)),
                 ts.createParameter(
                     /* decorators */ undefined,
@@ -334,7 +334,7 @@ describe("TypeScriptEngine tests", () => {
                 ts.createTypeReferenceNode("ParameterDecl", undefined),
                 baseFunDecl.name,
                 /* questionToken */ undefined
-            ),ts.createPropertySignature(
+            ), ts.createPropertySignature(
                 /* modifiers */ undefined,
                 "foo",
                 /* questionToken */ undefined,
@@ -400,7 +400,7 @@ describe("TypeScriptEngine tests", () => {
                     )],
                 ts.createTypeReferenceNode("ParameterDecl", undefined),
                 /* body */ undefined
-            ),ts.createProperty(
+            ), ts.createProperty(
                 undefined,
                 /* modifiers */ undefined,
                 "foo",
@@ -467,43 +467,44 @@ describe("TypeScriptEngine tests", () => {
             )]
         ));
 
-    it('should add a multiline comment with only one line to interface declaration', () => {
-        // interface FooBar { }
-        const name: string = "FooBar";
-        baseInterfaceDecl.interfaceName = name;
-        baseInterfaceDecl.functions = [];
-        baseInterfaceDecl.fieldDecl = new FieldDecl();
-        baseInterfaceDecl.fieldDecl.fields = new VarList();
-        baseInterfaceDecl.comments = new CommentDecl();
-        baseInterfaceDecl.comments.comments = ['comment line 1'];
-        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
-        const resultStr: string = nodeToString(result);
-        expect(resultStr).to.equal(`/**\n * comment line 1\n */\ninterface FooBar {\n}`);
-    });
+        it('should add a multiline comment with only one line to interface declaration', () => {
+            // interface FooBar { }
+            const name: string = "FooBar";
+            baseInterfaceDecl.interfaceName = name;
+            baseInterfaceDecl.functions = [];
+            baseInterfaceDecl.fieldDecl = new FieldDecl();
+            baseInterfaceDecl.fieldDecl.fields = new VarList();
+            baseInterfaceDecl.comments = new CommentDecl();
+            baseInterfaceDecl.comments.comments = ['comment line 1'];
+            const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+            const resultStr: string = nodeToString(result);
+            expect(resultStr).to.equal(`/**\n * comment line 1\n */\ninterface FooBar {\n}`);
+        });
 
-    it('should add a multiline comment with multiple lines to interface declaration', () => {
-        const name: string = "FooBar";
-        baseInterfaceDecl.interfaceName = name;
-        baseInterfaceDecl.functions = [];
-        baseInterfaceDecl.fieldDecl = new FieldDecl();
-        baseInterfaceDecl.fieldDecl.fields = new VarList();
-        baseInterfaceDecl.comments = new CommentDecl();
-        baseInterfaceDecl.comments.comments = ['comment line 1', 'comment line 2', 'comment line 3'];
-        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
-        const resultStr: string = nodeToString(result);
-        expect(resultStr).to.equal(`/**\n * comment line 1\n * comment line 2\n * comment line 3\n */\ninterface FooBar {\n}`);
-    });
+        it('should add a multiline comment with multiple lines to interface declaration', () => {
+            const name: string = "FooBar";
+            baseInterfaceDecl.interfaceName = name;
+            baseInterfaceDecl.functions = [];
+            baseInterfaceDecl.fieldDecl = new FieldDecl();
+            baseInterfaceDecl.fieldDecl.fields = new VarList();
+            baseInterfaceDecl.comments = new CommentDecl();
+            baseInterfaceDecl.comments.comments = ['comment line 1', 'comment line 2', 'comment line 3'];
+            const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+            const resultStr: string = nodeToString(result);
+            expect(resultStr).to.equal(`/**\n * comment line 1\n * comment line 2\n * comment line 3\n */\ninterface FooBar {\n}`);
+        });
 
-    it('should not add a comment to interface declaration', () => {
-        const name: string = "FooBar";
-        baseInterfaceDecl.interfaceName = name;
-        baseInterfaceDecl.functions = [];
-        baseInterfaceDecl.fieldDecl = new FieldDecl();
-        baseInterfaceDecl.fieldDecl.fields = new VarList();
-        baseInterfaceDecl.comments = new CommentDecl();
-        baseInterfaceDecl.comments.comments = [];
-        const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
-        const resultStr: string = nodeToString(result);
-        expect(resultStr).to.equal(`interface FooBar {\n}`);
+        it('should not add a comment to interface declaration', () => {
+            const name: string = "FooBar";
+            baseInterfaceDecl.interfaceName = name;
+            baseInterfaceDecl.functions = [];
+            baseInterfaceDecl.fieldDecl = new FieldDecl();
+            baseInterfaceDecl.fieldDecl.fields = new VarList();
+            baseInterfaceDecl.comments = new CommentDecl();
+            baseInterfaceDecl.comments.comments = [];
+            const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
+            const resultStr: string = nodeToString(result);
+            expect(resultStr).to.equal(`interface FooBar {\n}`);
+        });
     });
 });

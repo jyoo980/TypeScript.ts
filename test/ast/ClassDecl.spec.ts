@@ -60,7 +60,7 @@ describe("ClassDecl parse test", () => {
         expect(classDec.functions[0].maybeStatic.isStatic).to.be.false;
         expect(classDec.functions[0].maybeAsync.isAsync).to.be.false;
         expect(classDec.functions[0].params.nameToType.size).to.equal(3);
-        expect(classDec.functions[0].comment.comments.length).to.equal(2);
+        expect(classDec.functions[0].comments.comments.length).to.equal(2);
         expect(classDec.functions[0].returnDecl.returnType).to.equal("Date");
 
     });
