@@ -506,4 +506,4 @@ describe("TypeScriptEngine tests", () => {
         const resultStr: string = nodeToString(result);
         expect(resultStr).to.equal(`interface FooBar {\n}`);
     });
-});
+})});
