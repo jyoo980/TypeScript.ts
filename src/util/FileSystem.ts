@@ -21,6 +21,13 @@ export class FileDeleteError extends Error {
     }
 }
 
+export class DirectoryWriteError extends Error {
+    constructor(...args: any[]) {
+        super(...args);
+        Error.captureStackTrace(this, FileWriteError);
+    }
+}
+
 export default class FileSystem {
 
     /**
@@ -80,6 +87,23 @@ export default class FileSystem {
             const msg: string = `FileSystem::reading file: ${fullPath} failed with error: ${err}`;
             console.warn(msg);
             throw new FileReadError(msg);
+        }
+    }
+
+    /**
+     * Resolves with the full path to the written directory, else, rejects with a DirectoryWriteError
+     * Requires all directories in path to exist
+     *
+     * @param absolutePath  path of directory to be written
+     */
+    public async writeDirectory(absolutePath: string): Promise<string> {
+        try {
+            await fs.mkdir(absolutePath);
+            return absolutePath;
+        } catch (err) {
+            const msg: string = `FileSystem::making directory: ${absolutePath} failed with error: ${err}`;
+            console.warn(msg);
+            throw new DirectoryWriteError(msg);
         }
     }
 }
