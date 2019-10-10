@@ -1,0 +1,12 @@
+class Time implements ITime, DateTime extends TimeClass
+    comments ["This is the time class"]
+    fields private [number dayOfWeek, number hour, number minute]
+        generate getters
+        generate setters
+    fields public [number date]
+        generate getters
+    function public getDate
+        params [string id, string content, InsightDatasetKind kind]
+        comments ["creates a new Time object from given date",
+            "{param} date - date object to parse time object from"]
+        returns Date

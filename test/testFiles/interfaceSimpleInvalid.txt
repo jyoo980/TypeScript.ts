@@ -1,0 +1,1 @@
+interface TransitLine implements Line extends Transit

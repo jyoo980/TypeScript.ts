@@ -15,3 +15,6 @@ test/**/*.spec.js.map
 test/*.map
 .DS_Store
 .env
+
+.idea/*
+package-lock.json

@@ -15,29 +15,37 @@ export class InterfaceDecl extends Content {
     interfaceName: string;
     comments: CommentDecl;
     fieldDecl: FieldDecl;
-    functions: FuncDecl[];
-
-
+    functions: FuncDecl[] = [];
 
     public parse(context: Tokenizer): any {
+        let indentLevel = context.getCurrentLineTabLevel();
         context.getAndCheckNext("interface");
         this.interfaceName = context.getNext();
 
         if(context.checkToken("extends")) {
             this.extendsNodes = new ExtendsDecl();
+            this.extendsNodes.parse(context);
         }
 
-        // TODO: implement the rest of this.
-        this.comments = new CommentDecl();
-        this.comments.parse(context);
+        if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("comments")) {
+            this.comments = new CommentDecl();
+            this.comments.parse(context);
+        }
 
-        this.fieldDecl = new FieldDecl();
-        this.fieldDecl.parse(context);
+        if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
+            // TODO: how do we want to handle if someone tries to declare private fields in an interface?
+            this.fieldDecl = new FieldDecl();
+            this.fieldDecl.parse(context);
+        }
 
-        this.functions = [];
-        this.functions.forEach((fn) => {
-            fn.parse(context);
-        });
+        while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("function")) {
+            let func: FuncDecl = new FuncDecl();
+            func.parse(context);
+            this.functions.push(func);
+        }
+
+        this.typeTable.addInterface(this.interfaceName);
+        return this;
     }
 
     public evaluate(): any {
