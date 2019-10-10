@@ -2,7 +2,6 @@ import * as ts from "typescript";
 import {FunctionDeclaration,
         Modifier,
         ParameterDeclaration,
-        Printer,
         SyntaxKind,
         TypeNode,
         ClassDeclaration,
@@ -18,11 +17,9 @@ import CommentDecl from "../ast/CommentDecl";
 
 export default class TypeScriptEngine {
 
-    private readonly printer: Printer;
     private readonly typeTable: TypeTable;
 
     constructor() {
-        this.printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
         this.typeTable = TypeTable.getInstance();
     }
 
