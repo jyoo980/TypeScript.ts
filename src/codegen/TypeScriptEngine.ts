@@ -66,7 +66,9 @@ export default class TypeScriptEngine {
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
         const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
-        const tsPropertySignatures: TypeElement[] = this.fieldsToTypeElement(interfaceDecl.fieldDecl.fields);
+        // TODO: nicer way to check for undefined
+        const tsPropertySignatures: TypeElement[] = (interfaceDecl.fieldDecl === undefined) ?
+            [] : this.fieldsToTypeElement(interfaceDecl.fieldDecl.fields);
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             // TODO: comments!

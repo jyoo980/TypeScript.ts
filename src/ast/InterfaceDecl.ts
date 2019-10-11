@@ -49,7 +49,9 @@ export class InterfaceDecl extends Content {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        const tsNode = this.engine.createInterface(this);
+        const tsNodeAsString: string = this.printer.tsNodeToString(tsNode);
+        this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsNodeAsString);
     }
 
     public typeCheck(): void {
