@@ -9,7 +9,6 @@ import {ClassDecl} from "./ClassDecl";
 import {InterfaceDecl} from "./InterfaceDecl";
 
 export class DirDecl extends Content {
-
     directoryName: string;
 
     // The contents of this directory
@@ -33,11 +32,11 @@ export class DirDecl extends Content {
             let contentDecl: Content;
 
             if (context.checkToken("dir")) {
-                contentDecl = new DirDecl();
+                contentDecl = new DirDecl(this.getAbsolutePath());
             } else if (context.checkToken("class")) {
-                contentDecl = new ClassDecl();
+                contentDecl = new ClassDecl(this.getAbsolutePath());
             } else if (context.checkToken("interface")) {
-                contentDecl = new InterfaceDecl();
+                contentDecl = new InterfaceDecl(this.getAbsolutePath());
             } else {
                 throw new Error("Unexpected token in Dir declaration.");
             }
@@ -48,6 +47,14 @@ export class DirDecl extends Content {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        this.fileSystem.writeDirectory(this.getAbsolutePath());
+
+        for (let content of this.contents) {
+            content.evaluate();
+        }
+    }
+
+    public getAbsolutePath(): string {
+        return this.parentPath + "/" + this.directoryName;
     }
 }

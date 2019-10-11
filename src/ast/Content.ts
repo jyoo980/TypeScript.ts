@@ -8,4 +8,12 @@ import {AstNode} from "./AstNode";
  *
  * e.g. DIR | CLASS| INTERFACE
  */
-export abstract class Content extends AstNode {}
+export abstract class Content extends AstNode {
+    // Path to this directory, class or interface file
+    parentPath: string;
+
+    public constructor(parentPath: string) {
+        super();
+        this.parentPath = parentPath;
+    }
+}

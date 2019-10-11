@@ -8,7 +8,7 @@ describe("ClassDecl parse test", () => {
         let typeTable : TypeTable = TypeTable.getInstance();
         expect(typeTable.table.size).to.equal(3);
         let tokenizer : Tokenizer = new Tokenizer("interfaceDeclSimple.txt", "./test/testFiles");
-        let intDec : InterfaceDecl = new InterfaceDecl();
+        let intDec : InterfaceDecl = new InterfaceDecl(".");
         intDec = intDec.parse(tokenizer);
         expect(intDec.interfaceName).to.equal("TransitLine");
         expect(intDec.comments).to.be.undefined;
@@ -24,13 +24,13 @@ describe("ClassDecl parse test", () => {
     it("throws an error parsing invalid interface definition", () => {
         // TODO: implement this test case may require changes to how we tokenize... (does not currently throw error)
         let tokenizer : Tokenizer = new Tokenizer("interfaceSimpleInvalid.txt", "./test/testFiles");
-        let intDec : InterfaceDecl = new InterfaceDecl();
+        let intDec : InterfaceDecl = new InterfaceDecl(".");
         intDec.parse(tokenizer);
     });
 
     it("parses complex interface definition", () => {
         let tokenizer : Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
-        let intDec : InterfaceDecl = new InterfaceDecl();
+        let intDec : InterfaceDecl = new InterfaceDecl(".");
         intDec = intDec.parse(tokenizer);
         expect(intDec.interfaceName).to.equal("TransitLine");
         expect(intDec.comments).to.be.undefined;
