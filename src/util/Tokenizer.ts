@@ -38,8 +38,8 @@ export class Tokenizer {
         Implements: {val: "implements", isSpecial: false},
         Extends: {val: "extends", isSpecial: false},
         Comma: {val: "\,", isSpecial: true},
-        SquareBracketStart: {val: "\[", isSpecial: true},
-        SquareBracketEnd: {val: "\]", isSpecial: true},
+        SquareBracketStart: {val: "\[ ", isSpecial: true}, // change this to consider NOT bla
+        SquareBracketEnd: {val: " \]", isSpecial: true}, // change this to consider NOT bla
         Getters: {val: "getters", isSpecial: false},
         Setters: {val: "setters", isSpecial: false},
         Private: {val: "private", isSpecial: false},

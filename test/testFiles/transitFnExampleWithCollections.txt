@@ -1,0 +1,13 @@
+class Line implements TransitLine
+    fields private [ string name, string lineNumber, Stops stop[] ]
+    function public constructor
+        params [string name, string lineNumber, Stops stop[]]
+        comments [
+            "Constructor method for TransitLine",
+            "@param name - name of transit line",
+            "@param lineNumber - number of transit line",
+            "@param stop - stop",
+            "@returns TransitLine"
+        ]
+
+        returns TransitLine
