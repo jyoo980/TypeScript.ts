@@ -1,14 +1,16 @@
 import { expect } from "chai";
 import {ClassDecl} from "../../src/ast/ClassDecl";
 import {Tokenizer} from "../../src/util/Tokenizer";
-import {ImplementsDecl} from "../../src/ast/ImplementsDecl";
-import {ExtendsDecl} from "../../src/ast/ExtendsDecl";
 import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
 
 describe("ClassDecl parse test", () => {
+
+    const DUMMY_ROOT_DIR: string = ".";
+
+
     it("parses single-line, simple class definition", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclSimple.txt", "./test/testFiles");
-        let classDec : ClassDecl = new ClassDecl();
+        let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
         classDec = classDec.parse(tokenizer);
         expect(classDec.isAbstract).to.be.true;
         expect(classDec.className).to.equal("Time");
@@ -24,7 +26,7 @@ describe("ClassDecl parse test", () => {
 
     it("parses complex class definition", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclComplex.txt", "./test/testFiles");
-        let classDec : ClassDecl = new ClassDecl();
+        let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
         classDec = classDec.parse(tokenizer);
         expect(classDec.isAbstract).to.be.false;
         expect(classDec.className).to.equal("Time");
@@ -67,7 +69,7 @@ describe("ClassDecl parse test", () => {
 
     it("should throw a TypeCheckError when it attempts to extend a undeclared class", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclSimple.txt", "./test/testFiles");
-        let classDec : ClassDecl = new ClassDecl();
+        let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
         classDec.parse(tokenizer);
         expect(() => {
             return classDec.typeCheck();
@@ -76,7 +78,7 @@ describe("ClassDecl parse test", () => {
 
     it("should NOT throw a TypeCheckError when it attempts to extend a class which has been defined", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclSimple.txt", "./test/testFiles");
-        let classDec : ClassDecl = new ClassDecl();
+        let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
         classDec.parse(tokenizer);
         TypeTable.getInstance().addClass("TimeClass");
         classDec.typeCheck();
