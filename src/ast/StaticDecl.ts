@@ -18,4 +18,8 @@ export default class StaticDecl extends AstNode {
     public evaluate(): any {
         // TODO: implement this.
     }
+
+    public typeCheck(): void {
+
+    }
 }

@@ -1,6 +1,13 @@
 import * as ts from "typescript";
 import { TypeNode, SyntaxKind } from "typescript";
 
+export class TypeCheckError extends Error {
+    constructor(...args: any[]) {
+        super(...args);
+        Error.captureStackTrace(this, TypeCheckError);
+    }
+}
+
 /**
  * Represents a pair which is contains the type e.g. "number", "boolean", "class", "interface"
  * and its TypeNode (from the TS compiler API).
@@ -11,7 +18,8 @@ class TypeNodePair {
     private typeToSyntaxKind: Map<string, TypeNode> = new Map([
         ["number", ts.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)],
         ["boolean", ts.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword)],
-        ["string", ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)]
+        ["string", ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)],
+        ["void", ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword)]
     ]);
 
     constructor(typeName: string, classOrInterface?: string) {
@@ -37,7 +45,8 @@ export class TypeTable {
     table: Map<String, TypeNodePair> = new Map([
         ["number", new TypeNodePair("number")],
         ["boolean", new TypeNodePair("boolean")],
-        ["string", new TypeNodePair("string")]
+        ["string", new TypeNodePair("string")],
+        ["void", new TypeNodePair("void")]
     ]);
     static instance: TypeTable = null;
 

@@ -7,6 +7,7 @@ import {Content} from "./Content";
 import {Tokenizer} from "../util/Tokenizer";
 import {ClassDecl} from "./ClassDecl";
 import {InterfaceDecl} from "./InterfaceDecl";
+import {AstNode} from "./AstNode";
 
 export class DirDecl extends Content {
     directoryName: string;
@@ -56,5 +57,9 @@ export class DirDecl extends Content {
 
     public getAbsolutePath(): string {
         return this.parentPath + "/" + this.directoryName;
+    }
+
+    public typeCheck(): void {
+        this.contents.forEach((content: AstNode) => content.typeCheck());
     }
 }

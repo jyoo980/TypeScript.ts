@@ -28,4 +28,8 @@ export default class ConstructorDecl extends AstNode {
     public evaluate(): any {
         // TODO: implement this.
     }
+
+    public typeCheck(): void {
+
+    }
 }

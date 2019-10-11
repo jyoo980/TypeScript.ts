@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import FuncDecl from "../../src/ast/FuncDecl";
 import {Tokenizer} from "../../src/util/Tokenizer";
+import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
 
 describe("FuncDecl parse tests", () => {
 
@@ -109,4 +110,22 @@ describe("FuncDecl parse tests", () => {
         expect(funcDecl.comments.comments).to.deep.equal([]);
         expect(funcDecl.returnDecl.returnType).to.equal("void");
     });
+
+    it("should throw a TypeCheckError when a function returns a type that is undefined", () => {
+        const tokenizer: Tokenizer = new Tokenizer("funcDeclUndefinedType.txt", "./test/testFiles");
+        funcDecl.parse(tokenizer);
+        expect(() => {
+            return funcDecl.typeCheck();
+        }).to.throw(TypeCheckError);
+    });
+
+    it("should throw a TypeCheckError when a function has params with types that are undefined", () => {
+        // public bar(facade: InsightFacade, foo: number): void;
+        const tokenizer: Tokenizer = new Tokenizer("funcDeclParameterized.txt", "./test/testFiles");
+        funcDecl.parse(tokenizer);
+        expect(() => {
+            return funcDecl.typeCheck();
+        }).to.throw(TypeCheckError);
+    });
+
 });

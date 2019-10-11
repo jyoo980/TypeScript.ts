@@ -51,4 +51,8 @@ export class FieldDecl extends AstNode {
     public evaluate(): any {
         // TODO: implement this.
     }
+
+    public typeCheck(): void {
+        this.fields.typeCheck();
+    }
 }

@@ -64,4 +64,10 @@ export class ClassDecl extends Content {
     public evaluate(): any {
         // TODO: implement this.
     }
+
+    public typeCheck(): void {
+        this.extendsNodes.typeCheck();
+        this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
+        this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
 }
