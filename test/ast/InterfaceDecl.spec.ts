@@ -41,7 +41,7 @@ describe("ClassDecl parse test", () => {
     it("should write a complex interface definition to disk", () => {
         let tokenizer : Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
         let intDec : InterfaceDecl = new InterfaceDecl("./codegen/test");
-        intDec = intDec.parse(tokenizer);
+        intDec.parse(tokenizer);
         intDec.evaluate();
     });
 });
