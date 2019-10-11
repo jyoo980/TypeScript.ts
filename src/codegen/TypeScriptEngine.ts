@@ -54,7 +54,6 @@ export default class TypeScriptEngine {
         // Add function declarations
         for(let fn of classDecl.functions) {
             classMembers.push(this.createMethod(fn));
-
         }
 
         return ts.createClassDeclaration(
