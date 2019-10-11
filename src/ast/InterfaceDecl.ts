@@ -5,6 +5,8 @@ import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
 import {Tokenizer} from "../util/Tokenizer";
 import NodeTable from "./symbols/NodeTable";
+import {AstNode} from "./AstNode";
+import {VarList} from "./VarList";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -60,6 +62,26 @@ export class InterfaceDecl extends Content {
     }
 
     public fulfillContract(): void {
-        // TODO
+        if (this.extendsNodes !== undefined) {
+            const parentNode: InterfaceDecl =
+                NodeTable.getInstance().getNode(this.extendsNodes.parentName) as InterfaceDecl;
+            this.addParentFunctions(parentNode);
+            this.addParentFields(parentNode);
+
+        }
+    }
+
+    private addParentFunctions(parentNode: InterfaceDecl): void {
+        this.functions = this.functions.concat(parentNode.functions)
+    }
+
+    private addParentFields(parentNode: InterfaceDecl): void {
+        if (parentNode.fieldDecl !== undefined) {
+            if (this.fieldDecl === undefined) {
+                this.fieldDecl = new FieldDecl();
+                this.fieldDecl.fields = new VarList();
+            }
+            this.fieldDecl.fields.appendVarList(parentNode.fieldDecl.fields);
+        }
     }
 }

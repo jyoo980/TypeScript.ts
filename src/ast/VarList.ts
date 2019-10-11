@@ -44,6 +44,13 @@ export class VarList extends AstNode {
         }
     }
 
+    public appendVarList(otherVars: VarList): void {
+        const fieldsAsList: [string, string][] = Array.from(otherVars.nameToType.entries());
+        fieldsAsList.forEach((nameTypePair) => {
+            this.nameToType.set(nameTypePair[0], nameTypePair[1]);
+        });
+    }
+
     public fulfillContract(): void {
 
     }

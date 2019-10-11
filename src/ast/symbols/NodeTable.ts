@@ -15,7 +15,7 @@ export default class NodeTable {
     private nameToNode: Map<string, AstNode>;
 
     private constructor() {
-        // Private constructor to prevent multiple instantiation
+        this.nameToNode = new Map();
     }
 
     public static getInstance(): NodeTable {
