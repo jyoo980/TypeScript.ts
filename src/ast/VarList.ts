@@ -9,10 +9,10 @@ import {TypeCheckError} from "./symbols/TypeTable";
  */
 export class VarList extends AstNode {
 
-    nameToType: Map<string, string> = new Map();
+    nameTypeMap: Map<string, string> = new Map();
 
     public addPair(name: string, type: string): void {
-        this.nameToType.set(name, type);
+        this.nameTypeMap.set(name, type);
     }
 
     public parse(context: Tokenizer): any {

@@ -17,7 +17,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("private");
         expect(funcDecl.name).to.equal("foo");
-        expect(funcDecl.params.nameToType.size).to.equal(0);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
         expect(funcDecl.comments.comments).to.deep.equal([]);
@@ -30,7 +30,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("public");
         expect(funcDecl.name).to.equal("bar");
-        expect(funcDecl.params.nameToType.size).to.equal(2);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(2);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
         expect(funcDecl.comments.comments).to.deep.equal([]);
@@ -42,7 +42,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("private");
         expect(funcDecl.name).to.equal("foo");
-        expect(funcDecl.params.nameToType.size).to.equal(0);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
         expect(funcDecl.comments.comments).to.deep.equal(["ayy lmao"]);
@@ -54,7 +54,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("public");
         expect(funcDecl.name).to.equal("bar");
-        expect(funcDecl.params.nameToType.size).to.equal(2);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(2);
         expect(funcDecl.maybeAsync.isAsync).to.equal(true);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
         expect(funcDecl.comments.comments).to.deep.equal([]);
@@ -66,7 +66,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("public");
         expect(funcDecl.name).to.equal("bar");
-        expect(funcDecl.params.nameToType.size).to.equal(2);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(2);
         expect(funcDecl.maybeAsync.isAsync).to.equal(true);
         expect(funcDecl.maybeStatic.isStatic).to.equal(true);
         expect(funcDecl.comments.comments).to.deep.equal([]);
@@ -78,7 +78,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("public");
         expect(funcDecl.name).to.equal("addDataset");
-        expect(funcDecl.params.nameToType.size).to.equal(3);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(3);
         expect(funcDecl.maybeAsync.isAsync).to.equal(true);
         expect(funcDecl.maybeStatic.isStatic).to.equal(true);
         expect(funcDecl.comments.comments).to.deep.equal(["Add Dataset function", "returns ids of datasets on disk"]);
@@ -91,7 +91,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("public");
         expect(funcDecl.name).to.equal("getTime");
-        expect(funcDecl.params.nameToType.size).to.equal(0);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
         expect(funcDecl.comments.comments).to.deep.equal([]);
@@ -104,7 +104,7 @@ describe("FuncDecl parse tests", () => {
         funcDecl.parse(tokenizer);
         expect(funcDecl.modifier).to.equal("private");
         expect(funcDecl.name).to.equal("foo");
-        expect(funcDecl.params.nameToType.size).to.equal(0);
+        expect(funcDecl.params.nameTypeMap.size).to.equal(0);
         expect(funcDecl.maybeAsync.isAsync).to.equal(false);
         expect(funcDecl.maybeStatic.isStatic).to.equal(false);
         expect(funcDecl.comments.comments).to.deep.equal([]);
