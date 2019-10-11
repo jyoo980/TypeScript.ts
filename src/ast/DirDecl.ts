@@ -7,6 +7,7 @@ import {Content} from "./Content";
 import {Tokenizer} from "../util/Tokenizer";
 import {ClassDecl} from "./ClassDecl";
 import {InterfaceDecl} from "./InterfaceDecl";
+import {AstNode} from "./AstNode";
 
 export class DirDecl extends Content {
 
@@ -49,5 +50,9 @@ export class DirDecl extends Content {
 
     public evaluate(): any {
         // TODO: implement this.
+    }
+
+    public typeCheck(): void {
+        this.contents.forEach((content: AstNode) => content.typeCheck());
     }
 }

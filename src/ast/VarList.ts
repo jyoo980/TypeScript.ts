@@ -1,5 +1,6 @@
 import { AstNode } from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
+import {TypeCheckError} from "./symbols/TypeTable";
 
 /**
  * Represents a list of fields and their corresponding type. Used in declaring fields.
@@ -33,5 +34,13 @@ export class VarList extends AstNode {
 
     public evaluate(): any {
         // TODO: implement this.
+    }
+
+    public typeCheck(): void {
+        const fieldTypes: string[] = Array.from(this.nameToType.values());
+        const allValidTypes: boolean = this.typeTable.areValidTypes(fieldTypes);
+        if (!allValidTypes) {
+            throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
+        }
     }
 }

@@ -3,6 +3,7 @@
  */
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
+import {TypeCheckError} from "./symbols/TypeTable";
 
 export default class ReturnDecl extends AstNode {
 
@@ -19,5 +20,12 @@ export default class ReturnDecl extends AstNode {
 
     public evaluate(): any {
 
+    }
+
+    public typeCheck(): void {
+        const wasDeclared: boolean = this.typeTable.isValidType(this.returnType);
+        if (!wasDeclared) {
+            throw new TypeCheckError(`Type: ${this.returnType} was not defined`);
+        }
     }
 }

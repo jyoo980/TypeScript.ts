@@ -1,6 +1,7 @@
 import {ParseError, Tokenizer} from "../../src/util/Tokenizer";
 import {FieldDecl} from "../../src/ast/FieldDecl";
 import {expect} from "chai";
+import {TypeCheckError} from "../../src/ast/symbols/TypeTable";
 
 describe("FieldDecl tokenizer test", () => {
 
@@ -42,5 +43,13 @@ describe("FieldDecl tokenizer test", () => {
         expect(() => {
             fieldDecl.parse(tokenizer);
         }).to.throw(ParseError)
+    });
+
+    it("should throw a TypeCheckError when it contains types which are undeclared", () => {
+        const tokenizer: Tokenizer = new Tokenizer("fieldDeclExample.txt", "./test/testFiles");
+        fieldDecl.parse(tokenizer);
+        expect(() => {
+            return fieldDecl.typeCheck();
+        }).to.throw(TypeCheckError);
     });
 });

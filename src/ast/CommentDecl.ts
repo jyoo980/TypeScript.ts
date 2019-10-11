@@ -31,4 +31,8 @@ export default class CommentDecl extends AstNode {
         // TODO: implement this.
     }
 
+    public typeCheck(): void {
+
+    }
+
 }

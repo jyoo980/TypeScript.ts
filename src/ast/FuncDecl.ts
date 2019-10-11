@@ -55,4 +55,9 @@ export default class FuncDecl extends AstNode {
     public evaluate(): any {
         // TODO: implement this.
     }
+
+    public typeCheck(): void {
+        this.params.typeCheck();
+        this.returnDecl.typeCheck();
+    }
 }

@@ -37,4 +37,8 @@ export class ModuleDecl extends AstNode {
     public evaluate(): any {
         // TODO: implement this.
     }
+
+    public typeCheck(): void {
+        
+    }
 }

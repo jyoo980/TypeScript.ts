@@ -13,6 +13,7 @@ describe("TypeTable tests", () => {
         expect(table.isValidType("number")).to.equal(true);
         expect(table.isValidType("boolean")).to.equal(true);
         expect(table.isValidType("string")).to.equal(true);
+        expect(table.isValidType("void")).to.equal(true);
     });
 
 
