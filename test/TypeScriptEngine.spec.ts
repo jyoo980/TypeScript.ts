@@ -507,4 +507,4 @@ describe("TypeScriptEngine tests", () => {
             expect(resultStr).to.equal(`interface FooBar {\n}`);
         });
     });
-})});
+});

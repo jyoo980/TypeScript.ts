@@ -1,8 +1,10 @@
 import {ParseError, Tokenizer} from "../../src/util/Tokenizer";
 import {ModuleDecl} from "../../src/ast/ModuleDecl";
 import {expect} from "chai";
+import * as fs from 'fs';
+import * as nodeFs from "fs-extra";
 
-describe("FieldDecl tokenizer test", () => {
+describe("ModuleDecl parse() test", () => {
 
     let moduleDecl: ModuleDecl;
 
@@ -54,5 +56,38 @@ describe("FieldDecl tokenizer test", () => {
         } finally {
             expect(result).to.equal('NO_MORE_TOKENS did not match regex value "');
         }
+    });
+});
+
+describe('ModuleDecl evaluate() test', () => {
+    let moduleDecl: ModuleDecl;
+    const dir: string = 'packageModulesTest';
+
+    before(() => {	
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+    });
+
+    beforeEach(() => {
+        moduleDecl = new ModuleDecl();
+    });
+
+    afterEach(() => {
+        moduleDecl = null;
+        nodeFs.removeSync(dir);
+    });
+
+    function readPackageJson(path: string): any {
+        return JSON.parse(fs.readFileSync(path + '/package.json', 'utf-8'));
+    }
+
+    it('should add a package.json file at ./packageTest with "project1" as project name', async () => {
+        moduleDecl.setPath(dir);
+        moduleDecl.setProjectName('project1');
+        await moduleDecl.evaluate();
+        expect(fs.existsSync(dir + '/package.json')).to.be.true;
+        const packageContents: any = readPackageJson(dir);
+        expect(packageContents.name).to.equal('project1');
     });
 });
