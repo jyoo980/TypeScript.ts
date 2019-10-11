@@ -37,9 +37,9 @@ export class ModuleDecl extends AstNode {
         context.getAndCheckNext('\\]');
     }
 
-    public async evaluate(): Promise<any> {
+    public evaluate(): Promise<any> {
         const packageJson: PackageJson = new PackageJson(this.path, this.projectName);
-        await packageJson.addModules(this.modules);
+        return packageJson.addModules(this.modules);
     }
 
     public typeCheck(): void {
