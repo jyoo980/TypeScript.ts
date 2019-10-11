@@ -44,13 +44,17 @@ export default class TypeScriptEngine {
     }
 
     public createClass(classDecl: ClassDecl): ClassDeclaration {
-        // Add function declarations
-        let classMembers: ClassElement[] =
-            classDecl.functions.map((func: FuncDecl) => this.createMethod(func));
+        let classMembers: ClassElement[] = [];
 
         // Add field declarations
         for (let field of classDecl.fields) {
             classMembers = classMembers.concat(this.fieldsToClassElement(field.fields));
+        }
+
+        // Add function declarations
+        for(let fn of classDecl.functions) {
+            classMembers.push(this.createMethod(fn));
+
         }
 
         return ts.createClassDeclaration(
@@ -60,7 +64,7 @@ export default class TypeScriptEngine {
             undefined,
             undefined,
             classMembers
-        )
+        );
     }
 
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
@@ -98,7 +102,7 @@ export default class TypeScriptEngine {
             tsReturnType,
             funcDecl.name,
             /* questionToken */ undefined
-        )
+        );
         this.addLeadingComment(methodSignature, funcDecl.comments);
         return methodSignature;
     }
@@ -106,7 +110,11 @@ export default class TypeScriptEngine {
     private createMethod(funcDecl: FuncDecl): ClassElement {
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnDecl.returnType);
-        return ts.createMethod(
+        const retStatement = [];
+        if(!tsReturnType || tsReturnType !== this.typeTable.getTypeNode("void")) {
+            retStatement.push(ts.createReturn(ts.createNull()));
+        }
+        const methodSig =  ts.createMethod(
             undefined,
             undefined,
             undefined,
@@ -115,8 +123,10 @@ export default class TypeScriptEngine {
             undefined,
             tsParams,
             tsReturnType,
-            undefined
-        )
+            ts.createBlock(retStatement, false)
+        );
+        this.addLeadingComment(methodSig, funcDecl.comments);
+        return methodSig;
     }
 
     private fieldsToTypeElement(fields: VarList): TypeElement[] {
