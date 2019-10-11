@@ -66,7 +66,7 @@ export default class TypeScriptEngine {
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {
         const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
-        const tsPropertySignatures: TypeElement[] = this.fieldsToTypeElement(interfaceDecl.fieldDecl.fields);
+        const tsPropertySignatures: TypeElement[] = this.createTsPropertySignatures(interfaceDecl);
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             // TODO: comments!
@@ -77,20 +77,30 @@ export default class TypeScriptEngine {
             /* heritageClauses */ undefined,
             interfaceMembers
         );
-        this.addLeadingComment(interfaceDeclaration, interfaceDecl.comments);
         return interfaceDeclaration;
     }
 
+    private createTsPropertySignatures(interfaceDecl: InterfaceDecl): TypeElement[] {
+        if (interfaceDecl.fieldDecl == undefined) {
+            return [] as TypeElement[];
+        } else {
+            return this.fieldsToTypeElement(interfaceDecl.fieldDecl.fields);
+        }
+    }
+
     private createMethodSignature(funcDecl: FuncDecl): TypeElement {
+        // TODO: handle comments here
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnDecl.returnType);
-        return ts.createMethodSignature(
+        const methodSignature = ts.createMethodSignature(
             /* typeParameters */ undefined,
             tsParams,
             tsReturnType,
             funcDecl.name,
             /* questionToken */ undefined
         )
+        this.addLeadingComment(methodSignature, funcDecl.comments);
+        return methodSignature;
     }
 
     private createMethod(funcDecl: FuncDecl): ClassElement {
