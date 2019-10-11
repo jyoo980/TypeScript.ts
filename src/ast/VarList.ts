@@ -43,4 +43,8 @@ export class VarList extends AstNode {
             throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
         }
     }
+
+    public fulfillContract(): void {
+
+    }
 }

@@ -28,4 +28,8 @@ export default class ReturnDecl extends AstNode {
             throw new TypeCheckError(`Type: ${this.returnType} was not defined`);
         }
     }
+
+    public fulfillContract(): void {
+        
+    }
 }

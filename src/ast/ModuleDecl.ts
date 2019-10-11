@@ -41,4 +41,8 @@ export class ModuleDecl extends AstNode {
     public typeCheck(): void {
         
     }
+
+    public fulfillContract(): void {
+
+    }
 }

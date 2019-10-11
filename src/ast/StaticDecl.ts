@@ -22,4 +22,8 @@ export default class StaticDecl extends AstNode {
     public typeCheck(): void {
 
     }
+
+    public fulfillContract(): void {
+
+    }
 }

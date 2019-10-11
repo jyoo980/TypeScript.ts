@@ -12,11 +12,17 @@ export abstract class AstNode {
     protected engine: TypeScriptEngine = new TypeScriptEngine();
     protected printer: PrintUtil = new PrintUtil(ts.createPrinter({ newLine: ts.NewLineKind.LineFeed }));
 
-    // Declaring return type as any for now, we can get more specific later as we go
     public abstract parse(context: Tokenizer): any;
 
-    // Declaring return type as any for now, we can get more specific later as we go
     public abstract evaluate(): any;
 
     public abstract typeCheck(): void;
+
+    /**
+     * This should be run after typeCheck() to modify the AST nodes such that they correctly
+     * fulfill extends/implements contracts, i.e.
+     *  - classes which implement an interface should have the correct method signatures
+     *  - interfaces which extend other interfaces should have the correct method signatures
+     */
+    public abstract fulfillContract(): void;
 }

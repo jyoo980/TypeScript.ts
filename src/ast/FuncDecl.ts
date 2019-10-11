@@ -60,4 +60,8 @@ export default class FuncDecl extends AstNode {
         this.params.typeCheck();
         this.returnDecl.typeCheck();
     }
+
+    public fulfillContract(): void {
+
+    }
 }

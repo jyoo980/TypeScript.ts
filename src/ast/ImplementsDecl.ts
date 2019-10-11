@@ -32,4 +32,8 @@ export class ImplementsDecl extends AstNode {
             throw new TypeError(`At least one type from: ${this.parentNames} was not declared`);
         }
     }
+
+    public fulfillContract(): void {
+        // TODO
+    }
 }

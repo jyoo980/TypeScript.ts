@@ -32,4 +32,8 @@ export default class ConstructorDecl extends AstNode {
     public typeCheck(): void {
 
     }
+
+    public fulfillContract(): void {
+
+    }
 }

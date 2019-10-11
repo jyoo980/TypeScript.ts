@@ -35,4 +35,8 @@ export default class CommentDecl extends AstNode {
 
     }
 
+    public fulfillContract(): void {
+
+    }
+
 }

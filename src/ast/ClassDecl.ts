@@ -70,4 +70,8 @@ export class ClassDecl extends Content {
         this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }
+
+    public fulfillContract(): void {
+        // TODO: implement this.
+    }
 }

@@ -4,6 +4,7 @@ import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
 import {Tokenizer} from "../util/Tokenizer";
+import NodeTable from "./symbols/NodeTable";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -45,7 +46,7 @@ export class InterfaceDecl extends Content {
         }
 
         this.typeTable.addInterface(this.interfaceName);
-        return this;
+        NodeTable.getInstance().saveNode(this.interfaceName, this);
     }
 
     public evaluate(): any {
@@ -56,5 +57,9 @@ export class InterfaceDecl extends Content {
         this.extendsNodes.typeCheck();
         this.fieldDecl.typeCheck();
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public fulfillContract(): void {
+        // TODO
     }
 }

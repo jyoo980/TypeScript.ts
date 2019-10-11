@@ -55,4 +55,8 @@ export class FieldDecl extends AstNode {
     public typeCheck(): void {
         this.fields.typeCheck();
     }
+
+    public fulfillContract(): void {
+
+    }
 }

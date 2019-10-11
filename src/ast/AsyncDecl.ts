@@ -23,4 +23,8 @@ export default class AsyncDecl extends AstNode {
 
     }
 
+    public fulfillContract(): void {
+
+    }
+
 }

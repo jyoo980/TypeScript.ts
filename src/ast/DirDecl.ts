@@ -62,4 +62,8 @@ export class DirDecl extends Content {
     public typeCheck(): void {
         this.contents.forEach((content: AstNode) => content.typeCheck());
     }
+
+    public fulfillContract(): void {
+        // TODO
+    }
 }

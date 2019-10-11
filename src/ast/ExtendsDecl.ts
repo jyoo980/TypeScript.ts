@@ -27,4 +27,8 @@ export class ExtendsDecl extends AstNode {
             throw new TypeCheckError(`Type: ${this.parentName} was not defined`);
         }
     }
+
+    public fulfillContract(): void {
+        // TODO
+    }
 }
