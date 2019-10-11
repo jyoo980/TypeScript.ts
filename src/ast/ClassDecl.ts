@@ -62,7 +62,13 @@ export class ClassDecl extends Content {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        const tsNodeStr: string = this.printer.tsNodeToString(this.engine.createClass(this));
+        this.fileSystem.generateFile(this.className, this.parentPath, tsNodeStr).then(() => {
+            return;
+        }).catch((err) => {
+            return;
+            // TODO: throw evaluation error here..
+        })
     }
 
     public typeCheck(): void {

@@ -84,3 +84,7 @@ describe("ClassDecl parse test", () => {
         classDec.typeCheck();
     });
 });
+
+describe ("ClassDecl evaluate test", () => {
+
+});
