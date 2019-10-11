@@ -37,7 +37,7 @@ export class VarList extends AstNode {
     }
 
     public typeCheck(): void {
-        const fieldTypes: string[] = Array.from(this.nameToType.values());
+        const fieldTypes: string[] = Array.from(this.nameTypeMap.values());
         const allValidTypes: boolean = this.typeTable.areValidTypes(fieldTypes);
         if (!allValidTypes) {
             throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
