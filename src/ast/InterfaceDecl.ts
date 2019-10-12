@@ -45,6 +45,8 @@ export class InterfaceDecl extends Content {
         }
 
         this.typeTable.addInterface(this.interfaceName);
+        this.pathTable.addTypePath(this.interfaceName, this.getAbsolutePath());
+
         return this;
     }
 
@@ -58,5 +60,9 @@ export class InterfaceDecl extends Content {
         this.extendsNodes.typeCheck();
         this.fieldDecl.typeCheck();
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public getAbsolutePath(): string {
+        return this.parentPath + "/" + this.interfaceName + ".ts";
     }
 }

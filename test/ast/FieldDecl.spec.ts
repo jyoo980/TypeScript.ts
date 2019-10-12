@@ -15,15 +15,15 @@ describe("FieldDecl tokenizer test", () => {
         const tokenizer: Tokenizer = new Tokenizer("fieldDeclExample.txt", "./test/testFiles");
         fieldDecl.parse(tokenizer);
         expect(fieldDecl.modifier).to.equal("private");
-        expect(fieldDecl.fields.nameToType.get("foo")).to.deep.equal("string");
+        expect(fieldDecl.fields.nameTypeMap.get("foo")).to.deep.equal("string");
     });
 
     it("should parse a field declaration with getters", () => {
         const tokenizer: Tokenizer = new Tokenizer("fieldDeclWithGetter.txt", "./test/testFiles");
         fieldDecl.parse(tokenizer);
         expect(fieldDecl.modifier).to.equal("private");
-        expect(fieldDecl.fields.nameToType.get("foo")).to.deep.equal("string");
-        expect(fieldDecl.fields.nameToType.get("facade")).to.deep.equal("IInsightFacade");
+        expect(fieldDecl.fields.nameTypeMap.get("foo")).to.deep.equal("string");
+        expect(fieldDecl.fields.nameTypeMap.get("facade")).to.deep.equal("IInsightFacade");
         expect(fieldDecl.generateGetter).to.equal(true);
         expect(fieldDecl.generateSetter).to.equal(false);
     });
@@ -32,8 +32,8 @@ describe("FieldDecl tokenizer test", () => {
         const tokenizer: Tokenizer = new Tokenizer("fieldDeclWithGetterSetter.txt", "./test/testFiles");
         fieldDecl.parse(tokenizer);
         expect(fieldDecl.modifier).to.equal("private");
-        expect(fieldDecl.fields.nameToType.get("foo")).to.deep.equal("string");
-        expect(fieldDecl.fields.nameToType.get("facade")).to.deep.equal("IInsightFacade");
+        expect(fieldDecl.fields.nameTypeMap.get("foo")).to.deep.equal("string");
+        expect(fieldDecl.fields.nameTypeMap.get("facade")).to.deep.equal("IInsightFacade");
         expect(fieldDecl.generateGetter).to.equal(true);
         expect(fieldDecl.generateSetter).to.equal(true);
     });

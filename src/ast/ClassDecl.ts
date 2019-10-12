@@ -20,7 +20,6 @@ export class ClassDecl extends Content {
     fields: FieldDecl[] = [];
     functions: FuncDecl[] = [];
 
-
     public parse(context: Tokenizer): any {
         let indentLevel: number = context.getCurrentLineTabLevel();
         if(context.checkToken("abstract")) {
@@ -57,17 +56,25 @@ export class ClassDecl extends Content {
             func.parse(context);
             this.functions.push(func);
         }
+
         this.typeTable.addClass(this.className);
+        this.pathTable.addTypePath(this.className, this.getAbsolutePath());
+
         return this;
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        const tsNodeStr: string = this.printer.tsNodeToString(this.engine.createClass(this));
+        this.fileSystem.generateFile(this.className, this.parentPath, tsNodeStr);
     }
 
     public typeCheck(): void {
         this.extendsNodes.typeCheck();
         this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public getAbsolutePath(): string {
+        return `${this.parentPath}/${this.className}.ts`;
     }
 }

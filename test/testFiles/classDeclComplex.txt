@@ -6,7 +6,7 @@ class Time implements ITime, DateTime extends TimeClass
     fields public [ number date ]
         generate getters
     function public getDate
-        params [ string id, string content, InsightDatasetKind kind ]
+        params [ string id, string content, string kind ]
         comments [ "creates a new Time object from given date",
             "{param} date - date object to parse time object from" ]
-        returns Date
+        returns string
