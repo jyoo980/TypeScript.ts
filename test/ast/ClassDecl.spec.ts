@@ -2,6 +2,7 @@ import { expect } from "chai";
 import {ClassDecl} from "../../src/ast/ClassDecl";
 import {Tokenizer} from "../../src/util/Tokenizer";
 import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
+import * as nodeFs from "fs-extra";
 
 describe("ClassDecl parse test", () => {
 
@@ -63,7 +64,7 @@ describe("ClassDecl parse test", () => {
         expect(classDec.functions[0].maybeAsync.isAsync).to.be.false;
         expect(classDec.functions[0].params.nameToType.size).to.equal(3);
         expect(classDec.functions[0].comments.comments.length).to.equal(2);
-        expect(classDec.functions[0].returnDecl.returnType).to.equal("Date");
+        expect(classDec.functions[0].returnDecl.returnType).to.equal("string");
 
     });
 
@@ -83,4 +84,36 @@ describe("ClassDecl parse test", () => {
         TypeTable.getInstance().addClass("TimeClass");
         classDec.typeCheck();
     });
+});
+
+describe ("ClassDecl evaluate test", () => {
+
+    const OUTPUT_DIR: string = "./codegen/test";
+    const createdFiles: string[] = [];
+
+    after(async () => {
+        try {
+            const deleteOps: Array<Promise<void>> = createdFiles.map((toDelete: string) => nodeFs.unlink(toDelete));
+            await Promise.all(deleteOps);
+        } catch (err) {
+            console.warn(`FileSystemSpec::cleanup failed with error: ${err}`);
+        }
+    });
+
+    it("writes simple class definition to disk", () => {
+        let tokenizer : Tokenizer = new Tokenizer("classDeclSimple.txt", "./test/testFiles");
+        let classDec : ClassDecl = new ClassDecl(OUTPUT_DIR);
+        classDec.parse(tokenizer);
+        classDec.evaluate();
+        createdFiles.push(OUTPUT_DIR  + "/Time.ts");
+    });
+
+    it("writes complex class definition to disk", () => {
+        let tokenizer : Tokenizer = new Tokenizer("classDeclComplex.txt", "./test/testFiles");
+        let classDec : ClassDecl = new ClassDecl(OUTPUT_DIR);
+        classDec.parse(tokenizer);
+        classDec.evaluate();
+        createdFiles.push(OUTPUT_DIR  + "/Time.ts");
+    });
+
 });

@@ -375,7 +375,14 @@ describe("TypeScriptEngine tests", () => {
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
-            [ts.createMethod(
+            [ ts.createProperty(
+                undefined,
+                /* modifiers */ undefined,
+                "foo",
+                /* questionToken */ undefined,
+                ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+                /* initializer */ undefined
+            ), ts.createMethod(
                 /* typeParameters */ undefined,
                 undefined,
                 undefined,
@@ -399,15 +406,8 @@ describe("TypeScriptEngine tests", () => {
                         ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
                     )],
                 ts.createTypeReferenceNode("ParameterDecl", undefined),
-                /* body */ undefined
-            ), ts.createProperty(
-                undefined,
-                /* modifiers */ undefined,
-                "foo",
-                /* questionToken */ undefined,
-                ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-                /* initializer */ undefined
-            )]
+                /* body */ ts.createBlock([ts.createReturn(ts.createNull())], false)
+            ),]
         ));
     });
 
@@ -463,7 +463,7 @@ describe("TypeScriptEngine tests", () => {
                         ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
                     )],
                 ts.createTypeReferenceNode("ParameterDecl", undefined),
-                /* body */ undefined
+                /* body */ ts.createBlock([ts.createReturn(ts.createNull())])
             )]
         ));
 
