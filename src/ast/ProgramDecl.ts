@@ -32,9 +32,13 @@ export class ProgramDecl extends DirDecl {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
-        this.modules.setPath('' /* TODO */);
-        this.modules.setProjectName(this.projectName); 
+        this.directoryName = this.projectName;
+        this.modules.setPath(this.getAbsolutePath());
+        this.modules.setProjectName(this.projectName);
+
+        this.fileSystem.writeDirectory(this.getAbsolutePath()); // project dir does not exist until super.evaluate
         this.modules.evaluate();
+
+        super.evaluate();
     }
 }

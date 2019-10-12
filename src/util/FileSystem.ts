@@ -105,7 +105,9 @@ export default class FileSystem {
      */
     public writeDirectory(absolutePath: string): string {
         try {
-            fs.mkdirSync(absolutePath);
+            if (!fs.pathExistsSync(absolutePath)) {
+                fs.mkdirsSync(absolutePath);
+            }
             return absolutePath;
         } catch (err) {
             const msg: string = `FileSystem::making directory: ${absolutePath} failed with error: ${err}`;

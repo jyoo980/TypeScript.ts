@@ -69,7 +69,9 @@ export class ClassDecl extends Content {
     }
 
     public typeCheck(): void {
-        this.extendsNodes.typeCheck();
+        if (this.extendsNodes !== undefined) {
+            this.extendsNodes.typeCheck();
+        }
         this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }
