@@ -33,8 +33,8 @@ export class InterfaceDecl extends Content {
         }
 
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
-            // TODO: how do we want to handle if someone tries to declare private fields in an interface?
             this.fieldDecl = new FieldDecl();
+            this.fieldDecl.isInterfaceField = true;
             this.fieldDecl.parse(context);
         }
 
@@ -57,8 +57,13 @@ export class InterfaceDecl extends Content {
     }
 
     public typeCheck(): void {
-        this.extendsNodes.typeCheck();
-        this.fieldDecl.typeCheck();
+        if(this.extendsNodes) {
+            this.extendsNodes.typeCheck();
+        }
+        if(this.fieldDecl) {
+            this.fieldDecl.typeCheck();
+        }
+
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }
 
