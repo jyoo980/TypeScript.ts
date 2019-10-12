@@ -2,13 +2,13 @@ project TestProject
 modules [ ]
 dir src/model
     class Time
-        fields private [number dayOfWeek, number hour, number minute]
+        fields private [ number dayOfWeek, number hour, number minute ]
             generate getters
             generate setters
-        fields public [number date]
+        fields public [ number date ]
             generate getters
         function private getDate
-            params [string id, string content, string kind]
+            params [ string id, string content, string kind ]
             returns string
 
 
