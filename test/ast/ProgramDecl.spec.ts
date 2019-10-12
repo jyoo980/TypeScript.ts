@@ -6,7 +6,7 @@ describe("Top-level TypeScript DSL tests", () => {
 
     it("Should evaluate the simplest program", () => {
         const tokenizer: Tokenizer = new Tokenizer("simpleProgram.txt", "./test/testFiles");
-        let programDecl: ProgramDecl = new ProgramDecl("./");
+        let programDecl: ProgramDecl = new ProgramDecl(".");
         programDecl.parse(tokenizer);
         programDecl.typeCheck();
         programDecl.evaluate();
