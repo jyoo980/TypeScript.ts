@@ -21,7 +21,7 @@ describe("ClassDecl parse test", () => {
         expect(classDec.fields.length).to.equal(0);
         expect(classDec.functions.length).to.equal(0);
         let typeTable : TypeTable = TypeTable.getInstance();
-        expect(typeTable.table.size).to.equal(4);
+        expect(typeTable.table.size).to.equal(5);
         expect(typeTable.getTypeNode(classDec.className)).to.not.be.undefined;
     });
 

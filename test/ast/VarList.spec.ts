@@ -8,7 +8,7 @@ describe("VarList typecheck", () => {
         let varList: VarList = new VarList();
         varList.parse(tokenizer);
 
-        expect(varList.nameToType.size).to.equal(3);
+        expect(varList.nameTypeMap.size).to.equal(3);
         varList.typeCheck();
     });
 });

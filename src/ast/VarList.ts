@@ -17,8 +17,8 @@ export class VarList extends AstNode {
 
     public parse(context: Tokenizer): any {
         // See the beginning of the array "["
-        context.getAndCheckNext("^[\[]$");
-        while (!context.checkToken("^[\]]$")) {
+        context.getAndCheckNext("^[\\[]$");
+        while (!context.checkToken("^[\\]]$")) {
             // Iterate over the type/name pairs until we see the bracket "]
             const type: string = context.getNext();
             const name: string = context.getNext();
