@@ -6,7 +6,7 @@ import {TypeTable} from "../../src/ast/symbols/TypeTable";
 describe("ClassDecl parse test", () => {
     it("parses single-line, simple interface definition", () => {
         let typeTable : TypeTable = TypeTable.getInstance();
-        expect(typeTable.table.size).to.equal(3);
+        expect(typeTable.table.size).to.equal(4);
         let tokenizer : Tokenizer = new Tokenizer("interfaceDeclSimple.txt", "./test/testFiles");
         let intDec : InterfaceDecl = new InterfaceDecl(".");
         intDec = intDec.parse(tokenizer);
@@ -16,7 +16,7 @@ describe("ClassDecl parse test", () => {
         expect(intDec.fieldDecl).to.be.undefined;
         expect(intDec.functions.length).to.equal(0);
 
-        expect(typeTable.table.size).to.equal(4);
+        expect(typeTable.table.size).to.equal(5);
         expect(typeTable.getTypeNode(intDec.interfaceName)).to.not.be.undefined;
 
     });

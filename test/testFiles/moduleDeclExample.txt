@@ -1,1 +1,1 @@
-modules ["someModule1", "someModule2: 1.0.0"]
+modules [ "someModule1", "someModule2: 1.0.0" ]
