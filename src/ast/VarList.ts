@@ -17,8 +17,8 @@ export class VarList extends AstNode {
 
     public parse(context: Tokenizer): any {
         // See the beginning of the array "["
-        context.getAndCheckNext("\\[");
-        while (!context.checkToken("\\]")) {
+        context.getAndCheckNext("^[\[]$");
+        while (!context.checkToken("^[\]]$")) {
             // Iterate over the type/name pairs until we see the bracket "]
             const type: string = context.getNext();
             const name: string = context.getNext();
@@ -37,7 +37,11 @@ export class VarList extends AstNode {
     }
 
     public typeCheck(): void {
-        const fieldTypes: string[] = Array.from(this.nameToType.values());
+        const fieldTypes: string[] = Array.from(this.nameToType.values())
+            .map((fieldType) => {
+                // filter out [] from type before checking against typeTable
+                return fieldType.replace(/[\[\]]/g, "");
+        });
         const allValidTypes: boolean = this.typeTable.areValidTypes(fieldTypes);
         if (!allValidTypes) {
             throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
