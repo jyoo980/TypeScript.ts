@@ -1,0 +1,8 @@
+project ZooProject
+modules []
+dir src/AnimalModels
+	interface Animal
+		fields public [string name, number age]
+			generate getter
+			generate setter
+		fields private [number age]
