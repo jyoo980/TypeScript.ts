@@ -1,4 +1,5 @@
 interface TransitLine
+    fields private [ number dayOfWeek, number hour, number minute ]
     function public getNumberOfStops
         params [ ]
         comments [ "Returns the number of stops in the transit line" ]
