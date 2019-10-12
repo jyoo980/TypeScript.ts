@@ -30,6 +30,6 @@ export default class ReturnDecl extends AstNode {
     }
 
     public fulfillContract(): void {
-        
+        // Not needed.
     }
 }

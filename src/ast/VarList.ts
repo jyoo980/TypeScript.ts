@@ -33,7 +33,7 @@ export class VarList extends AstNode {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        // Not needed.
     }
 
     public typeCheck(): void {
@@ -52,6 +52,6 @@ export class VarList extends AstNode {
     }
 
     public fulfillContract(): void {
-
+        // Not needed.
     }
 }

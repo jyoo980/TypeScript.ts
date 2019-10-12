@@ -57,6 +57,6 @@ export class FieldDecl extends AstNode {
     }
 
     public fulfillContract(): void {
-
+        // Not needed.
     }
 }

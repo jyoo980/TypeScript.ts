@@ -30,10 +30,10 @@ export default class ConstructorDecl extends AstNode {
     }
 
     public typeCheck(): void {
-
+        this.params.typeCheck();
     }
 
     public fulfillContract(): void {
-
+        // Not needed.
     }
 }

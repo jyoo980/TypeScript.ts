@@ -32,6 +32,6 @@ export class ProgramDecl extends DirDecl {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+
     }
 }

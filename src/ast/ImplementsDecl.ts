@@ -23,7 +23,7 @@ export class ImplementsDecl extends AstNode {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        // Not needed.
     }
 
     public typeCheck(): void {
@@ -34,6 +34,6 @@ export class ImplementsDecl extends AstNode {
     }
 
     public fulfillContract(): void {
-        // TODO
+        // Not needed.
     }
 }

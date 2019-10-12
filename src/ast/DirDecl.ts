@@ -64,6 +64,6 @@ export class DirDecl extends Content {
     }
 
     public fulfillContract(): void {
-        // TODO
+        this.contents.forEach((content: AstNode) => content.fulfillContract());
     }
 }

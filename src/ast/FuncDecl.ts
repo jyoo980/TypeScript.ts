@@ -62,6 +62,6 @@ export default class FuncDecl extends AstNode {
     }
 
     public fulfillContract(): void {
-
+        // Not needed.
     }
 }
