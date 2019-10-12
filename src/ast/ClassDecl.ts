@@ -5,7 +5,8 @@ import {ImplementsDecl} from "./ImplementsDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
 import {Tokenizer} from "../util/Tokenizer";
-
+import NodeTable from "./symbols/NodeTable";
+import {InterfaceDecl} from "./InterfaceDecl";
 /**
  * Represents a Class a TypeScript project may have.
  *
@@ -58,6 +59,7 @@ export class ClassDecl extends Content {
             this.functions.push(func);
         }
         this.typeTable.addClass(this.className);
+        NodeTable.getInstance().saveNode(this.className, this);
         return this;
     }
 
@@ -72,6 +74,20 @@ export class ClassDecl extends Content {
     }
 
     public fulfillContract(): void {
-        // TODO: implement this.
+        const nodeTable: NodeTable = NodeTable.getInstance();
+        if (this.implementsNodes !== undefined) {
+            const interfacesToImplement: string[] = this.implementsNodes.parentNames;
+            interfacesToImplement.forEach((parentName) => {
+                const interfaceDecl: InterfaceDecl = nodeTable.getNode(parentName) as InterfaceDecl;
+                this.implementInterface(interfaceDecl);
+            });
+        }
+    }
+
+    private implementInterface(interfaceDecl: InterfaceDecl): void {
+        this.functions = this.functions.concat(interfaceDecl.functions);
+        if (interfaceDecl.fieldDecl !== undefined) {
+            this.fields.push(interfaceDecl.fieldDecl);
+        }
     }
 }
