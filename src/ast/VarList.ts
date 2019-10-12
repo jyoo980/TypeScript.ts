@@ -9,10 +9,10 @@ import {TypeCheckError} from "./symbols/TypeTable";
  */
 export class VarList extends AstNode {
 
-    nameToType: Map<string, string> = new Map();
+    nameTypeMap: Map<string, string> = new Map();
 
     public addPair(name: string, type: string): void {
-        this.nameToType.set(name, type);
+        this.nameTypeMap.set(name, type);
     }
 
     public parse(context: Tokenizer): any {
@@ -37,7 +37,7 @@ export class VarList extends AstNode {
     }
 
     public typeCheck(): void {
-        const fieldTypes: string[] = Array.from(this.nameToType.values());
+        const fieldTypes: string[] = Array.from(this.nameTypeMap.values());
         const allValidTypes: boolean = this.typeTable.areValidTypes(fieldTypes);
         if (!allValidTypes) {
             throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
