@@ -4,6 +4,7 @@ import {VarList} from "../ast/VarList";
 import {AstNode} from "../ast/AstNode";
 import {InterfaceDecl} from "../ast/InterfaceDecl";
 import FuncDecl from "../ast/FuncDecl";
+import {FieldDecl} from "../ast/FieldDecl";
 
 export class ImportStringBuilder {
 
@@ -136,7 +137,7 @@ export class ImportStringBuilder {
     }
 
     /**
-     * Extracts the non primitive types from a Class' fields and functions
+     * Extracts the non primitive types from a Class' fields, functions and inheritance
      *
      * @param classDec  the Class declaration to extract non primitives from
      */
@@ -144,70 +145,96 @@ export class ImportStringBuilder {
         let classNonPrimitives = new Set<string>();
 
         // Extract from fields
-        for (let fieldDec of classDec.fields) {
-            let nonPrimitives = this.extractNonPrimitiveTypesFromVarList(fieldDec.fields);
-
-            nonPrimitives.forEach((nonPrimitive: string) => {
+        classDec.fields.forEach((fieldDec: FieldDecl) => {
+            this.extractNonPrimitiveTypesFromVarList(fieldDec.fields).forEach((nonPrimitive: string) => {
                 classNonPrimitives.add(nonPrimitive);
             });
-        }
+        });
 
-        // Extract from functions
-        for (let funcDec of classDec.functions) {
-            let nonPrimitivesParams = this.extractNonPrimitiveTypesFromFunctions(funcDec);
-
-            nonPrimitivesParams.forEach((nonPrimitive: string) => {
-                classNonPrimitives.add(nonPrimitive);
-            });
-        }
+        this.extractNonPrimitivesFromFunctionsAndInheritance(classDec).forEach((nonPrimitive: string) => {
+            classNonPrimitives.add(nonPrimitive);
+        });
 
         return classNonPrimitives;
     }
 
     /**
-     * Extracts the non primitive types from a Interfaces' fields and functions
+     * Extracts the non primitive types from a Interfaces' fields, functions and inheritance
      *
      * @param interfaceDec  the Interface declaration to extract non primitives from
      */
     private static extractNonPrimitiveTypesFromInterface(interfaceDec: InterfaceDecl): Set<string> {
         let interfaceNonPrimitives = new Set<string>();
 
-        // Extract from fields
-        let nonPrimitives = this.extractNonPrimitiveTypesFromVarList(interfaceDec.fieldDecl.fields);
-
-        nonPrimitives.forEach((nonPrimitive: string) => {
+        this.extractNonPrimitiveTypesFromVarList(interfaceDec.fieldDecl.fields).forEach((nonPrimitive: string) => {
             interfaceNonPrimitives.add(nonPrimitive);
         });
 
-
-        // Extract from functions
-        for (let funcDec of interfaceDec.functions) {
-            let nonPrimitivesParams = this.extractNonPrimitiveTypesFromFunctions(funcDec);
-
-            nonPrimitivesParams.forEach((nonPrimitive: string) => {
-                interfaceNonPrimitives.add(nonPrimitive);
-            });
-        }
+        this.extractNonPrimitivesFromFunctionsAndInheritance(interfaceDec).forEach((nonPrimitive: string) => {
+            interfaceNonPrimitives.add(nonPrimitive);
+        });
 
         return interfaceNonPrimitives;
     }
 
     /**
-     * Extracts the non primitive types from a function declaration (params and return type)
+     * Extracts the non primitive types from a function declaration (params and return type) and inheritance
      *
-     * @param FuncDec  the FuncDec to extract fields from
+     * @param decl  Either the ClassDecl or InterfaceDecl to extract non primitives used in their functions and inheritance
      */
-    private static extractNonPrimitiveTypesFromFunctions(funcDec: FuncDecl): Set<string> {
-        let nonPrimitiveTypes = new Set<string>();
+    private static extractNonPrimitivesFromFunctionsAndInheritance(decl: ClassDecl | InterfaceDecl): Set<string> {
+        let nonPrimitives = new Set<string>();
 
-        let nonPrimitivesParams = this.extractNonPrimitiveTypesFromVarList(funcDec.params);
-        nonPrimitivesParams.forEach((nonPrimitive: string) => {
-            nonPrimitiveTypes.add(nonPrimitive);
+        this.extractNonPrimitiveTypesFromFunctions(decl).forEach((nonPrimitive: string) => {
+            nonPrimitives.add(nonPrimitive);
         });
 
-        let nonPrimitiveReturnType = funcDec.returnDecl.returnType;
-        if (nonPrimitiveReturnType !== "void") {
-            nonPrimitiveTypes.add(nonPrimitiveReturnType);
+        this.extractNonPrimitiveTypeFromInheritance(decl).forEach((nonPrimitive: string) => {
+            nonPrimitives.add(nonPrimitive)
+        });
+
+        return nonPrimitives;
+    }
+
+    /**
+     * Extracts the non primitive types from a function declaration (params and return type)
+     *
+     * @param decl  Either the ClassDecl or InterfaceDecl to extract non primitives used in their functions
+     */
+    private static extractNonPrimitiveTypesFromFunctions(decl: ClassDecl | InterfaceDecl): Set<string> {
+        let nonPrimitiveTypes = new Set<string>();
+
+        decl.functions.forEach((funcDec: FuncDecl) => {
+            let nonPrimitivesParams = this.extractNonPrimitiveTypesFromVarList(funcDec.params);
+            nonPrimitivesParams.forEach((nonPrimitive: string) => {
+                nonPrimitiveTypes.add(nonPrimitive);
+            });
+
+            let nonPrimitiveReturnType = funcDec.returnDecl.returnType;
+            if (nonPrimitiveReturnType !== "void") {
+                nonPrimitiveTypes.add(nonPrimitiveReturnType);
+            }
+        });
+
+        return nonPrimitiveTypes;
+    }
+
+    /**
+     * Extracts the non primitive types from extends relationships and implements relationships (if applicable)
+     *
+     * @param decl  Either the ClassDecl or InterfaceDecl to extract non primitives used in inheritance
+     */
+    private static extractNonPrimitiveTypeFromInheritance(decl: ClassDecl | InterfaceDecl): Set<string> {
+        let nonPrimitiveTypes = new Set<string>();
+
+        if (decl.extendsNodes !== undefined) {
+            nonPrimitiveTypes.add(decl.extendsNodes.parentName);
+        }
+
+        if (decl instanceof ClassDecl && decl.implementsNodes !== undefined) {
+            decl.implementsNodes.parentNames.forEach((parentName: string) => {
+                nonPrimitiveTypes.add(parentName);
+            });
         }
 
         return nonPrimitiveTypes;
