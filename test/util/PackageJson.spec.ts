@@ -10,6 +10,9 @@ describe('PackageJson generation and add modules test', function() {
     beforeEach(() => {	
         if (!fs.existsSync(dir)){
             fs.mkdirSync(dir);
+        } else {
+            nodeFs.removeSync(dir);
+            fs.mkdirSync(dir);
         }
     });
 

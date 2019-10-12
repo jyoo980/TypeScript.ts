@@ -21,11 +21,11 @@ describe("FileSystem write/delete tests", () => {
         }
     });
 
-    it("should successfully write a file (one level deep, e.g. codegen/test/Foo.ts", async () => {
+    it("should successfully write a file (one level deep, e.g. codegen/test/Foo.ts", () => {
         const file: string = "Foo";
         let result: string;
         try {
-            result = await fs.generateFile(file, testDir, "test");
+            result = fs.generateFile(file, testDir, "test");
         } catch (err) {
             result = err;
         } finally {
@@ -34,11 +34,11 @@ describe("FileSystem write/delete tests", () => {
         }
     });
 
-    it("should successfully write a file (> 1 level deep, e.g. codegen/test/src/InsightFacade.ts", async () => {
+    it("should successfully write a file (> 1 level deep, e.g. codegen/test/src/InsightFacade.ts",  () => {
         const file: string = "InsightFacade";
         let result: string;
         try {
-            result = await fs.generateFile(file, "./codegen/test/src", "test");
+            result = fs.generateFile(file, "./codegen/test/src", "test");
         } catch (err) {
             result = err;
         } finally {
@@ -51,7 +51,7 @@ describe("FileSystem write/delete tests", () => {
         const file: string = "Bar";
         let result: string;
         try {
-            await fs.generateFile(file, testDir, "trust the natural recursion");
+            fs.generateFile(file, testDir, "trust the natural recursion");
             await fs.deleteFile(file, testDir);
         } catch (err) {
             expect(result).to.equal("./codegen/test/Bar.ts");
@@ -62,7 +62,7 @@ describe("FileSystem write/delete tests", () => {
         const file: string = "Alice";
         let result: string;
         try {
-            await fs.generateFile(file, "./codegen/test/src", "this is not a test file");
+            fs.generateFile(file, "./codegen/test/src", "this is not a test file");
             result = await fs.deleteFile(file, "./codegen/test/src");
         } catch (err) {
             result = err;

@@ -39,17 +39,17 @@ export default class FileSystem {
 
     /**
      *
-     * Resolves with the full path to the file written, else, rejects with a FileWriteError
+     * Returns with the full path to the file written, else, throws a FileWriteError
      *
      * @param fileName  of the TypeScript file to be written, does not need to end in .ts
      * @param path      path to the directory where the file should be written
      * @param content   as string
      */
-    public async generateFile(fileName: string, path: string, content: string): Promise<string> {
+    public generateFile(fileName: string, path: string, content: string): string {
         const fullPath: string = this.createFullPath(fileName, path);
         try {
-            await fs.ensureDir(path);
-            await fs.writeFile(fullPath, content);
+            fs.ensureDirSync(path);
+            fs.writeFileSync(fullPath, content);
             return fullPath;
         } catch (err) {
             const msg: string = `FileSystem::file generation of ${fullPath} failed with error: ${err}`;

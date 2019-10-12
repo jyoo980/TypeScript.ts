@@ -5,10 +5,13 @@
  */
 import { AstNode } from "./AstNode";
 import { Tokenizer } from "../util/Tokenizer";
+import PackageJson from "../util/PackageJson";
 
 export class ModuleDecl extends AstNode {
 
     modules: string[] = [];
+    projectName: string = '';
+    path: string = '';
 
     public parse(context: Tokenizer): any {
         if (!context.checkToken('modules')) {
@@ -34,8 +37,9 @@ export class ModuleDecl extends AstNode {
         context.getAndCheckNext('\\]');
     }
 
-    public evaluate(): any {
-        // TODO: implement this.
+    public evaluate(): Promise<any> {
+        const packageJson: PackageJson = new PackageJson(this.path, this.projectName);
+        return packageJson.addModules(this.modules);
     }
 
     public typeCheck(): void {
@@ -44,5 +48,13 @@ export class ModuleDecl extends AstNode {
 
     public fulfillContract(): void {
         // Not needed.
+    }
+
+    public setProjectName(name: string) {
+        this.projectName = name;
+    }
+
+    public setPath(path: string) {
+        this.path = path;
     }
 }
