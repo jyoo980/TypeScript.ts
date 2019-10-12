@@ -105,7 +105,6 @@ export default class FileSystem {
      */
     public writeDirectory(absolutePath: string): string {
         try {
-            console.log('write directory: ', absolutePath);
             if (!fs.pathExistsSync(absolutePath)) {
                 fs.mkdirsSync(absolutePath);
             }
