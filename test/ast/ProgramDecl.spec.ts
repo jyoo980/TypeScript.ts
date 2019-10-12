@@ -12,4 +12,11 @@ describe("Top-level TypeScript DSL tests", () => {
         programDecl.evaluate();
     });
 
+    it("Should evaluate a program with a class", () => {
+        const tokenizer: Tokenizer = new Tokenizer("simpleProgramClass.txt", "./test/testFiles");
+        let programDecl: ProgramDecl = new ProgramDecl(".");
+        programDecl.parse(tokenizer);
+        programDecl.typeCheck();
+        programDecl.evaluate();
+    });
 });
