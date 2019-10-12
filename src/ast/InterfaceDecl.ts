@@ -57,7 +57,9 @@ export class InterfaceDecl extends Content {
     }
 
     public typeCheck(): void {
-        this.extendsNodes.typeCheck();
+        if (this.extendsNodes !== undefined) {
+            this.extendsNodes.typeCheck();
+        }
         this.fieldDecl.typeCheck();
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }

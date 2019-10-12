@@ -29,7 +29,7 @@ export class DirDecl extends Content {
     protected parseContents(context: Tokenizer): any {
         this.contents = [];
 
-        while (context.getCurrentLineTabLevel() > this.tabLevel && !context.checkToken("NO_MORE_TOKENS")) {
+        while (context.getCurrentLineTabLevel() >= this.tabLevel && !context.checkToken("NO_MORE_TOKENS")) {
             let contentDecl: Content;
 
             if (context.checkToken("dir")) {
