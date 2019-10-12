@@ -33,5 +33,8 @@ export class ProgramDecl extends DirDecl {
 
     public evaluate(): any {
         // TODO: implement this.
+        this.modules.setPath('' /* TODO */);
+        this.modules.setProjectName(this.projectName); 
+        this.modules.evaluate();
     }
 }

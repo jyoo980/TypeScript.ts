@@ -49,5 +49,10 @@ describe("ClassDecl parse test", () => {
         expect(childDec.comments).to.be.undefined;
         expect(childDec.fieldDecl).to.be.undefined;
         expect(childDec.functions.length).to.equal(2);
+    it("should write a complex interface definition to disk", () => {
+        let tokenizer : Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
+        let intDec : InterfaceDecl = new InterfaceDecl("./codegen/test");
+        intDec.parse(tokenizer);
+        intDec.evaluate();
     });
 });
