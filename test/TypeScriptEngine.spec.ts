@@ -346,7 +346,7 @@ describe("TypeScriptEngine tests", () => {
 
     it("should make a class with method signatures and fields", () => {
         /* class InsightFacade {
-         *       foo: string;
+         *       public foo: string;
          *       makeParamDecl(name: string, type: string): ParameterDecl;
          * }
          * */
@@ -365,6 +365,7 @@ describe("TypeScriptEngine tests", () => {
         baseClassDecl.className = name;
         baseClassDecl.functions = [funDecl];
         const fieldDecl: FieldDecl = new FieldDecl();
+        fieldDecl.modifier = "public";
         fieldDecl.fields = new VarList();
         fieldDecl.fields.addPair("foo", "string");
         baseClassDecl.fields = [fieldDecl];
@@ -377,14 +378,14 @@ describe("TypeScriptEngine tests", () => {
             /* heritageClauses */ undefined,
             [ ts.createProperty(
                 undefined,
-                /* modifiers */ undefined,
+                /* modifiers */ [ts.createModifier(SyntaxKind.PublicKeyword)],
                 "foo",
                 /* questionToken */ undefined,
                 ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
                 /* initializer */ undefined
             ), ts.createMethod(
                 /* typeParameters */ undefined,
-                undefined,
+                [ts.createModifier(SyntaxKind.PublicKeyword)],
                 undefined,
                 funDecl.name,
                 undefined,
@@ -414,7 +415,7 @@ describe("TypeScriptEngine tests", () => {
     it("should make a class with method signatures", () => {
         /* class InsightFacade {
          *       foo: string;
-         *       makeParamDecl(name: string, type: string): ParameterDecl;
+         *       public makeParamDecl(name: string, type: string): ParameterDecl;
          * }
          * */
         const name: string = "InsightFacade";
@@ -441,7 +442,7 @@ describe("TypeScriptEngine tests", () => {
             /* heritageClauses */ undefined,
             [ts.createMethod(
                 /* typeParameters */ undefined,
-                undefined,
+                [ts.createModifier(SyntaxKind.PublicKeyword)],
                 undefined,
                 funDecl.name,
                 undefined,
