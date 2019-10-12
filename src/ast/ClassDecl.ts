@@ -74,6 +74,6 @@ export class ClassDecl extends Content {
     }
 
     public getAbsolutePath(): string {
-        return this.parentPath + "/" + this.className + ".ts";
+        return `${this.parentPath}/${this.className}.ts`;
     }
 }

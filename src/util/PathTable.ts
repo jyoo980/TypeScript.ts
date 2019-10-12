@@ -23,7 +23,6 @@ export class PathTable {
     }
 
     public getPath(typeName: string): string {
-        const typePath: string = this.table.get(typeName);
-        return typePath;
+        return this.table.get(typeName);
     }
 }
