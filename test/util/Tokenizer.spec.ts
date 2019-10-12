@@ -53,4 +53,26 @@ describe("Tokenizer tokenize", () => {
         expect(tokenizer.getNext()).to.equal("Stop");
         expect(tokenizer.getNext()).to.equal("stop");
     });
+
+    it("gets and checks tokens from transitFnExampleWithCollections", () => {
+        let tokenizer: Tokenizer = new Tokenizer("transitFnExampleWithCollections.txt", "./test/testFiles");
+        // class Line implements TransitLine
+        expect(tokenizer.getNext()).to.equal("class");
+        expect(tokenizer.getNext()).to.equal("Line");
+        expect(tokenizer.getNext()).to.equal("implements");
+        expect(tokenizer.getNext()).to.equal("TransitLine");
+        // 	fields private [string name, string lineNumber, Stop stop]
+        expect(tokenizer.getAndCheckNext("fields")).to.equal("fields");
+        expect(tokenizer.getNext()).to.equal("private");
+        expect(tokenizer.getNext()).to.equal("[");
+        expect(tokenizer.getNext()).to.equal("string");
+        expect(tokenizer.getNext()).to.equal("name");
+        expect(tokenizer.getNext()).to.equal(",");
+        expect(tokenizer.getNext()).to.equal("string");
+        expect(tokenizer.getNext()).to.equal("lineNumber");
+        expect(tokenizer.getNext()).to.equal(",");
+        expect(tokenizer.getNext()).to.equal("Stop[]");
+        expect(tokenizer.getNext()).to.equal("stops");
+
+    });
 });

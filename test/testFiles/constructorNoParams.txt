@@ -1,2 +1,2 @@
 constructor public
-    params []
+    params [ ]

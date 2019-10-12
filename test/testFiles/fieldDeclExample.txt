@@ -1,1 +1,1 @@
-fields private [string foo, IInsightFacade facade]
+fields private [ string foo, IInsightFacade facade ]
