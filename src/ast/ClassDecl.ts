@@ -21,7 +21,6 @@ export class ClassDecl extends Content {
     fields: FieldDecl[] = [];
     functions: FuncDecl[] = [];
 
-
     public parse(context: Tokenizer): any {
         let indentLevel: number = context.getCurrentLineTabLevel();
         if(context.checkToken("abstract")) {
@@ -58,8 +57,10 @@ export class ClassDecl extends Content {
             func.parse(context);
             this.functions.push(func);
         }
+
         this.typeTable.addClass(this.className);
         NodeTable.getInstance().saveNode(this.className, this);
+        this.pathTable.addTypePath(this.className, this.getAbsolutePath());
         return this;
     }
 
@@ -90,5 +91,8 @@ export class ClassDecl extends Content {
         if (interfaceDecl.fieldDecl !== undefined) {
             this.fields.push(interfaceDecl.fieldDecl);
         }
+
+    public getAbsolutePath(): string {
+        return `${this.parentPath}/${this.className}.ts`;
     }
 }

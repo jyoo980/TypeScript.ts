@@ -52,7 +52,7 @@ describe("TypeScriptEngine tests", () => {
 
     it("should convert a VarList to a ParamDeclaration[]", () => {
         const vars: VarList = new VarList();
-        vars.nameToType = new Map();
+        vars.nameTypeMap = new Map();
         const expected: ParameterDeclaration[] = [
             ts.createParameter(
                 /* decorators */ undefined,
@@ -85,7 +85,7 @@ describe("TypeScriptEngine tests", () => {
     });
 
     it("should create a simple function declaration - foo(): number", () => {
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseFunDecl.name = "foo";
         baseFunDecl.modifier = "public";
         baseFunDecl.params = baseVarList;
@@ -105,7 +105,7 @@ describe("TypeScriptEngine tests", () => {
 
     it("should create a parameterized function declaration", () => {
         // public makeParamDecl(name: string, type: string): ParameterDecl;
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
@@ -142,7 +142,7 @@ describe("TypeScriptEngine tests", () => {
     });
 
     it('should add a multiline comment with only one line to the function', () => {
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseFunDecl.name = "foo";
         baseFunDecl.modifier = "public";
         baseFunDecl.params = baseVarList;
@@ -155,7 +155,7 @@ describe("TypeScriptEngine tests", () => {
     });
 
     it('should add a multiline comment with multiple lines to the function', () => {
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseFunDecl.name = "foo";
         baseFunDecl.modifier = "public";
         baseFunDecl.params = baseVarList;
@@ -168,7 +168,7 @@ describe("TypeScriptEngine tests", () => {
     });
 
     it('should not add a comment to the function', () => {
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseFunDecl.name = "foo";
         baseFunDecl.modifier = "public";
         baseFunDecl.params = baseVarList;
@@ -245,7 +245,7 @@ describe("TypeScriptEngine tests", () => {
          * */
         const name: string = "IInsightFacade";
         const funName: string = "makeParamDecl";
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
@@ -295,7 +295,7 @@ describe("TypeScriptEngine tests", () => {
          * */
         const name: string = "IInsightFacade";
         const funName: string = "makeParamDecl";
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
@@ -352,7 +352,7 @@ describe("TypeScriptEngine tests", () => {
          * */
         const name: string = "InsightFacade";
         const funName: string = "makeParamDecl";
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test
@@ -419,7 +419,7 @@ describe("TypeScriptEngine tests", () => {
          * */
         const name: string = "InsightFacade";
         const funName: string = "makeParamDecl";
-        baseVarList.nameToType = new Map();
+        baseVarList.nameTypeMap = new Map();
         baseVarList.addPair("name", "string");
         baseVarList.addPair("type", "string");
         TypeTable.getInstance().addClass("ParameterDecl"); // add the class so we have access to it in the test

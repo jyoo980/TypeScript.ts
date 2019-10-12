@@ -49,6 +49,8 @@ export class InterfaceDecl extends Content {
 
         this.typeTable.addInterface(this.interfaceName);
         NodeTable.getInstance().saveNode(this.interfaceName, this);
+        this.pathTable.addTypePath(this.interfaceName, this.getAbsolutePath());
+        return this;
     }
 
     public evaluate(): any {
@@ -85,5 +87,8 @@ export class InterfaceDecl extends Content {
             }
             this.fieldDecl.fields.appendVarList(parentNode.fieldDecl.fields);
         }
+      
+    public getAbsolutePath(): string {
+        return this.parentPath + "/" + this.interfaceName + ".ts";
     }
 }

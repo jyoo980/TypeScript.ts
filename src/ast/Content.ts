@@ -16,4 +16,6 @@ export abstract class Content extends AstNode {
         super();
         this.parentPath = parentPath;
     }
+
+    public abstract getAbsolutePath(): string;
 }

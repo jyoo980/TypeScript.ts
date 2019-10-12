@@ -44,12 +44,12 @@ describe("ClassDecl parse test", () => {
         expect(classDec.fields.length).to.equal(2);
         //fields private [number dayOfWeek, number hour, number minute]
         expect(classDec.fields[0].modifier).to.equal("private");
-        expect(classDec.fields[0].fields.nameToType.size).to.equal(3);
+        expect(classDec.fields[0].fields.nameTypeMap.size).to.equal(3);
         expect(classDec.fields[0].generateGetter).to.equal(true);
         expect(classDec.fields[0].generateSetter).to.equal(true);
 
         expect(classDec.fields[1].modifier).to.equal("public");
-        expect(classDec.fields[1].fields.nameToType.size).to.equal(1);
+        expect(classDec.fields[1].fields.nameTypeMap.size).to.equal(1);
         expect(classDec.fields[1].generateGetter).to.equal(true);
         expect(classDec.fields[1].generateSetter).to.equal(false);
 
@@ -62,7 +62,7 @@ describe("ClassDecl parse test", () => {
         expect(classDec.functions[0].modifier).to.equal("public");
         expect(classDec.functions[0].maybeStatic.isStatic).to.be.false;
         expect(classDec.functions[0].maybeAsync.isAsync).to.be.false;
-        expect(classDec.functions[0].params.nameToType.size).to.equal(3);
+        expect(classDec.functions[0].params.nameTypeMap.size).to.equal(3);
         expect(classDec.functions[0].comments.comments.length).to.equal(2);
         expect(classDec.functions[0].returnDecl.returnType).to.equal("string");
 

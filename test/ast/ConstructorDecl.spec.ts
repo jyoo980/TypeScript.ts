@@ -14,15 +14,15 @@ describe("ConstructorDecl parse test", () => {
         const tokenizer: Tokenizer = new Tokenizer("constructorNoParams.txt", "./test/testFiles");
         constructor.parse(tokenizer);
         expect(constructor.modifier).to.equal("public");
-        expect(constructor.params.nameToType.size).to.equal(0);
+        expect(constructor.params.nameTypeMap.size).to.equal(0);
     });
 
     it ("should parse a constructor with params", () => {
         const tokenizer: Tokenizer = new Tokenizer("constructorWithParams.txt", "./test/testFiles");
         constructor.parse(tokenizer);
         expect(constructor.modifier).to.equal("private");
-        expect(constructor.params.nameToType.get("facade")).to.equal("IInsightFacade");
-        expect(constructor.params.nameToType.get("engine")).to.equal("QueryEngine");
+        expect(constructor.params.nameTypeMap.get("facade")).to.equal("IInsightFacade");
+        expect(constructor.params.nameTypeMap.get("engine")).to.equal("QueryEngine");
     });
 
 });

@@ -4,10 +4,12 @@ import FileSystem from "../util/FileSystem";
 import TypeScriptEngine from "../codegen/TypeScriptEngine";
 import PrintUtil from "../util/PrintUtil";
 import ts = require("typescript");
+import {PathTable} from "../util/PathTable";
 
 export abstract class AstNode {
 
     protected typeTable: TypeTable = TypeTable.getInstance();
+    protected pathTable: PathTable = PathTable.getInstance();
     protected fileSystem: FileSystem  = new FileSystem();
     protected engine: TypeScriptEngine = new TypeScriptEngine();
     protected printer: PrintUtil = new PrintUtil(ts.createPrinter({ newLine: ts.NewLineKind.LineFeed }));
