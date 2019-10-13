@@ -7,6 +7,7 @@ project TestProject
                 generate setters
             fields public [ number date ]
                 generate getters
-            function private makeDate
+            function private getDate
                 params [ string id, string content, string kind ]
                 returns string
+
