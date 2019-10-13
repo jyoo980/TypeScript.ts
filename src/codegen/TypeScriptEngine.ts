@@ -9,7 +9,8 @@ import {FunctionDeclaration,
         ClassElement,
         TypeElement,
         Block,
-        Statement} from "typescript";
+        Statement,
+        HeritageClause} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
@@ -63,9 +64,22 @@ export default class TypeScriptEngine {
             [ts.createModifier(SyntaxKind.ExportKeyword)],
             classDecl.className,
             undefined,
-            undefined,
+            this.makeHeritageClause(classDecl),
             classMembers
         );
+    }
+
+    private makeHeritageClause(classDecl: ClassDecl): HeritageClause[] {
+        if (classDecl.implementsNodes !== undefined) {
+            const parentNames: string[] = classDecl.implementsNodes.parentNames;
+            const interfaces: HeritageClause = ts.createHeritageClause(
+                ts.SyntaxKind.ImplementsKeyword,
+                parentNames.map((name) =>
+                    ts.createExpressionWithTypeArguments(undefined, ts.createIdentifier(name)))
+                );
+            return [interfaces];
+        }
+        return undefined;
     }
 
     public createInterface(interfaceDecl: InterfaceDecl): InterfaceDeclaration {

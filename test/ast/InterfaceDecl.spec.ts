@@ -40,7 +40,6 @@ describe("InterfaceDecl parse test", () => {
     });
 });
 
-<<<<<<< HEAD
     it("should correctly extend other interfaces", () => {
         let tokenizer: Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
         let parentDec: InterfaceDecl = new InterfaceDecl(".");
@@ -52,9 +51,8 @@ describe("InterfaceDecl parse test", () => {
         expect(childDec.comments).to.be.undefined;
         expect(childDec.fieldDecl).to.be.undefined;
         expect(childDec.functions.length).to.equal(2);
-=======
+
 describe("InterfaceDecl evaluate test", () => {
->>>>>>> master
     it("should write a complex interface definition to disk", () => {
         let tokenizer : Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
         let intDec : InterfaceDecl = new InterfaceDecl("./codegen/test");
@@ -65,26 +63,32 @@ describe("InterfaceDecl evaluate test", () => {
 
 describe("InterfaceDecl typeCheck test", () => {
     it("throws a validation error when the modifier for an interface is not public", () => {
-        let tokenizer : Tokenizer = new Tokenizer("interfaceDeclInvalidFieldMod.txt", "./test/testFiles");
-        let intDec : InterfaceDecl = new InterfaceDecl(".");
+        let tokenizer: Tokenizer = new Tokenizer("interfaceDeclInvalidFieldMod.txt", "./test/testFiles");
+        let intDec: InterfaceDecl = new InterfaceDecl(".");
         intDec.parse(tokenizer);
-        expect(() => {intDec.typeCheck()}).to.throw(ValidationError);
+        expect(() => {
+            intDec.typeCheck()
+        }).to.throw(ValidationError);
     });
 
     it("successfully validates an interface declaration with private fields", () => {
-        let tokenizer : Tokenizer = new Tokenizer("interfaceDeclWithFields.txt", "./test/testFiles");
-        let intDec : InterfaceDecl = new InterfaceDecl(".");
+        let tokenizer: Tokenizer = new Tokenizer("interfaceDeclWithFields.txt", "./test/testFiles");
+        let intDec: InterfaceDecl = new InterfaceDecl(".");
         intDec.parse(tokenizer);
-        expect(() => {intDec.typeCheck()}).to.not.throw(ValidationError);
+        expect(() => {
+            intDec.typeCheck()
+        }).to.not.throw(ValidationError);
 
     });
 
     it("successfully validates an interface declaration with no fields", () => {
-        let tokenizer : Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
-        let intDec : InterfaceDecl = new InterfaceDecl(".");
+        let tokenizer: Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
+        let intDec: InterfaceDecl = new InterfaceDecl(".");
         intDec.parse(tokenizer);
-        expect(() => {intDec.typeCheck()}).to.not.throw(ValidationError);
+        expect(() => {
+            intDec.typeCheck()
+        }).to.not.throw(ValidationError);
 
     });
-
+    });
 });
