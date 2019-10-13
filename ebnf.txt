@@ -13,8 +13,8 @@ COMMENT         ::= ind ‘comments ’ STRLIST ded
 ABS             ::= ‘abstract’
 IMP             ::= ‘implements’ str (‘,’ str)*
 EXT             ::= ‘extends’ str
-VARLIST         ::= ‘[’ (type str (‘,’ type str))? ‘]’
-STRLIST         ::= ‘[‘ str (‘,’ str)* ‘]’
+VARLIST         ::= ‘[ ’ (type str (‘,’ type str))? ‘ ]’
+STRLIST         ::= ‘[ ‘ str (‘,’ str)* ‘ ]’
 
 gen             ::= (‘getters’ | ‘setters’)
 mod             ::= ‘private’ | ‘public’| ‘protected’
@@ -23,4 +23,4 @@ str             ::= [a-z|A-Z]* sp
 sp              ::= ‘ ’
 nl              ::= [\n]
 ind             ::= [\t]
-ded             ::= []
+ded             ::= [] # this is a dedent

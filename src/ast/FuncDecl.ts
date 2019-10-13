@@ -22,13 +22,19 @@ export default class FuncDecl extends AstNode {
     name: string;
     params: VarList;
     comments: CommentDecl;
+    body: string = null; // only used in getter/setter
     returnDecl: ReturnDecl = new ReturnDecl();
 
     public parse(context: Tokenizer): any {
         let indentLevel: number = context.getCurrentLineTabLevel();
         context.getAndCheckNext("function");
         this.returnDecl.returnType = "void";
-        this.modifier = context.getNext();
+
+        if (context.checkToken("private") || context.checkToken("public") || context.checkToken("protected")) {
+            this.modifier = context.getNext();
+        } else {
+            this.modifier = "public";
+        }
 
         this.maybeStatic = new StaticDecl();
         this.maybeStatic.parse(context);

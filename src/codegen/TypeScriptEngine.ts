@@ -7,7 +7,9 @@ import {FunctionDeclaration,
         ClassDeclaration,
         InterfaceDeclaration,
         ClassElement,
-        TypeElement} from "typescript";
+        TypeElement,
+        Block,
+        Statement} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
@@ -48,7 +50,7 @@ export default class TypeScriptEngine {
 
         // Add field declarations
         for (let field of classDecl.fields) {
-            classMembers = classMembers.concat(this.fieldsToClassElement(field.fields));
+            classMembers = classMembers.concat(this.fieldsToClassElement(field.fields, field.modifier));
         }
 
         // Add function declarations
@@ -58,7 +60,7 @@ export default class TypeScriptEngine {
 
         return ts.createClassDeclaration(
             undefined,
-            undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             classDecl.className,
             undefined,
             undefined,
@@ -72,9 +74,8 @@ export default class TypeScriptEngine {
         const tsPropertySignatures: TypeElement[] = this.createTsPropertySignatures(interfaceDecl);
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
-            // TODO: comments!
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             interfaceDecl.interfaceName,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -107,6 +108,7 @@ export default class TypeScriptEngine {
     }
 
     private createMethod(funcDecl: FuncDecl): ClassElement {
+        const tsModifiers: Modifier[] = this.makeMethodModifiers(funcDecl);
         const tsParams: ParameterDeclaration[] = this.varsToParamDecl(funcDecl.params);
         const tsReturnType: TypeNode = this.typeTable.getTypeNode(funcDecl.returnDecl.returnType);
         const retStatement = [];
@@ -115,17 +117,47 @@ export default class TypeScriptEngine {
         }
         const methodSig =  ts.createMethod(
             undefined,
-            undefined,
+            tsModifiers,
             undefined,
             funcDecl.name,
             undefined,
             undefined,
             tsParams,
             tsReturnType,
-            ts.createBlock(retStatement, false)
+            this.makeBody(funcDecl, retStatement)
         );
         this.addLeadingComment(methodSig, funcDecl.comments);
         return methodSig;
+    }
+
+    private makeBody(funcDecl: FuncDecl, defaultRetStatement: Statement[]): Block {
+        const funcName: string = funcDecl.name;
+        if (funcName.includes("get")) {
+            const nameOfField: string = funcName.split("get")[1];
+            const fieldAsLowercase: string = nameOfField.charAt(0).toLowerCase() + nameOfField.slice(1);
+            const statements: Statement[] = [ts.createReturn(ts.createIdentifier(`this.${fieldAsLowercase}`))];
+            return ts.createBlock(statements, false);
+        } else if (funcName.includes("set")) {
+            const nameOfField: string = funcName.split("set")[1];
+            const fieldAsLowercase: string = nameOfField.charAt(0).toLowerCase() + nameOfField.slice(1);
+            const setterBody: Statement[] = [ts.createExpressionStatement(ts.createBinary(
+                ts.createIdentifier(`this.${fieldAsLowercase}`),
+                ts.SyntaxKind.EqualsToken,
+                ts.createIdentifier(fieldAsLowercase))
+            )];
+            return ts.createBlock(setterBody, false);
+        } else {
+            return ts.createBlock(defaultRetStatement, false);
+        }
+
+    }
+
+    private makeMethodModifiers(funcDecl: FuncDecl): Modifier[] {
+        if (funcDecl.modifier) {
+            return this.makeModifierNodes([funcDecl.modifier]);
+        } else {
+            return [ts.createModifier(SyntaxKind.PublicKeyword)];
+        }
     }
 
     private fieldsToTypeElement(fields: VarList): TypeElement[] {
@@ -135,10 +167,10 @@ export default class TypeScriptEngine {
         });
     }
 
-    private fieldsToClassElement(fields: VarList): ClassElement[] {
+    private fieldsToClassElement(fields: VarList, modifier: string): ClassElement[] {
         const fieldsAsList: [string, string][] = Array.from(fields.nameTypeMap.entries());
         return fieldsAsList.map((nameTypePair) => {
-            return this.makeProperty(nameTypePair[0], nameTypePair[1]);
+            return this.makeProperty(nameTypePair[0], nameTypePair[1], modifier);
         });
     }
 
@@ -152,15 +184,20 @@ export default class TypeScriptEngine {
         );
     }
 
-    private makeProperty(name: string, type: string): ClassElement {
+    private makeProperty(name: string, type: string, modifier: string): ClassElement {
+        const tsModifiers: Modifier[] = this.makeFieldModifiers(modifier);
         return ts.createProperty(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            tsModifiers,
             name,
             /* questionToken */ undefined,
             this.typeTable.getTypeNode(type),
             /* initializer */ undefined
         );
+    }
+
+    private makeFieldModifiers(modifier: string): Modifier[] {
+        return this.makeModifierNodes([modifier]);
     }
 
     private varsToParamDecl(vars: VarList): ParameterDeclaration[] {

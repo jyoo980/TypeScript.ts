@@ -8,23 +8,6 @@ describe("ClassDecl parse test", () => {
 
     const DUMMY_ROOT_DIR: string = ".";
 
-
-    it("parses single-line, simple class definition", () => {
-        let tokenizer : Tokenizer = new Tokenizer("classDeclSimple.txt", "./test/testFiles");
-        let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
-        classDec = classDec.parse(tokenizer);
-        expect(classDec.isAbstract).to.be.true;
-        expect(classDec.className).to.equal("Time");
-        expect(classDec.implementsNodes).to.be.undefined;
-        expect(classDec.extendsNodes.parentName).to.equal("TimeClass");
-        expect(classDec.comments).to.be.undefined;
-        expect(classDec.fields.length).to.equal(0);
-        expect(classDec.functions.length).to.equal(0);
-        let typeTable : TypeTable = TypeTable.getInstance();
-        expect(typeTable.table.size).to.equal(4);
-        expect(typeTable.getTypeNode(classDec.className)).to.not.be.undefined;
-    });
-
     it("parses complex class definition", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclComplex.txt", "./test/testFiles");
         let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);

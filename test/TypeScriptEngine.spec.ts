@@ -190,7 +190,7 @@ describe("TypeScriptEngine tests", () => {
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             baseInterfaceDecl.interfaceName,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -210,7 +210,7 @@ describe("TypeScriptEngine tests", () => {
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             baseClassDecl.className,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -229,7 +229,7 @@ describe("TypeScriptEngine tests", () => {
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             baseClassDecl.className,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -258,7 +258,7 @@ describe("TypeScriptEngine tests", () => {
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -309,7 +309,7 @@ describe("TypeScriptEngine tests", () => {
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -346,7 +346,7 @@ describe("TypeScriptEngine tests", () => {
 
     it("should make a class with method signatures and fields", () => {
         /* class InsightFacade {
-         *       foo: string;
+         *       public foo: string;
          *       makeParamDecl(name: string, type: string): ParameterDecl;
          * }
          * */
@@ -365,26 +365,27 @@ describe("TypeScriptEngine tests", () => {
         baseClassDecl.className = name;
         baseClassDecl.functions = [funDecl];
         const fieldDecl: FieldDecl = new FieldDecl();
+        fieldDecl.modifier = "public";
         fieldDecl.fields = new VarList();
         fieldDecl.fields.addPair("foo", "string");
         baseClassDecl.fields = [fieldDecl];
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
             [ ts.createProperty(
                 undefined,
-                /* modifiers */ undefined,
+                /* modifiers */ [ts.createModifier(SyntaxKind.PublicKeyword)],
                 "foo",
                 /* questionToken */ undefined,
                 ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
                 /* initializer */ undefined
             ), ts.createMethod(
                 /* typeParameters */ undefined,
-                undefined,
+                [ts.createModifier(SyntaxKind.PublicKeyword)],
                 undefined,
                 funDecl.name,
                 undefined,
@@ -414,7 +415,7 @@ describe("TypeScriptEngine tests", () => {
     it("should make a class with method signatures", () => {
         /* class InsightFacade {
          *       foo: string;
-         *       makeParamDecl(name: string, type: string): ParameterDecl;
+         *       public makeParamDecl(name: string, type: string): ParameterDecl;
          * }
          * */
         const name: string = "InsightFacade";
@@ -435,13 +436,13 @@ describe("TypeScriptEngine tests", () => {
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
             [ts.createMethod(
                 /* typeParameters */ undefined,
-                undefined,
+                [ts.createModifier(SyntaxKind.PublicKeyword)],
                 undefined,
                 funDecl.name,
                 undefined,

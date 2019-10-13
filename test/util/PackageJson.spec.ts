@@ -54,7 +54,7 @@ describe('PackageJson generation and add modules test', function() {
         } catch (err) {
             result = err;
         } finally {
-            expect(result).to.equal('npm failed when installing abcabcabcabc with: 404 Not Found - GET https://registry.yarnpkg.com/abcabcabcabc - Not found');
+            expect(result).to.equal('npm failed when installing abcabcabcabc with: 404 Not Found: abcabcabcabc@latest');
             expect(verifiyDependency(module)).to.equal(null);
         }
     });

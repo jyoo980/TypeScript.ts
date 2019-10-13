@@ -3,35 +3,35 @@ import * as fs from "fs-extra";
 export class FileReadError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, FileReadError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
 export class FileWriteError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, FileWriteError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
 export class FileDeleteError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, FileDeleteError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
 export class DirectoryWriteError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, DirectoryWriteError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
 export class PathExistsError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, PathExistsError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
@@ -105,7 +105,9 @@ export default class FileSystem {
      */
     public writeDirectory(absolutePath: string): string {
         try {
-            fs.mkdirSync(absolutePath);
+            if (!fs.pathExistsSync(absolutePath)) {
+                fs.mkdirsSync(absolutePath);
+            }
             return absolutePath;
         } catch (err) {
             const msg: string = `FileSystem::making directory: ${absolutePath} failed with error: ${err}`;

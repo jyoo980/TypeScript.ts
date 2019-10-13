@@ -1,7 +1,7 @@
 class Line implements TransitLine
-    fields private [ string name, string lineNumber, Stop stop ]
+    fields private [ string name, string lineNumber, Stop[] stops ]
     function public constructor
-        params [ string name, string lineNumber, Stop stop ]
+        params [ string name, string lineNumber, Stop[] stops ]
         comments [
             "Constructor method for TransitLine",
             "@param name - name of transit line",

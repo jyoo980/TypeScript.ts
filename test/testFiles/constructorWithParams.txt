@@ -1,2 +1,2 @@
 constructor private
-    params [IInsightFacade facade, QueryEngine engine]
+    params [ IInsightFacade facade, QueryEngine engine ]

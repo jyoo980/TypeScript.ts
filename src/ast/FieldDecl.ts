@@ -1,6 +1,7 @@
 import {VarList} from "./VarList";
-import {AstNode} from "./AstNode";
 import {ParseError, Tokenizer} from "../util/Tokenizer";
+import {ValidationError} from "./errors/ASTErrors";
+import {AstNode} from "./AstNode";
 
 /**
  * Represents a field declaration in the TypeScript DSL.
@@ -12,6 +13,7 @@ export class FieldDecl extends AstNode {
 
     fields: VarList;
     modifier: string;
+    isInterfaceField: boolean = false;
     generateGetter: boolean = false;
     generateSetter: boolean = false;
 
@@ -53,6 +55,9 @@ export class FieldDecl extends AstNode {
     }
 
     public typeCheck(): void {
+        if(this.isInterfaceField && this.modifier !== "public") {
+            throw new ValidationError("Interfaces cannot have non-public fields");
+        }
         this.fields.typeCheck();
     }
 
