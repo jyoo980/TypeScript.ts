@@ -79,11 +79,17 @@ describe("FileSystem read tests", () => {
 
     it("should successfully read contents of a file", () => {
         fs = new FileSystem();
-        let contents = fs.readFileSync("projectstructureex.txt", testDir).toString();
-        expect(contents).to.equal("dir src\n" +
-            "\tclass Time\n" +
-            "\tdir TransitModels\n" +
-            "dir tests\n");
+        let contents = fs.readFileSync("programExample.txt", testDir).toString();
+        expect(contents).to.equal(
+            "project ts-dsl\n" +
+            "    dir src\n" +
+            "        dir ast\n" +
+            "        dir codegen\n" +
+            "        dir util\n" +
+            "    dir test\n" +
+            "        dir ast\n" +
+            "        dir testFiles\n" +
+            "        dir util\n");
     });
 
     it("should throw a FileReadError when reading contents of a file that does not exist", () => {

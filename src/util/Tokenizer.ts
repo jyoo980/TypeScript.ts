@@ -3,14 +3,14 @@ import FileSystem from "./FileSystem";
 export class TokenizerError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, TokenizerError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
 export class ParseError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, ParseError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
@@ -122,7 +122,6 @@ export class Tokenizer {
             // 5. split on reservedword
             this.tokens.push(line.split(Tokenizer.reservedTokenWord).filter((str) => str !==''));
         });
-        console.log(this.tokens);
     }
 
     /**
