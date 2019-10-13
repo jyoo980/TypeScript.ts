@@ -190,7 +190,7 @@ describe("TypeScriptEngine tests", () => {
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             baseInterfaceDecl.interfaceName,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -210,7 +210,7 @@ describe("TypeScriptEngine tests", () => {
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             baseClassDecl.className,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -229,7 +229,7 @@ describe("TypeScriptEngine tests", () => {
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             baseClassDecl.className,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -258,7 +258,7 @@ describe("TypeScriptEngine tests", () => {
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -309,7 +309,7 @@ describe("TypeScriptEngine tests", () => {
         const result: InterfaceDeclaration = engine.createInterface(baseInterfaceDecl);
         expect(result).to.deep.equal(ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -372,7 +372,7 @@ describe("TypeScriptEngine tests", () => {
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -436,7 +436,7 @@ describe("TypeScriptEngine tests", () => {
         const result: ClassDeclaration = engine.createClass(baseClassDecl);
         expect(result).to.deep.equal(ts.createClassDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            /* modifiers */ [ts.createModifier(SyntaxKind.ExportKeyword)],
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
