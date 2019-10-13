@@ -24,6 +24,8 @@ export class DirDecl extends Content {
         this.directoryName = context.getNext();
 
         this.parseContents(context);
+
+        context.checkStartOfLine();
     }
 
     protected parseContents(context: Tokenizer): any {
@@ -31,6 +33,8 @@ export class DirDecl extends Content {
 
         while (context.getCurrentLineTabLevel() > this.tabLevel && !context.checkToken("NO_MORE_TOKENS")) {
             let contentDecl: Content;
+
+            context.checkStartOfLine();
 
             if (context.checkToken("dir")) {
                 contentDecl = new DirDecl(this.getAbsolutePath());
@@ -44,6 +48,8 @@ export class DirDecl extends Content {
 
             contentDecl.parse(context);
             this.contents.push(contentDecl);
+
+            context.checkStartOfLine();
         }
     }
 
