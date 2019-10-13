@@ -3,7 +3,7 @@ interface TransitLine
         params [ ]
         comments [ "Returns the number of stops in the transit line" ]
         returns number
-    function public getRoute
+    function getRoute
         params [ ]
         comments [ "Returns the street names of transit route" ]
         returns string
