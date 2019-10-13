@@ -86,7 +86,7 @@ export default class TypeScriptEngine {
         const tsMethodSignatures: TypeElement[] =
             interfaceDecl.functions.map((func: FuncDecl) => this.createMethodSignature(func));
         const tsPropertySignatures: TypeElement[] = this.createTsPropertySignatures(interfaceDecl);
-        const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
+        const interfaceMembers = tsPropertySignatures.concat(tsMethodSignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             /* decorators */ undefined,
             [ts.createModifier(SyntaxKind.ExportKeyword)],
