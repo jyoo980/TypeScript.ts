@@ -54,7 +54,7 @@ describe("ModuleDecl parse() test", () => {
         } catch (e) {
             result = e.message;
         } finally {
-            expect(result).to.equal('NO_MORE_TOKENS did not match regex value "');
+            expect(result).to.equal('NO_MORE_TOKENS is an invalid token in line 2');
         }
     });
 });

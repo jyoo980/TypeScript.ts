@@ -36,18 +36,34 @@ describe("ClassDecl parse test", () => {
         expect(classDec.fields[1].generateGetter).to.equal(true);
         expect(classDec.fields[1].generateSetter).to.equal(false);
 
-        expect(classDec.functions.length).to.equal(1);
+        expect(classDec.functions.length).to.equal(8);
         // function public getDate
         // params [string id, string content, InsightDatasetKind kind]
         // comments ["creates a new Time object from given date",
         //     "{param} date - date object to parse time object from"]
         // returns Date
+        expect(classDec.functions[7].modifier).to.equal("public");
+        expect(classDec.functions[7].maybeStatic.isStatic).to.be.false;
+        expect(classDec.functions[7].maybeAsync.isAsync).to.be.false;
+        expect(classDec.functions[7].params.nameTypeMap.size).to.equal(3);
+        expect(classDec.functions[7].comments.comments.length).to.equal(2);
+        expect(classDec.functions[7].returnDecl.returnType).to.equal("string");
+
+        // getter for dayOfWeek
         expect(classDec.functions[0].modifier).to.equal("public");
         expect(classDec.functions[0].maybeStatic.isStatic).to.be.false;
         expect(classDec.functions[0].maybeAsync.isAsync).to.be.false;
-        expect(classDec.functions[0].params.nameTypeMap.size).to.equal(3);
-        expect(classDec.functions[0].comments.comments.length).to.equal(2);
-        expect(classDec.functions[0].returnDecl.returnType).to.equal("string");
+        expect(classDec.functions[0].params.nameTypeMap.size).to.equal(0);
+        expect(classDec.functions[0].comments.comments.length).to.equal(0);
+        expect(classDec.functions[0].returnDecl.returnType).to.equal("number");
+
+        // setter for dayOfWeek
+        expect(classDec.functions[3].modifier).to.equal("public");
+        expect(classDec.functions[3].maybeStatic.isStatic).to.be.false;
+        expect(classDec.functions[3].maybeAsync.isAsync).to.be.false;
+        expect(classDec.functions[3].params.nameTypeMap.size).to.equal(1);
+        expect(classDec.functions[3].comments.comments.length).to.equal(0);
+        expect(classDec.functions[3].returnDecl.returnType).to.equal("void");
 
     });
 

@@ -47,13 +47,13 @@ export class InterfaceDecl extends Content {
 
             // handle getter/setter functions
             if (this.fieldDecl.generateGetter) {
-                this.fieldDecl.fields.nameTypeMap.forEach((name: string, type: string) => {
+                this.fieldDecl.fields.nameTypeMap.forEach((type: string, name: string) => {
                     this.functions.push(this.createGetter(name, type));
                 });
 
             }
             if (this.fieldDecl.generateSetter) {
-                this.fieldDecl.fields.nameTypeMap.forEach((name: string, type: string) => {
+                this.fieldDecl.fields.nameTypeMap.forEach((type: string, name: string) => {
                     this.functions.push(this.createSetter(name, type));
                 });
             }
