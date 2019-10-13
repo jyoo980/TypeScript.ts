@@ -122,7 +122,6 @@ export class Tokenizer {
             // 5. split on reservedword
             this.tokens.push(line.split(Tokenizer.reservedTokenWord).filter((str) => str !==''));
         });
-        console.log(this.tokens);
     }
 
     /**
