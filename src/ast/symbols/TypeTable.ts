@@ -4,7 +4,7 @@ import { TypeNode, SyntaxKind } from "typescript";
 export class TypeCheckError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, TypeCheckError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 
@@ -86,5 +86,15 @@ export class TypeTable {
      */
     public areValidTypes(candidates: string[]): boolean {
         return candidates.every((candidate) => this.isValidType(candidate));
+    }
+
+    // NOTE: Should be used for testing only
+    public resetTypeTable() {
+        this.table = new Map([
+            ["number", new TypeNodePair("number")],
+            ["boolean", new TypeNodePair("boolean")],
+            ["string", new TypeNodePair("string")],
+            ["void", new TypeNodePair("void")]
+        ]);
     }
 }

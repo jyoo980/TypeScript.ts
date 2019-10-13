@@ -1,6 +1,6 @@
 export class ValidationError extends Error {
     constructor(...args: any[]) {
         super(...args);
-        Error.captureStackTrace(this, ValidationError);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
