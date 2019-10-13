@@ -138,7 +138,14 @@ export default class TypeScriptEngine {
             const statements: Statement[] = [ts.createReturn(ts.createIdentifier(`this.${fieldAsLowercase}`))];
             return ts.createBlock(statements, false);
         } else if (funcName.includes("set")) {
-            return ts.createBlock(defaultRetStatement, false);
+            const nameOfField: string = funcName.split("set")[1];
+            const fieldAsLowercase: string = nameOfField.charAt(0).toLowerCase() + nameOfField.slice(1);
+            const setterBody: Statement[] = [ts.createExpressionStatement(ts.createBinary(
+                ts.createIdentifier(`this.${fieldAsLowercase}`),
+                ts.SyntaxKind.EqualsToken,
+                ts.createIdentifier(fieldAsLowercase))
+            )];
+            return ts.createBlock(setterBody, false);
         } else {
             return ts.createBlock(defaultRetStatement, false);
         }
