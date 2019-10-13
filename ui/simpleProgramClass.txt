@@ -6,6 +6,7 @@ project TestProject
             function formatTime
                 params [ number hours, number min ]
                 returns string
+        interface Casio extends Clock
     dir src/model
         class Time implements Clock
             fields private [ number dayOfWeek, number hour, number minute ]

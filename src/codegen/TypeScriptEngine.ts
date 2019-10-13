@@ -92,10 +92,21 @@ export default class TypeScriptEngine {
             [ts.createModifier(SyntaxKind.ExportKeyword)],
             interfaceDecl.interfaceName,
             /* typeParams */ undefined,
-            /* heritageClauses */ undefined,
+            this.makeInterfaceHeritageClause(interfaceDecl),
             interfaceMembers
         );
         return interfaceDeclaration;
+    }
+
+    private makeInterfaceHeritageClause(interfaceDecl: InterfaceDecl): HeritageClause[] {
+        if (interfaceDecl.extendsNodes !== undefined) {
+            const parentName: string = interfaceDecl.extendsNodes.parentName;
+            const interfaces: HeritageClause = ts.createHeritageClause(
+                ts.SyntaxKind.ExtendsKeyword,
+                    [ts.createExpressionWithTypeArguments(undefined, ts.createIdentifier(parentName))]);
+            return [interfaces];
+        }
+        return undefined;
     }
 
     private createTsPropertySignatures(interfaceDecl: InterfaceDecl): TypeElement[] {
