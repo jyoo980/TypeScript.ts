@@ -122,6 +122,7 @@ export class Tokenizer {
             // 5. split on reservedword
             this.tokens.push(line.split(Tokenizer.reservedTokenWord).filter((str) => str !==''));
         });
+        console.log(this.tokens);
     }
 
     /**
@@ -211,10 +212,11 @@ export class Tokenizer {
     public getAndCheckNext(regexp: string): string {
         let next = this.getNext();
         if(!RegExp(regexp).test(next)) {
-            throw new TokenizerError(next + " did not match regex value " + regexp);
+            throw new TokenizerError(`${next} is an invalid token in line ${this.currentToken.arr + 1}`);
         }
         return next;
     }
+
     /**
      * Gets the indentation level of the current line, if out of bounds, returns 0
      * @returns number  indentation level of current line
@@ -224,5 +226,19 @@ export class Tokenizer {
             return parseInt(this.tokens[this.currentToken.arr][0].replace(/\D/g, ''));
         }
         return 0;
+    }
+
+    public checkStartOfLine(): void {
+        if(!this.isStartOfLine()) {
+            throw new TokenizerError(`New line missing in line ${this.currentToken.arr + 1} before: ${this.getNext()}`);
+        }
+    }
+
+    /**
+     * Determines whether the current token position is at the start of a new line
+     * @returns boolean  indicating whether next token is from a new line
+     */
+    public isStartOfLine(): boolean {
+        return this.currentToken.pos === 1;
     }
 }

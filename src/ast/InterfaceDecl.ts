@@ -3,11 +3,11 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
-import {Tokenizer} from "../util/Tokenizer";
 import {ImportStringBuilder} from "../util/ImportStringBuilder";
 import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
+import {ParseError, Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -31,10 +31,14 @@ export class InterfaceDecl extends Content {
             this.extendsNodes.parse(context);
         }
 
+        context.checkStartOfLine();
+
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("comments")) {
             this.comments = new CommentDecl();
             this.comments.parse(context);
         }
+
+        context.checkStartOfLine();
 
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
             this.fieldDecl = new FieldDecl();
@@ -56,9 +60,14 @@ export class InterfaceDecl extends Content {
         }
 
         while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("function")) {
+            context.checkStartOfLine();
             let func: FuncDecl = new FuncDecl();
             func.parse(context);
             this.functions.push(func);
+        }
+
+        if(context.getCurrentLineTabLevel() > indentLevel) {
+            throw new ParseError(`Invalid keyword: ${context.getNext()}  found under ${this.interfaceName} interface`);
         }
 
         this.typeTable.addInterface(this.interfaceName);
