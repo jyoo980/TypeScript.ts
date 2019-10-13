@@ -1,0 +1,9 @@
+abstract class Time extends TimeClass
+    comments [ "This is the time class" ]
+        fields private [ number dayOfWeek, number hour, number minute ]
+            generate getters
+            generate setters
+        fields public [ number date ]
+            generate getters
+        function public formatDate
+            returns string

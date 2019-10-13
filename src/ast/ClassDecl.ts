@@ -36,6 +36,9 @@ export class ClassDecl extends Content {
         this.className = context.getNext();
 
         if(context.checkToken("implements")) {
+            if(this.isAbstract) {
+                throw new ParseError("Cannot implement another class in an abstract class");
+            }
             this.implementsNodes = new ImplementsDecl();
             this.implementsNodes.parse(context);
         }
