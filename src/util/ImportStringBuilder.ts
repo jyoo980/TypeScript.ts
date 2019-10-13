@@ -86,7 +86,6 @@ export class ImportStringBuilder {
                 importStrBody += importStr;
             }
         });
-
         return importStrBody;
     }
 
@@ -166,9 +165,11 @@ export class ImportStringBuilder {
     private static extractNonPrimitiveTypesFromInterface(interfaceDec: InterfaceDecl): Set<string> {
         let interfaceNonPrimitives = new Set<string>();
 
-        this.extractNonPrimitiveTypesFromVarList(interfaceDec.fieldDecl.fields).forEach((nonPrimitive: string) => {
-            interfaceNonPrimitives.add(nonPrimitive);
-        });
+        if (interfaceDec.fieldDecl !== undefined) {
+            this.extractNonPrimitiveTypesFromVarList(interfaceDec.fieldDecl.fields).forEach((nonPrimitive: string) => {
+                interfaceNonPrimitives.add(nonPrimitive);
+            });
+        }
 
         this.extractNonPrimitivesFromFunctionsAndInheritance(interfaceDec).forEach((nonPrimitive: string) => {
             interfaceNonPrimitives.add(nonPrimitive);

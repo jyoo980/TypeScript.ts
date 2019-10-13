@@ -4,6 +4,7 @@ import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
 import {Tokenizer} from "../util/Tokenizer";
+import {ImportStringBuilder} from "../util/ImportStringBuilder";
 import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
@@ -61,15 +62,17 @@ export class InterfaceDecl extends Content {
         }
 
         this.typeTable.addInterface(this.interfaceName);
-        this.pathTable.addTypePath(this.interfaceName, this.getAbsolutePath());
+        this.pathTable.addTypePath(this.interfaceName, this.getImportPath());
 
         return this;
     }
 
     public evaluate(): any {
         const tsNode = this.engine.createInterface(this);
+        const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeAsString: string = this.printer.tsNodeToString(tsNode);
-        this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsNodeAsString);
+        const tsFileStr: string = `${importStr}\n${tsNodeAsString}`;
+        this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsFileStr);
     }
 
     public typeCheck(): void {
@@ -83,6 +86,10 @@ export class InterfaceDecl extends Content {
             this.fieldDecl.typeCheck();
         }
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public getImportPath(): string {
+        return `${this.parentPath}/${this.interfaceName}`;
     }
 
     public getAbsolutePath(): string {

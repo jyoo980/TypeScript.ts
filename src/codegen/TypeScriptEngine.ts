@@ -60,7 +60,7 @@ export default class TypeScriptEngine {
 
         return ts.createClassDeclaration(
             undefined,
-            undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             classDecl.className,
             undefined,
             undefined,
@@ -75,7 +75,7 @@ export default class TypeScriptEngine {
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             interfaceDecl.interfaceName,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,

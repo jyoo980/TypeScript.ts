@@ -5,6 +5,7 @@ import {ImplementsDecl} from "./ImplementsDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
 import {Tokenizer} from "../util/Tokenizer";
+import {ImportStringBuilder} from "../util/ImportStringBuilder";
 import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
@@ -73,14 +74,16 @@ export class ClassDecl extends Content {
         }
 
         this.typeTable.addClass(this.className);
-        this.pathTable.addTypePath(this.className, this.getAbsolutePath());
+        this.pathTable.addTypePath(this.className, this.getImportPath());
 
         return this;
     }
 
     public evaluate(): any {
+        const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeStr: string = this.printer.tsNodeToString(this.engine.createClass(this));
-        this.fileSystem.generateFile(this.className, this.parentPath, tsNodeStr);
+        const tsFileStr: string = `${importStr}\n${tsNodeStr}`;
+        this.fileSystem.generateFile(this.className, this.parentPath, tsFileStr);
     }
 
     public typeCheck(): void {
@@ -89,6 +92,10 @@ export class ClassDecl extends Content {
         }
         this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public getImportPath(): string {
+        return `${this.parentPath}/${this.className}`;
     }
 
     public getAbsolutePath(): string {
