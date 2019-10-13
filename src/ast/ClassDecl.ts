@@ -57,13 +57,13 @@ export class ClassDecl extends Content {
             let field: FieldDecl = new FieldDecl();
             field.parse(context);
             if (field.generateGetter) {
-                field.fields.nameTypeMap.forEach((name: string, type: string) => {
+                field.fields.nameTypeMap.forEach((type: string, name: string) => {
                     this.functions.push(this.createGetter(name, type));
                 });
 
             }
             if (field.generateSetter) {
-                field.fields.nameTypeMap.forEach((name: string, type: string) => {
+                field.fields.nameTypeMap.forEach((type: string, name: string) => {
                     this.functions.push(this.createSetter(name, type));
                 });
             }
