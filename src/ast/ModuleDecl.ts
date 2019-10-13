@@ -43,7 +43,11 @@ export class ModuleDecl extends AstNode {
     }
 
     public typeCheck(): void {
-        
+        // Not needed.
+    }
+
+    public fulfillContract(): void {
+        // Not needed.
     }
 
     public setProjectName(name: string) {

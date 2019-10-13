@@ -23,7 +23,7 @@ export class ImplementsDecl extends AstNode {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        // Not needed.
     }
 
     public typeCheck(): void {
@@ -31,5 +31,9 @@ export class ImplementsDecl extends AstNode {
         if (!allValidTypes) {
             throw new TypeError(`At least one type from: ${this.parentNames} was not declared`);
         }
+    }
+
+    public fulfillContract(): void {
+        // Not needed.
     }
 }

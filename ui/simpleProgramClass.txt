@@ -1,7 +1,14 @@
 project TestProject
     modules [ ]
+    dir src/others
+        interface Clock
+            fields public [ number hourHand, number minuteHand ]
+            function formatTime
+                params [ number hours, number min ]
+                returns string
+        interface Casio extends Clock
     dir src/model
-        class Time
+        class Time implements Clock
             fields private [ number dayOfWeek, number hour, number minute ]
                 generate getters
                 generate setters
@@ -10,4 +17,3 @@ project TestProject
             function private formatDate
                 params [ string id, string content, string kind ]
                 returns string
-

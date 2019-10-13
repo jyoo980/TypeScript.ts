@@ -11,4 +11,5 @@ program.parse(tokenizer);
 console.log("Typechecking your program...");
 program.typeCheck();
 console.log("Generating your program...");
+program.fulfillContract();
 program.evaluate();

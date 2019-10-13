@@ -33,7 +33,7 @@ export class VarList extends AstNode {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        // Not needed.
     }
 
     public typeCheck(): void {
@@ -46,5 +46,16 @@ export class VarList extends AstNode {
         if (!allValidTypes) {
             throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
         }
+    }
+
+    public appendVarList(otherVars: VarList): void {
+        const fieldsAsList: [string, string][] = Array.from(otherVars.nameTypeMap.entries());
+        fieldsAsList.forEach((nameTypePair) => {
+            this.nameTypeMap.set(nameTypePair[0], nameTypePair[1]);
+        });
+    }
+
+    public fulfillContract(): void {
+        // Not needed.
     }
 }

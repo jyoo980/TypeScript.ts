@@ -3,6 +3,7 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
+import NodeTable from "./symbols/NodeTable";
 import {ImportStringBuilder} from "../util/ImportStringBuilder";
 import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
@@ -71,8 +72,9 @@ export class InterfaceDecl extends Content {
         }
 
         this.typeTable.addInterface(this.interfaceName);
+        NodeTable.getInstance().saveNode(this.interfaceName, this);
+        this.pathTable.addTypePath(this.interfaceName, this.getAbsolutePath());
         this.pathTable.addTypePath(this.interfaceName, this.getImportPath());
-
         return this;
     }
 
@@ -97,6 +99,30 @@ export class InterfaceDecl extends Content {
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }
 
+    public fulfillContract(): void {
+        if (this.extendsNodes !== undefined) {
+            const parentNode: InterfaceDecl =
+                NodeTable.getInstance().getNode(this.extendsNodes.parentName) as InterfaceDecl;
+            this.addParentFunctions(parentNode);
+            this.addParentFields(parentNode);
+
+        }
+    }
+
+    private addParentFunctions(parentNode: InterfaceDecl): void {
+        this.functions = this.functions.concat(parentNode.functions)
+    }
+
+    private addParentFields(parentNode: InterfaceDecl): void {
+        if (parentNode.fieldDecl !== undefined) {
+            if (this.fieldDecl === undefined) {
+                this.fieldDecl = new FieldDecl();
+                this.fieldDecl.fields = new VarList();
+            }
+            this.fieldDecl.fields.appendVarList(parentNode.fieldDecl.fields);
+        }
+    }
+      
     public getImportPath(): string {
         return `${this.parentPath}/${this.interfaceName}`;
     }

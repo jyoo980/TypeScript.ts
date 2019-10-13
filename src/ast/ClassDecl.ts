@@ -4,13 +4,13 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {ImplementsDecl} from "./ImplementsDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
+import NodeTable from "./symbols/NodeTable";
+import {InterfaceDecl} from "./InterfaceDecl";
 import {ImportStringBuilder} from "../util/ImportStringBuilder";
 import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
-import Func = Mocha.Func;
 import {ParseError, Tokenizer} from "../util/Tokenizer";
-
 /**
  * Represents a Class a TypeScript project may have.
  *
@@ -82,6 +82,7 @@ export class ClassDecl extends Content {
         }
 
         this.typeTable.addClass(this.className);
+        NodeTable.getInstance().saveNode(this.className, this);
         this.pathTable.addTypePath(this.className, this.getImportPath());
 
         return this;
@@ -100,6 +101,25 @@ export class ClassDecl extends Content {
         }
         this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public fulfillContract(): void {
+        const nodeTable: NodeTable = NodeTable.getInstance();
+        if (this.implementsNodes !== undefined) {
+            const interfacesToImplement: string[] = this.implementsNodes.parentNames;
+            interfacesToImplement.forEach((parentName) => {
+                const interfaceDecl: InterfaceDecl = nodeTable.getNode(parentName) as InterfaceDecl;
+                this.implementInterface(interfaceDecl);
+            });
+        }
+    }
+
+    private implementInterface(interfaceDecl: InterfaceDecl): void {
+        this.functions = this.functions.concat(interfaceDecl.functions);
+        if (interfaceDecl.fieldDecl !== undefined) {
+            this.fields.push(interfaceDecl.fieldDecl);
+        }
+
     }
 
     public getImportPath(): string {

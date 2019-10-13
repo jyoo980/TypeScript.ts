@@ -16,11 +16,15 @@ export default class AsyncDecl extends AstNode {
     }
 
     public evaluate(): any {
-
+        // Not needed.
     }
 
     public typeCheck(): void {
+        // Not needed.
+    }
 
+    public fulfillContract(): void {
+        // Not needed.
     }
 
 }

@@ -18,7 +18,7 @@ export class ExtendsDecl extends AstNode {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        // Not needed.
     }
 
     public typeCheck(): void {
@@ -26,5 +26,9 @@ export class ExtendsDecl extends AstNode {
         if (!wasDeclared) {
             throw new TypeCheckError(`Type: ${this.parentName} was not defined`);
         }
+    }
+
+    public fulfillContract(): void {
+        // Not needed.
     }
 }

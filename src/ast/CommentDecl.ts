@@ -28,11 +28,15 @@ export default class CommentDecl extends AstNode {
     }
 
     public evaluate(): any {
-        // TODO: implement this.
+        // Not needed.
     }
 
     public typeCheck(): void {
+        // Not needed.
+    }
 
+    public fulfillContract(): void {
+        // Not needed.
     }
 
 }
