@@ -29,7 +29,12 @@ export default class FuncDecl extends AstNode {
         let indentLevel: number = context.getCurrentLineTabLevel();
         context.getAndCheckNext("function");
         this.returnDecl.returnType = "void";
-        this.modifier = context.getNext();
+
+        if (context.checkToken("private") || context.checkToken("public") || context.checkToken("protected")) {
+            this.modifier = context.getNext();
+        } else {
+            this.modifier = "public";
+        }
 
         this.maybeStatic = new StaticDecl();
         this.maybeStatic.parse(context);
