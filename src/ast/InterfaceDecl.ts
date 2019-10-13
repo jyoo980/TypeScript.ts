@@ -4,6 +4,7 @@ import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
 import {Tokenizer} from "../util/Tokenizer";
+import {ImportStringBuilder} from "../util/ImportStringBuilder";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -52,8 +53,10 @@ export class InterfaceDecl extends Content {
 
     public evaluate(): any {
         const tsNode = this.engine.createInterface(this);
+        const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeAsString: string = this.printer.tsNodeToString(tsNode);
-        this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsNodeAsString);
+        const tsFileStr: string = `${importStr}\n${tsNodeAsString}`;
+        this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsFileStr);
     }
 
     public typeCheck(): void {

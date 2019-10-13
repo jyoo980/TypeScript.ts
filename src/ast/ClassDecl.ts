@@ -5,6 +5,7 @@ import {ImplementsDecl} from "./ImplementsDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
 import {Tokenizer} from "../util/Tokenizer";
+import {ImportStringBuilder} from "../util/ImportStringBuilder";
 
 /**
  * Represents a Class a TypeScript project may have.
@@ -64,8 +65,10 @@ export class ClassDecl extends Content {
     }
 
     public evaluate(): any {
+        const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeStr: string = this.printer.tsNodeToString(this.engine.createClass(this));
-        this.fileSystem.generateFile(this.className, this.parentPath, tsNodeStr);
+        const tsFileStr: string = `${importStr}\n${tsNodeStr}`;
+        this.fileSystem.generateFile(this.className, this.parentPath, tsFileStr);
     }
 
     public typeCheck(): void {
