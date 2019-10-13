@@ -1,4 +1,4 @@
 function public static async addDataset
-    params [ string id, string content, InsightDatasetKind kind ]
     comments [ "Add Dataset function", "returns ids of datasets on disk" ]
+    params [ string id, string content, InsightDatasetKind kind ]
     returns Promise<string>

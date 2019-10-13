@@ -1,1 +1,2 @@
-function public getTime returns number
+function public getTime
+    returns number

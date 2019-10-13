@@ -5,7 +5,7 @@ CLASS           ::= ABS? ‘class’ str IMP? EXT? (nl COMMENT)? (nl FIELD)* (nl
 INTERFACE       ::= ‘interface’ str EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
 
 FIELD           ::= ind ‘fields’ mod? VARLIST (nl ind 'generate' gen)* ded
-FUNC            ::= ind ‘function ’ mod ‘async ’? 'static'? str (nl PARAM)? (nl ind 'returns' type)? (nl ind COMMENT)? ded
+FUNC            ::= ind ‘function ’ mod ‘async ’? 'static'? str (nl ind COMMENT)? (nl PARAM)? (nl ind 'returns' type)? ded
 
 PARAM           ::= ind ‘params ’ VARLIST ded
 COMMENT         ::= ind ‘comments ’ STRLIST ded

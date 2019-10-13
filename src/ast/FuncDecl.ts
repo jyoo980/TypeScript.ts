@@ -47,22 +47,27 @@ export default class FuncDecl extends AstNode {
 
         context.checkStartOfLine();
 
-        if (context.checkToken("returns")) {
-            this.returnDecl.parse(context);
-        }
         if (context.getCurrentLineTabLevel() <= indentLevel) return;
+        context.checkStartOfLine();
 
+        if(context.checkToken("comments")) {
+            this.comments.parse(context);
+        }
+
+        if (context.getCurrentLineTabLevel() <= indentLevel) return;
         context.checkStartOfLine();
 
         if (context.checkToken("params")) {
             context.getAndCheckNext("params");
             this.params.parse(context);
-            this.comments.parse(context);
         }
 
+        if (context.getCurrentLineTabLevel() <= indentLevel) return;
         context.checkStartOfLine();
 
-        this.returnDecl.parse(context);
+        if(context.checkToken("returns")) {
+            this.returnDecl.parse(context);
+        }
     }
 
     public evaluate(): any {
