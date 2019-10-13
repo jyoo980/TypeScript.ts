@@ -4,11 +4,6 @@ dir src/model
     class Time
         fields private [ number dayOfWeek, number hour, number minute ]
             generate getters
-            generate setters
-        fields public [ number date ]
-            generate getters
-        function private getDate
+        function private makeDate
             params [ string id, string content, string kind ]
             returns string
-
-

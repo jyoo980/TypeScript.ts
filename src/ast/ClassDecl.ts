@@ -53,16 +53,16 @@ export class ClassDecl extends Content {
             let field: FieldDecl = new FieldDecl();
             field.parse(context);
             if (field.generateGetter) {
-                field.fields.nameTypeMap.forEach((name: string, type: string) => {
+                field.fields.nameTypeMap.forEach((type: string, name: string) => {
                     this.functions.push(this.createGetter(name, type));
                 });
 
             }
-            if (field.generateSetter) {
-                field.fields.nameTypeMap.forEach((name: string, type: string) => {
-                    this.functions.push(this.createSetter(name, type));
-                });
-            }
+            // if (field.generateSetter) {
+            //     field.fields.nameTypeMap.forEach((name: string, type: string) => {
+            //         this.functions.push(this.createSetter(name, type));
+            //     });
+            // }
             this.fields.push(field);
         }
 
@@ -97,34 +97,30 @@ export class ClassDecl extends Content {
 
     private createGetter(name: string, type: string): FuncDecl {
         let funcGetter: FuncDecl = new FuncDecl();
-        // getName
         funcGetter.name = "get" + name.charAt(0).toUpperCase() + name.slice(1);
         funcGetter.returnDecl.returnType = type;
-        // return this.name;
-        funcGetter.body = "return this." + name + ";";
         funcGetter.modifier = "public";
         funcGetter.maybeStatic = new StaticDecl(); // not static
         funcGetter.maybeAsync = new AsyncDecl(); // not async
-        // no params
         funcGetter.params = new VarList();
         funcGetter.comments = new CommentDecl();
         return funcGetter;
     }
 
-    private createSetter(name: string, type: string): FuncDecl {
-        let funcSetter: FuncDecl = new FuncDecl();
-        // setName
-        funcSetter.name = "set" + name.charAt(0).toUpperCase() + name.slice(1);
-        funcSetter.returnDecl.returnType = "void";
-        // this.name = name;
-        funcSetter.body = "this." + name + " = " + name + ";";
-        funcSetter.modifier = "public";
-        funcSetter.maybeStatic = new StaticDecl(); // not static
-        funcSetter.maybeAsync = new AsyncDecl(); // not async
-        // one param
-        funcSetter.params = new VarList();
-        funcSetter.params.addPair(name, type);
-        funcSetter.comments = new CommentDecl();
-        return funcSetter;
-    }
+    // private createSetter(name: string, type: string): FuncDecl {
+    //     let funcSetter: FuncDecl = new FuncDecl();
+    //     // setName
+    //     funcSetter.name = "set" + name.charAt(0).toUpperCase() + name.slice(1);
+    //     funcSetter.returnDecl.returnType = "void";
+    //     // this.name = name;
+    //     funcSetter.body = "this." + name + " = " + name + ";";
+    //     funcSetter.modifier = "public";
+    //     funcSetter.maybeStatic = new StaticDecl(); // not static
+    //     funcSetter.maybeAsync = new AsyncDecl(); // not async
+    //     // one param
+    //     funcSetter.params = new VarList();
+    //     funcSetter.params.addPair(name, type);
+    //     funcSetter.comments = new CommentDecl();
+    //     return funcSetter;
+    // }
 }
