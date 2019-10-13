@@ -71,7 +71,7 @@ export class InterfaceDecl extends Content {
         const tsNode = this.engine.createInterface(this);
         const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeAsString: string = this.printer.tsNodeToString(tsNode);
-        const tsFileStr: string = `${importStr}\n${tsNodeAsString}`;
+        const tsFileStr: string = importStr === "" ? `${tsNodeAsString}` : `${importStr}\n${tsNodeAsString}`;
         this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsFileStr);
     }
 

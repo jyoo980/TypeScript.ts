@@ -122,7 +122,7 @@ export class ImportStringBuilder {
         let importPath: string = "";
 
         // If in same directory, simply do a ./<NonPrimitiveParam>
-        if (i === dstArr.length - 1 && i === srcArr.length - 1) {
+        if (i === srcArr.length - 1) {
             importPath = "./" + pathToDstFromCommonPoint.join("/");
         } else { // Need to go "up" a directory by j = (srcArr.length - 1) - i
             for (let j = srcArr.length - 1 - i; j > 0; j--) {
