@@ -3,6 +3,10 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
+import {ImportStringBuilder} from "../util/ImportStringBuilder";
+import StaticDecl from "./StaticDecl";
+import AsyncDecl from "./AsyncDecl";
+import {VarList} from "./VarList";
 import {ParseError, Tokenizer} from "../util/Tokenizer";
 
 /**
@@ -40,6 +44,19 @@ export class InterfaceDecl extends Content {
             this.fieldDecl = new FieldDecl();
             this.fieldDecl.isInterfaceField = true;
             this.fieldDecl.parse(context);
+
+            // handle getter/setter functions
+            if (this.fieldDecl.generateGetter) {
+                this.fieldDecl.fields.nameTypeMap.forEach((name: string, type: string) => {
+                    this.functions.push(this.createGetter(name, type));
+                });
+
+            }
+            if (this.fieldDecl.generateSetter) {
+                this.fieldDecl.fields.nameTypeMap.forEach((name: string, type: string) => {
+                    this.functions.push(this.createSetter(name, type));
+                });
+            }
         }
 
         while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("function")) {
@@ -53,15 +70,17 @@ export class InterfaceDecl extends Content {
         }
 
         this.typeTable.addInterface(this.interfaceName);
-        this.pathTable.addTypePath(this.interfaceName, this.getAbsolutePath());
+        this.pathTable.addTypePath(this.interfaceName, this.getImportPath());
 
         return this;
     }
 
     public evaluate(): any {
         const tsNode = this.engine.createInterface(this);
+        const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeAsString: string = this.printer.tsNodeToString(tsNode);
-        this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsNodeAsString);
+        const tsFileStr: string = `${importStr}\n${tsNodeAsString}`;
+        this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsFileStr);
     }
 
     public typeCheck(): void {
@@ -77,7 +96,40 @@ export class InterfaceDecl extends Content {
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }
 
+    public getImportPath(): string {
+        return `${this.parentPath}/${this.interfaceName}`;
+    }
+
     public getAbsolutePath(): string {
         return this.parentPath + "/" + this.interfaceName + ".ts";
+    }
+
+    private createGetter(name: string, type: string): FuncDecl {
+        let funcGetter: FuncDecl = new FuncDecl();
+        // getName
+        funcGetter.name = "get" + name.charAt(0).toUpperCase() + name.slice(1);
+        funcGetter.returnDecl.returnType = type;
+        funcGetter.modifier = "public";
+        funcGetter.maybeStatic = new StaticDecl(); // not static
+        funcGetter.maybeAsync = new AsyncDecl(); // not async
+        // no params
+        funcGetter.params = new VarList();
+        funcGetter.comments = new CommentDecl();
+        return funcGetter;
+    }
+
+    private createSetter(name: string, type: string): FuncDecl {
+        let funcSetter: FuncDecl = new FuncDecl();
+        // setName
+        funcSetter.name = "set" + name.charAt(0).toUpperCase() + name.slice(1);
+        funcSetter.returnDecl.returnType = "void";
+        funcSetter.modifier = "public";
+        funcSetter.maybeStatic = new StaticDecl(); // not static
+        funcSetter.maybeAsync = new AsyncDecl(); // not async
+        // one param
+        funcSetter.params = new VarList();
+        funcSetter.params.addPair(name, type);
+        funcSetter.comments = new CommentDecl();
+        return funcSetter;
     }
 }

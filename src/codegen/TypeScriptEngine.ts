@@ -7,7 +7,9 @@ import {FunctionDeclaration,
         ClassDeclaration,
         InterfaceDeclaration,
         ClassElement,
-        TypeElement} from "typescript";
+        TypeElement,
+        Block,
+        Statement} from "typescript";
 import {VarList} from "../ast/VarList";
 import {TypeTable} from "../ast/symbols/TypeTable";
 import FuncDecl from "../ast/FuncDecl";
@@ -58,7 +60,7 @@ export default class TypeScriptEngine {
 
         return ts.createClassDeclaration(
             undefined,
-            undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             classDecl.className,
             undefined,
             undefined,
@@ -73,7 +75,7 @@ export default class TypeScriptEngine {
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             interfaceDecl.interfaceName,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
@@ -122,10 +124,32 @@ export default class TypeScriptEngine {
             undefined,
             tsParams,
             tsReturnType,
-            ts.createBlock(retStatement, false)
+            this.makeBody(funcDecl, retStatement)
         );
         this.addLeadingComment(methodSig, funcDecl.comments);
         return methodSig;
+    }
+
+    private makeBody(funcDecl: FuncDecl, defaultRetStatement: Statement[]): Block {
+        const funcName: string = funcDecl.name;
+        if (funcName.includes("get")) {
+            const nameOfField: string = funcName.split("get")[1];
+            const fieldAsLowercase: string = nameOfField.charAt(0).toLowerCase() + nameOfField.slice(1);
+            const statements: Statement[] = [ts.createReturn(ts.createIdentifier(`this.${fieldAsLowercase}`))];
+            return ts.createBlock(statements, false);
+        } else if (funcName.includes("set")) {
+            const nameOfField: string = funcName.split("set")[1];
+            const fieldAsLowercase: string = nameOfField.charAt(0).toLowerCase() + nameOfField.slice(1);
+            const setterBody: Statement[] = [ts.createExpressionStatement(ts.createBinary(
+                ts.createIdentifier(`this.${fieldAsLowercase}`),
+                ts.SyntaxKind.EqualsToken,
+                ts.createIdentifier(fieldAsLowercase))
+            )];
+            return ts.createBlock(setterBody, false);
+        } else {
+            return ts.createBlock(defaultRetStatement, false);
+        }
+
     }
 
     private makeMethodModifiers(funcDecl: FuncDecl): Modifier[] {

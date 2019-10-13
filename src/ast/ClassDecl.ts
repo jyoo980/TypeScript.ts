@@ -4,6 +4,11 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {ImplementsDecl} from "./ImplementsDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
+import {ImportStringBuilder} from "../util/ImportStringBuilder";
+import StaticDecl from "./StaticDecl";
+import AsyncDecl from "./AsyncDecl";
+import {VarList} from "./VarList";
+import Func = Mocha.Func;
 import {ParseError, Tokenizer} from "../util/Tokenizer";
 
 /**
@@ -52,6 +57,17 @@ export class ClassDecl extends Content {
         while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
             let field: FieldDecl = new FieldDecl();
             field.parse(context);
+            if (field.generateGetter) {
+                field.fields.nameTypeMap.forEach((type: string, name: string) => {
+                    this.functions.push(this.createGetter(name, type));
+                });
+
+            }
+            if (field.generateSetter) {
+                field.fields.nameTypeMap.forEach((type: string, name: string) => {
+                    this.functions.push(this.createSetter(name, type));
+                });
+            }
             this.fields.push(field);
         }
 
@@ -66,14 +82,16 @@ export class ClassDecl extends Content {
         }
 
         this.typeTable.addClass(this.className);
-        this.pathTable.addTypePath(this.className, this.getAbsolutePath());
+        this.pathTable.addTypePath(this.className, this.getImportPath());
 
         return this;
     }
 
     public evaluate(): any {
+        const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeStr: string = this.printer.tsNodeToString(this.engine.createClass(this));
-        this.fileSystem.generateFile(this.className, this.parentPath, tsNodeStr);
+        const tsFileStr: string = `${importStr}\n${tsNodeStr}`;
+        this.fileSystem.generateFile(this.className, this.parentPath, tsFileStr);
     }
 
     public typeCheck(): void {
@@ -84,7 +102,37 @@ export class ClassDecl extends Content {
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }
 
+    public getImportPath(): string {
+        return `${this.parentPath}/${this.className}`;
+    }
+
     public getAbsolutePath(): string {
         return `${this.parentPath}/${this.className}.ts`;
+    }
+
+    private createGetter(name: string, type: string): FuncDecl {
+        let funcGetter: FuncDecl = new FuncDecl();
+        funcGetter.name = "get" + name.charAt(0).toUpperCase() + name.slice(1);
+        funcGetter.returnDecl.returnType = type;
+        funcGetter.modifier = "public";
+        funcGetter.maybeStatic = new StaticDecl(); // not static
+        funcGetter.maybeAsync = new AsyncDecl(); // not async
+        funcGetter.params = new VarList();
+        funcGetter.comments = new CommentDecl();
+        return funcGetter;
+    }
+
+    private createSetter(name: string, type: string): FuncDecl {
+        let funcSetter: FuncDecl = new FuncDecl();
+        // setName
+        funcSetter.name = "set" + name.charAt(0).toUpperCase() + name.slice(1);
+        funcSetter.returnDecl.returnType = "void";
+        funcSetter.modifier = "public";
+        funcSetter.maybeStatic = new StaticDecl(); // not static
+        funcSetter.maybeAsync = new AsyncDecl(); // not async
+        funcSetter.params = new VarList();
+        funcSetter.params.addPair(name, type);
+        funcSetter.comments = new CommentDecl();
+        return funcSetter;
     }
 }
