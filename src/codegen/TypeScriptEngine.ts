@@ -73,7 +73,7 @@ export default class TypeScriptEngine {
         const interfaceMembers = tsMethodSignatures.concat(tsPropertySignatures);
         const interfaceDeclaration: InterfaceDeclaration = ts.createInterfaceDeclaration(
             /* decorators */ undefined,
-            /* modifiers */ undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             interfaceDecl.interfaceName,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
