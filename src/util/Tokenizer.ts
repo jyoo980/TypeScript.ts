@@ -228,6 +228,12 @@ export class Tokenizer {
         return 0;
     }
 
+    public checkStartOfLine(): void {
+        if(!this.isStartOfLine()) {
+            throw new TokenizerError(`New line missing in line ${this.currentToken.arr + 1} before: ${this.getNext()}`);
+        }
+    }
+
     /**
      * Determines whether the current token position is at the start of a new line
      * @returns boolean  indicating whether next token is from a new line

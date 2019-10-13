@@ -31,14 +31,14 @@ export class InterfaceDecl extends Content {
             this.extendsNodes.parse(context);
         }
 
-        if(!context.isStartOfLine()) {
-            throw new ParseError("New line missing from " + this.interfaceName + " interface");
-        }
+        context.checkStartOfLine();
 
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("comments")) {
             this.comments = new CommentDecl();
             this.comments.parse(context);
         }
+
+        context.checkStartOfLine();
 
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
             this.fieldDecl = new FieldDecl();
@@ -60,6 +60,7 @@ export class InterfaceDecl extends Content {
         }
 
         while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("function")) {
+            context.checkStartOfLine();
             let func: FuncDecl = new FuncDecl();
             func.parse(context);
             this.functions.push(func);

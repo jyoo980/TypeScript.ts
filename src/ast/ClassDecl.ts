@@ -45,9 +45,7 @@ export class ClassDecl extends Content {
             this.extendsNodes.parse(context);
         }
 
-        if(!context.isStartOfLine()) {
-            throw new ParseError("New line missing from " + this.className + " class");
-        }
+        context.checkStartOfLine();
 
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("comments")) {
             this.comments = new CommentDecl();
@@ -55,16 +53,17 @@ export class ClassDecl extends Content {
         }
 
         while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("fields")) {
+            context.checkStartOfLine();
             let field: FieldDecl = new FieldDecl();
             field.parse(context);
             if (field.generateGetter) {
-                field.fields.nameTypeMap.forEach((type: string, name: string) => {
+                field.fields.nameTypeMap.forEach((name: string, type: string) => {
                     this.functions.push(this.createGetter(name, type));
                 });
 
             }
             if (field.generateSetter) {
-                field.fields.nameTypeMap.forEach((type: string, name: string) => {
+                field.fields.nameTypeMap.forEach((name: string, type: string) => {
                     this.functions.push(this.createSetter(name, type));
                 });
             }
@@ -72,6 +71,7 @@ export class ClassDecl extends Content {
         }
 
         while(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("function")) {
+            context.checkStartOfLine();
             let func: FuncDecl = new FuncDecl();
             func.parse(context);
             this.functions.push(func);

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import {ParseError, Tokenizer} from "../../src/util/Tokenizer";
+import {ParseError, Tokenizer, TokenizerError} from "../../src/util/Tokenizer";
 import {InterfaceDecl} from "../../src/ast/InterfaceDecl";
 import {TypeTable} from "../../src/ast/symbols/TypeTable";
 import {ValidationError} from "../../src/ast/errors/ASTErrors";
@@ -25,7 +25,7 @@ describe("InterfaceDecl parse test", () => {
     it("throws an error parsing invalid interface definition", () => {
         let tokenizer : Tokenizer = new Tokenizer("interfaceSimpleInvalid.txt", "./test/testFiles");
         let intDec : InterfaceDecl = new InterfaceDecl(".");
-        expect(() => {intDec.parse(tokenizer)}).to.throw(ParseError);
+        expect(() => {intDec.parse(tokenizer)}).to.throw(TokenizerError);
     });
 
     it("parses complex interface definition", () => {

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import {ClassDecl} from "../../src/ast/ClassDecl";
-import {ParseError, Tokenizer} from "../../src/util/Tokenizer";
+import {ParseError, Tokenizer, TokenizerError} from "../../src/util/Tokenizer";
 import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
 import * as nodeFs from "fs-extra";
 
@@ -54,7 +54,13 @@ describe("ClassDecl parse test", () => {
     it("throws a parse error when class definition includes extends after implements", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclInvalidFirstLine.txt", "./test/testFiles");
         let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
-        expect(() => {classDec.parse(tokenizer)}).to.throw(ParseError);
+        expect(() => {classDec.parse(tokenizer)}).to.throw(TokenizerError);
+    });
+
+    it("throws a parse error when class definition field decl with missing new line", () => {
+        let tokenizer : Tokenizer = new Tokenizer("classDeclInvalidMergedLines.txt", "./test/testFiles");
+        let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
+        expect(() => {classDec.parse(tokenizer)}).to.throw(TokenizerError);
     });
 
     it("throws a parse error when there is an invalid value inside the class", () => {
