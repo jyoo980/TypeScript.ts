@@ -17,5 +17,3 @@ project TestProject
             function private formatDate
                 params [ string id, string content, string kind ]
                 returns string
-
-
