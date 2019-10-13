@@ -58,7 +58,7 @@ export default class TypeScriptEngine {
 
         return ts.createClassDeclaration(
             undefined,
-            undefined,
+            [ts.createModifier(SyntaxKind.ExportKeyword)],
             classDecl.className,
             undefined,
             undefined,

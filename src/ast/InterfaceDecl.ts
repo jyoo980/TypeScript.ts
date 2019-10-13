@@ -46,7 +46,7 @@ export class InterfaceDecl extends Content {
         }
 
         this.typeTable.addInterface(this.interfaceName);
-        this.pathTable.addTypePath(this.interfaceName, this.getAbsolutePath());
+        this.pathTable.addTypePath(this.interfaceName, this.getImportPath());
 
         return this;
     }
@@ -70,6 +70,10 @@ export class InterfaceDecl extends Content {
             this.fieldDecl.typeCheck();
         }
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public getImportPath(): string {
+        return `${this.parentPath}/${this.interfaceName}`;
     }
 
     public getAbsolutePath(): string {

@@ -59,7 +59,7 @@ export class ClassDecl extends Content {
         }
 
         this.typeTable.addClass(this.className);
-        this.pathTable.addTypePath(this.className, this.getAbsolutePath());
+        this.pathTable.addTypePath(this.className, this.getImportPath());
 
         return this;
     }
@@ -77,6 +77,10 @@ export class ClassDecl extends Content {
         }
         this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
+    }
+
+    public getImportPath(): string {
+        return `${this.parentPath}/${this.className}`;
     }
 
     public getAbsolutePath(): string {
