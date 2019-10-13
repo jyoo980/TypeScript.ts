@@ -1,0 +1,10 @@
+dir models
+    abstract class Time implements ITime, DateTime extends TimeClass
+        comments [ "This is the time class" ]
+        fields private [ number dayOfWeek, number hour, number minute ]
+            generate getters
+            generate setters
+        fields public [ number date ]
+            generate getters
+        function public getDate
+            returns string

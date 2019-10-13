@@ -38,7 +38,7 @@ export class DirDecl extends Content {
 
             if (context.checkToken("dir")) {
                 contentDecl = new DirDecl(this.getAbsolutePath());
-            } else if (context.checkToken("class")) {
+            } else if (context.checkToken("class") || context.checkToken("abstract")) {
                 contentDecl = new ClassDecl(this.getAbsolutePath());
             } else if (context.checkToken("interface")) {
                 contentDecl = new InterfaceDecl(this.getAbsolutePath());
