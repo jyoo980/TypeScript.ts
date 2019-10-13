@@ -313,7 +313,13 @@ describe("TypeScriptEngine tests", () => {
             name,
             /* typeParams */ undefined,
             /* heritageClauses */ undefined,
-            [ts.createMethodSignature(
+            [ts.createPropertySignature(
+                /* modifiers */ undefined,
+                "foo",
+                /* questionToken */ undefined,
+                ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
+                /* initializer */ undefined
+            ), ts.createMethodSignature(
                 /* typeParameters */ undefined,
                 [
                     ts.createParameter(
@@ -334,12 +340,6 @@ describe("TypeScriptEngine tests", () => {
                 ts.createTypeReferenceNode("ParameterDecl", undefined),
                 baseFunDecl.name,
                 /* questionToken */ undefined
-            ), ts.createPropertySignature(
-                /* modifiers */ undefined,
-                "foo",
-                /* questionToken */ undefined,
-                ts.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-                /* initializer */ undefined
             )]
         ));
     });
