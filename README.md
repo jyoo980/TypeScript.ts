@@ -6,6 +6,12 @@ This is a repository for CPSC 410: Advanced Software Engineering. The TS-DSL sho
 * yarn (>= v1.17.3)
 * tsc (>= 3.6.3)
 
+## Demo
+
+1. Navigate to `ts-dsl/ui`
+2. Run `tsc TypeScript.ts`
+3. Run `node TypeScript.js simpleProgramClass.txt`
+
 ## Working with ts-dsl
 
 * To build: `yarn build`

@@ -22,6 +22,7 @@ export default class FuncDecl extends AstNode {
     name: string;
     params: VarList;
     comments: CommentDecl;
+    body: string = null; // only used in getter/setter
     returnDecl: ReturnDecl = new ReturnDecl();
 
     public parse(context: Tokenizer): any {
