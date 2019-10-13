@@ -4,7 +4,7 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {ImplementsDecl} from "./ImplementsDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
-import {Tokenizer} from "../util/Tokenizer";
+import {ParseError, Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents a Class a TypeScript project may have.
@@ -40,6 +40,10 @@ export class ClassDecl extends Content {
             this.extendsNodes.parse(context);
         }
 
+        if(!context.isStartOfLine()) {
+            throw new ParseError("New line missing from " + this.className + " class");
+        }
+
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("comments")) {
             this.comments = new CommentDecl();
             this.comments.parse(context);
@@ -55,6 +59,10 @@ export class ClassDecl extends Content {
             let func: FuncDecl = new FuncDecl();
             func.parse(context);
             this.functions.push(func);
+        }
+
+        if(context.getCurrentLineTabLevel() > indentLevel) {
+            throw new ParseError(`Invalid keyword: ${context.getNext()}  found under ${this.className} class`);
         }
 
         this.typeTable.addClass(this.className);

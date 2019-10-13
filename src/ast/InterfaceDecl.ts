@@ -3,7 +3,7 @@ import {ExtendsDecl} from "./ExtendsDecl";
 import {FieldDecl} from "./FieldDecl";
 import CommentDecl from "./CommentDecl";
 import FuncDecl from "./FuncDecl";
-import {Tokenizer} from "../util/Tokenizer";
+import {ParseError, Tokenizer} from "../util/Tokenizer";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -27,6 +27,10 @@ export class InterfaceDecl extends Content {
             this.extendsNodes.parse(context);
         }
 
+        if(!context.isStartOfLine()) {
+            throw new ParseError("New line missing from " + this.interfaceName + " interface");
+        }
+
         if(context.getCurrentLineTabLevel() > indentLevel && context.checkToken("comments")) {
             this.comments = new CommentDecl();
             this.comments.parse(context);
@@ -42,6 +46,10 @@ export class InterfaceDecl extends Content {
             let func: FuncDecl = new FuncDecl();
             func.parse(context);
             this.functions.push(func);
+        }
+
+        if(context.getCurrentLineTabLevel() > indentLevel) {
+            throw new ParseError(`Invalid keyword: ${context.getNext()}  found under ${this.interfaceName} interface`);
         }
 
         this.typeTable.addInterface(this.interfaceName);

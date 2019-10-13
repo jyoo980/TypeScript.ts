@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import {Tokenizer} from "../../src/util/Tokenizer";
+import {ParseError, Tokenizer} from "../../src/util/Tokenizer";
 import {InterfaceDecl} from "../../src/ast/InterfaceDecl";
 import {TypeTable} from "../../src/ast/symbols/TypeTable";
 import {ValidationError} from "../../src/ast/errors/ASTErrors";
@@ -23,10 +23,9 @@ describe("InterfaceDecl parse test", () => {
     });
 
     it("throws an error parsing invalid interface definition", () => {
-        // TODO: implement this test case may require changes to how we tokenize... (does not currently throw error)
         let tokenizer : Tokenizer = new Tokenizer("interfaceSimpleInvalid.txt", "./test/testFiles");
         let intDec : InterfaceDecl = new InterfaceDecl(".");
-        intDec.parse(tokenizer);
+        expect(() => {intDec.parse(tokenizer)}).to.throw(ParseError);
     });
 
     it("parses complex interface definition", () => {
@@ -37,6 +36,13 @@ describe("InterfaceDecl parse test", () => {
         expect(intDec.comments).to.be.undefined;
         expect(intDec.fieldDecl).to.be.undefined;
         expect(intDec.functions.length).to.equal(2);
+    });
+
+    it("throws a ParseError with invalid line", () => {
+        let tokenizer : Tokenizer = new Tokenizer("interfaceInvalidInput.txt", "./test/testFiles");
+        let intDec : InterfaceDecl = new InterfaceDecl(".");
+        expect(() => {intDec.parse(tokenizer)}).to.throw(ParseError);
+
     });
 });
 
