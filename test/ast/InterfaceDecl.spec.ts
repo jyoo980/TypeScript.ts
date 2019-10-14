@@ -41,7 +41,7 @@ describe("InterfaceDecl parse test", () => {
     it("throws a ParseError with invalid line", () => {
         let tokenizer : Tokenizer = new Tokenizer("interfaceInvalidInput.txt", "./test/testFiles");
         let intDec : InterfaceDecl = new InterfaceDecl(".");
-        expect(() => {intDec.parse(tokenizer)}).to.throw(ParseError);
+        expect(() => {intDec.parse(tokenizer)}).to.throw(TokenizerError);
 
     });
 });

@@ -22,7 +22,6 @@ export default class FuncDecl extends AstNode {
     name: string;
     params: VarList;
     comments: CommentDecl;
-    body: string = null; // only used in getter/setter
     returnDecl: ReturnDecl = new ReturnDecl();
 
     public parse(context: Tokenizer): any {
@@ -45,17 +44,30 @@ export default class FuncDecl extends AstNode {
         this.comments = new CommentDecl();
 
         this.name = context.getNext();
-        if (context.checkToken("returns")) {
-            this.returnDecl.parse(context);
-        }
+
+        context.checkStartOfLine();
+
         if (context.getCurrentLineTabLevel() <= indentLevel) return;
+        context.checkStartOfLine();
+
+        if(context.checkToken("comments")) {
+            this.comments.parse(context);
+        }
+
+        if (context.getCurrentLineTabLevel() <= indentLevel) return;
+        context.checkStartOfLine();
 
         if (context.checkToken("params")) {
             context.getAndCheckNext("params");
             this.params.parse(context);
-            this.comments.parse(context);
         }
-        this.returnDecl.parse(context);
+
+        if (context.getCurrentLineTabLevel() <= indentLevel) return;
+        context.checkStartOfLine();
+
+        if(context.checkToken("returns")) {
+            this.returnDecl.parse(context);
+        }
     }
 
     public evaluate(): any {

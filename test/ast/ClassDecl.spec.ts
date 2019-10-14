@@ -138,4 +138,12 @@ describe ("ClassDecl evaluate test", () => {
         createdFiles.push(OUTPUT_DIR  + "/Time.ts");
     });
 
+    it("writes an abstract class to disk", () => {
+        let tokenizer : Tokenizer = new Tokenizer("classDeclAbstract.txt", "./test/testFiles");
+        let classDec : ClassDecl = new ClassDecl(OUTPUT_DIR);
+        classDec.parse(tokenizer);
+        classDec.evaluate();
+        // createdFiles.push(OUTPUT_DIR  + "/Time.ts");
+    })
+
 });

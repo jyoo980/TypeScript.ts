@@ -59,9 +59,15 @@ export default class TypeScriptEngine {
             classMembers.push(this.createMethod(fn));
         }
 
+        let modifiers: Modifier[] = [];
+        modifiers.push(ts.createModifier(SyntaxKind.ExportKeyword));
+        if(classDecl.isAbstract) {
+            modifiers.push(ts.createModifier(SyntaxKind.AbstractKeyword));
+        }
+
         return ts.createClassDeclaration(
             undefined,
-            [ts.createModifier(SyntaxKind.ExportKeyword)],
+            modifiers,
             classDecl.className,
             undefined,
             this.makeHeritageClause(classDecl),

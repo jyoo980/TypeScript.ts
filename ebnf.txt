@@ -1,11 +1,12 @@
-PROGRAM         ::= ‘project’ (str | STRLIST) nl MODULE? nl (DIR|CLASS|INTERFACE)* nl
-MODULE          ::= ‘modules’ STRLIST nl 				# should have quotes
+PROGRAM         ::= ‘project’ str nl (MODULE nl)? (DIR|CLASS|INTERFACE)*
+MODULE          ::= ‘modules’ STRLIST				# should have quotes
 DIR             ::= ‘dir’ str nl (ind (DIR|CLASS|INTERFACE) ded)* nl
-CLASS           ::= ABS? ‘class’ str IMP? EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
+CLASS           ::= ABS? ‘class’ str IMP? EXT? (nl COMMENT)? (nl FIELD)* (nl (FUNC | CONSTR))* nl
 INTERFACE       ::= ‘interface’ str EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
 
 FIELD           ::= ind ‘fields’ mod? VARLIST (nl ind 'generate' gen)* ded
-FUNC            ::= ind ‘function ’ mod ‘async ’? 'static'? str (nl PARAM)? (nl ind 'returns' type)? (nl ind COMMENT)? ded
+FUNC            ::= ind ‘function ’ mod ‘async ’? 'static'? str (nl ind COMMENT)? (nl PARAM)? (nl ind 'returns' type)? ded
+CONSTR          ::= ind ‘constructor’ mod (nl PARAM)? ded
 
 PARAM           ::= ind ‘params ’ VARLIST ded
 COMMENT         ::= ind ‘comments ’ STRLIST ded
@@ -17,10 +18,10 @@ VARLIST         ::= ‘[ ’ (type str (‘,’ type str))? ‘ ]’
 STRLIST         ::= ‘[ ‘ str (‘,’ str)* ‘ ]’
 
 gen             ::= (‘getters’ | ‘setters’)
-mod             ::= ‘private’ | ‘public’| ‘protected’
+mod             ::= (‘private’ | ‘public’| ‘protected’)
 type            ::= (‘number’ | ‘boolean’| ‘string’ | str) sp
 str             ::= [a-z|A-Z]* sp
 sp              ::= ‘ ’
-nl              ::= [\n]
-ind             ::= [\t]
+nl              ::= [\n]+
+ind             ::= [\t | ]+    # tab(s) or single space(s)
 ded             ::= [] # this is a dedent

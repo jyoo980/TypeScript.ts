@@ -1,1 +1,2 @@
-function private foo returns NOTAVALIDTYPE
+function private foo
+    returns NOTAVALIDTYPE
