@@ -91,7 +91,7 @@ export class ClassDecl extends Content {
     public evaluate(): any {
         const importStr: string = ImportStringBuilder.getImportsString(this);
         const tsNodeStr: string = this.printer.tsNodeToString(this.engine.createClass(this));
-        const tsFileStr: string = `${importStr}\n${tsNodeStr}`;
+        const tsFileStr: string = importStr === "" ? `${tsNodeStr}` : `${importStr}\n${tsNodeStr}`;
         this.fileSystem.generateFile(this.className, this.parentPath, tsFileStr);
     }
 

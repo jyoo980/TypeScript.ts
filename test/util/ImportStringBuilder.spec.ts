@@ -32,6 +32,26 @@ describe('ImportStringBuilder ClassDecl tests', function() {
             "import {Age} from \"./age.ts\";\n");
     });
 
+    it('should build an import string body for a class that imports from the same directory nested', () => {
+        let pathTable: PathTable = PathTable.getInstance();
+        pathTable.addTypePath("Animal", "./src/animals/animal.ts")
+        pathTable.addTypePath("Age", "./src/animals/util/age.ts");
+
+        let animalClass = new ClassDecl("./src/animals");
+        animalClass.className = "Animal";
+
+        let animalFields = new FieldDecl();
+        let animalFieldVarList = new VarList();
+        animalFieldVarList.addPair("age", "Age");
+        animalFields.fields = animalFieldVarList;
+
+        animalClass.functions = [];
+        animalClass.fields = [animalFields];
+
+        expect(ImportStringBuilder.getImportsString(animalClass)).to.equal(
+            "import {Age} from \"./util/age.ts\";\n");
+    });
+
     it('should build an import string body for a class that imports from other sub-directory trees', () => {
         let pathTable: PathTable = PathTable.getInstance();
         pathTable.addTypePath("Animal", "./src/animals/animal.ts")
