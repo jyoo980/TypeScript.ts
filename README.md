@@ -1,6 +1,6 @@
-# ts-dsl
+# TypeScript.ts
 
-This is a repository for CPSC 410: Advanced Software Engineering. The TS-DSL should enable developers to generate/bootstrap TypeScript projects from scratch using a small grammar. Development is currently in the early phases, so changes to this repo will be constant.
+This is a repository for CPSC 410: Advanced Software Engineering. This DSL should enable developers to generate/bootstrap TypeScript projects from scratch using a small grammar. Development is currently in the early phases, so changes to this repo will be constant.
 
 ## Dependencies
 * yarn (>= v1.17.3)
@@ -8,7 +8,7 @@ This is a repository for CPSC 410: Advanced Software Engineering. The TS-DSL sho
 
 ## Demo
 
-1. Navigate to `ts-dsl/ui`
+1. Navigate to `TypeScript.ts/ui`
 2. Run `tsc TypeScript.ts`
 3. Run `node TypeScript.js simpleProgramClass.txt`
 
@@ -27,49 +27,30 @@ This is a repository for CPSC 410: Advanced Software Engineering. The TS-DSL sho
 
 ## Grammar
 
+```
 PROGRAM         ::= ‘project’ str nl (MODULE nl)? (DIR|CLASS|INTERFACE)*
-
 MODULE          ::= ‘modules’ STRLIST				# should have quotes
-
 DIR             ::= ‘dir’ str nl (ind (DIR|CLASS|INTERFACE) ded)* nl
-
 CLASS           ::= ABS? ‘class’ str IMP? EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
-
 INTERFACE       ::= ‘interface’ str EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
-
 FIELD           ::= ind ‘fields’ mod? VARLIST (nl ind 'generate' gen)* ded
-
 FUNC            ::= ind ‘function ’ mod ‘async ’? 'static'? str (nl ind COMMENT)? (nl PARAM)? (nl ind 'returns' type)? ded
-
 PARAM           ::= ind ‘params ’ VARLIST ded
-
 COMMENT         ::= ind ‘comments ’ STRLIST ded
-
 ABS             ::= ‘abstract’
-
 IMP             ::= ‘implements’ str (‘,’ str)*
-
 EXT             ::= ‘extends’ str
-
 VARLIST         ::= ‘[ ’ (type str (‘,’ type str))? ‘ ]’
-
 STRLIST         ::= ‘[ ‘ str (‘,’ str)* ‘ ]’
-
 gen             ::= (‘getters’ | ‘setters’)
-
 mod             ::= (‘private’ | ‘public’| ‘protected’)
-
 type            ::= (‘number’ | ‘boolean’| ‘string’ | str) sp
-
 str             ::= [^\n]* sp # note strings outside of comments cannot have spaces as well.
-
 sp              ::= ‘ ’
-
 nl              ::= [\n]+
-
 ind             ::= [\t | ]+    # tab(s) or single space(s)
-
 ded             ::= [] # this is a dedent
+```
 
 ## Documentation
 
