@@ -1,12 +1,11 @@
 PROGRAM         ::= ‘project’ str nl (MODULE nl)? (DIR|CLASS|INTERFACE)*
 MODULE          ::= ‘modules’ STRLIST				# should have quotes
 DIR             ::= ‘dir’ str nl (ind (DIR|CLASS|INTERFACE) ded)* nl
-CLASS           ::= ABS? ‘class’ str IMP? EXT? (nl COMMENT)? (nl FIELD)* (nl (FUNC | CONSTR))* nl
+CLASS           ::= ABS? ‘class’ str IMP? EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
 INTERFACE       ::= ‘interface’ str EXT? (nl COMMENT)? (nl FIELD)* (nl FUNC)* nl
 
 FIELD           ::= ind ‘fields’ mod? VARLIST (nl ind 'generate' gen)* ded
 FUNC            ::= ind ‘function ’ mod ‘async ’? 'static'? str (nl ind COMMENT)? (nl PARAM)? (nl ind 'returns' type)? ded
-CONSTR          ::= ind ‘constructor’ mod (nl PARAM)? ded
 
 PARAM           ::= ind ‘params ’ VARLIST ded
 COMMENT         ::= ind ‘comments ’ STRLIST ded
