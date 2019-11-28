@@ -5,6 +5,7 @@ import {Tokenizer} from "../util/Tokenizer";
 import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import ReturnDecl from "./ReturnDecl";
+import IVisitor from "../visitor/IVisitor";
 
 /**
  * Represents a function declaration in our language
@@ -81,5 +82,9 @@ export default class FuncDecl extends AstNode {
 
     public fulfillContract(): void {
         // Not needed.
+    }
+
+    public accept(v: IVisitor): void {
+        v.visit(this);
     }
 }

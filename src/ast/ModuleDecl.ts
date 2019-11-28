@@ -6,6 +6,7 @@
 import { AstNode } from "./AstNode";
 import { Tokenizer } from "../util/Tokenizer";
 import PackageJson from "../util/PackageJson";
+import IVisitor from "../visitor/IVisitor";
 
 export class ModuleDecl extends AstNode {
 
@@ -56,5 +57,9 @@ export class ModuleDecl extends AstNode {
 
     public setPath(path: string) {
         this.path = path;
+    }
+
+    public accept(v: IVisitor): void {
+        v.visit(this);
     }
 }

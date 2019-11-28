@@ -8,6 +8,7 @@ import {Tokenizer} from "../util/Tokenizer";
 import {ClassDecl} from "./ClassDecl";
 import {InterfaceDecl} from "./InterfaceDecl";
 import {AstNode} from "./AstNode";
+import IVisitor from "../visitor/IVisitor";
 
 export class DirDecl extends Content {
     directoryName: string;
@@ -71,5 +72,9 @@ export class DirDecl extends Content {
 
     public fulfillContract(): void {
         this.contents.forEach((content: AstNode) => content.fulfillContract());
+    }
+
+    public accept(v: IVisitor): void {
+        v.visit(this);
     }
 }
