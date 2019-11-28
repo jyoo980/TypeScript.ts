@@ -34,6 +34,6 @@ export class ExtendsDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitExtendsDecl(this);
     }
 }

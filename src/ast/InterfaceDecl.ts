@@ -162,6 +162,6 @@ export class InterfaceDecl extends Content {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitInterfaceDecl(this);
     }
 }

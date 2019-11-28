@@ -60,6 +60,6 @@ export class ModuleDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitModuleDecl(this);
     }
 }

@@ -75,6 +75,6 @@ export class DirDecl extends Content {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitDirDecl(this);
     }
 }

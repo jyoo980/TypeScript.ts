@@ -29,7 +29,7 @@ export default class AsyncDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitAsyncDecl(this);
     }
 
 }

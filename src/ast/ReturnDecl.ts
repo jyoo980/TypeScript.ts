@@ -35,6 +35,6 @@ export default class ReturnDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitReturnDecl(this);
     }
 }

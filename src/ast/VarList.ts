@@ -61,6 +61,6 @@ export class VarList extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitVarListDecl(this);
     }
 }

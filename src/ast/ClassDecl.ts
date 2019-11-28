@@ -161,6 +161,6 @@ export class ClassDecl extends Content {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitClassDecl(this);
     }
 }

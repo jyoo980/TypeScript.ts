@@ -39,6 +39,6 @@ export default class ConstructorDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitConstructorDecl(this);
     }
 }

@@ -85,6 +85,6 @@ export default class FuncDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitFuncDecl(this);
     }
 }

@@ -16,20 +16,20 @@ import StaticDecl from "../ast/StaticDecl";
 import {VarList} from "../ast/VarList";
 
 export default interface IVisitor {
-    visit(node: AsyncDecl): void;
-    visit(node: ClassDecl): void;
-    visit(node: CommentDecl): void;
-    visit(node: ConstructorDecl): void;
-    visit(node: Content): void;
-    visit(node: DirDecl): void;
-    visit(node: ExtendsDecl): void;
-    visit(node: FieldDecl): void;
-    visit(node: FuncDecl): void;
-    visit(node: ImplementsDecl): void;
-    visit(node: InterfaceDecl): void;
-    visit(node: ModuleDecl): void;
-    visit(node: ProgramDecl): void;
-    visit(node: ReturnDecl): void;
-    visit(node: StaticDecl): void;
-    visit(node: VarList): void;
+    visitAsyncDecl(node: AsyncDecl): void;
+    visitClassDecl(node: ClassDecl): void;
+    visitCommentDecl(node: CommentDecl): void;
+    visitConstructorDecl(node: ConstructorDecl): void;
+    visitContentDecl(node: Content): void;
+    visitDirDecl(node: DirDecl): void;
+    visitExtendsDecl(node: ExtendsDecl): void;
+    visitFieldDecl(node: FieldDecl): void;
+    visitFuncDecl(node: FuncDecl): void;
+    visitImplementsDecl(node: ImplementsDecl): void;
+    visitInterfaceDecl(node: InterfaceDecl): void;
+    visitModuleDecl(node: ModuleDecl): void;
+    visitProgramDecl(node: ProgramDecl): void;
+    visitReturnDecl(node: ReturnDecl): void;
+    visitStaticDecl(node: StaticDecl): void;
+    visitVarListDecl(node: VarList): void;
 }

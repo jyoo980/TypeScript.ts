@@ -41,7 +41,7 @@ export default class CommentDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitCommentDecl(this);
     }
 
 }

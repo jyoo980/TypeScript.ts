@@ -67,6 +67,6 @@ export class FieldDecl extends AstNode {
     }
 
     public accept(v: IVisitor): void {
-        v.visit(this);
+        v.visitFieldDecl(this);
     }
 }
