@@ -11,7 +11,6 @@ import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
 import {ParseError, Tokenizer} from "../util/Tokenizer";
-import IVisitor from "../visitor/IVisitor";
 /**
  * Represents a Class a TypeScript project may have.
  *
@@ -158,9 +157,5 @@ export class ClassDecl extends Content {
         funcSetter.params.addPair(name, type);
         funcSetter.comments = new CommentDecl();
         return funcSetter;
-    }
-
-    public accept(v: IVisitor): void {
-        v.visit(this);
     }
 }

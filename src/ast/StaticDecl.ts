@@ -3,7 +3,6 @@
  */
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
-import IVisitor from "../visitor/IVisitor";
 
 export default class StaticDecl extends AstNode {
 
@@ -26,9 +25,5 @@ export default class StaticDecl extends AstNode {
 
     public fulfillContract(): void {
         // Not needed.
-    }
-
-    public accept(v: IVisitor): void {
-        v.visit(this);
     }
 }

@@ -3,7 +3,6 @@
  */
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
-import IVisitor from "../visitor/IVisitor";
 
 export default class AsyncDecl extends AstNode {
 
@@ -26,10 +25,6 @@ export default class AsyncDecl extends AstNode {
 
     public fulfillContract(): void {
         // Not needed.
-    }
-
-    public accept(v: IVisitor): void {
-        v.visit(this);
     }
 
 }
