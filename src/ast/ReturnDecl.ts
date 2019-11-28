@@ -4,6 +4,7 @@
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
 import {TypeCheckError} from "./symbols/TypeTable";
+import IVisitor from "../visitor/IVisitor";
 
 export default class ReturnDecl extends AstNode {
 
@@ -31,5 +32,9 @@ export default class ReturnDecl extends AstNode {
 
     public fulfillContract(): void {
         // Not needed.
+    }
+
+    public accept(v: IVisitor): void {
+        v.visit(this);
     }
 }

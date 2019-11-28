@@ -9,6 +9,7 @@ import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
 import {ParseError, Tokenizer} from "../util/Tokenizer";
+import IVisitor from "../visitor/IVisitor";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -122,7 +123,7 @@ export class InterfaceDecl extends Content {
             this.fieldDecl.fields.appendVarList(parentNode.fieldDecl.fields);
         }
     }
-      
+
     public getImportPath(): string {
         return `${this.parentPath}/${this.interfaceName}`;
     }
@@ -158,5 +159,9 @@ export class InterfaceDecl extends Content {
         funcSetter.params.addPair(name, type);
         funcSetter.comments = new CommentDecl();
         return funcSetter;
+    }
+
+    public accept(v: IVisitor): void {
+        v.visit(this);
     }
 }

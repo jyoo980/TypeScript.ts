@@ -5,6 +5,7 @@ import TypeScriptEngine from "../codegen/TypeScriptEngine";
 import PrintUtil from "../util/PrintUtil";
 import ts = require("typescript");
 import {PathTable} from "../util/PathTable";
+import IVisitor from "../visitor/IVisitor";
 
 export abstract class AstNode {
 
@@ -27,4 +28,6 @@ export abstract class AstNode {
      *  - interfaces which extend other interfaces should have the correct method signatures
      */
     public abstract fulfillContract(): void;
+
+    abstract accept(v: IVisitor): void;
 }
