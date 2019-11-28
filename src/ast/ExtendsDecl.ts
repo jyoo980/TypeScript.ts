@@ -6,7 +6,6 @@
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
 import {TypeCheckError} from "./symbols/TypeTable";
-import IVisitor from "../visitor/IVisitor";
 
 export class ExtendsDecl extends AstNode {
     parentName: string;
@@ -31,9 +30,5 @@ export class ExtendsDecl extends AstNode {
 
     public fulfillContract(): void {
         // Not needed.
-    }
-
-    public accept(v: IVisitor): void {
-        v.visit(this);
     }
 }
