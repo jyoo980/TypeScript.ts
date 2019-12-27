@@ -1,0 +1,13 @@
+image: node:latest
+
+before_script:
+  - apt-get update -qq && apt-get install
+
+stages:
+  - build
+
+Build:
+  stage: build
+  script:
+    - yarn install
+    - yarn build

@@ -1,4 +1,4 @@
-# TypeScript.ts
+# TypeScript.ts ![build-status](https://gitlab.com/jamesyoo/TypeScript-ts/badges/master/pipeline.svg)
 
 This is a repository for CPSC 410: Advanced Software Engineering. This DSL should enable developers to generate/bootstrap TypeScript projects from scratch using a small grammar. Development is currently in the early phases, so changes to this repo will be constant.
 
