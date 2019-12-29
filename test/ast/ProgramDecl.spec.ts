@@ -1,14 +1,16 @@
 import {Tokenizer} from "../../src/util/Tokenizer";
-import {expect} from "chai";
 import {ProgramDecl} from "../../src/ast/ProgramDecl";
+import TypeCheckVisitor from "../../src/codegen/TypeCheckVisitor";
 
 describe("Top-level TypeScript DSL tests", () => {
+
+    const typeChecker: TypeCheckVisitor = new TypeCheckVisitor();
 
     it("Should evaluate the simplest program", () => {
         const tokenizer: Tokenizer = new Tokenizer("simpleProgram.txt", "./test/testFiles");
         let programDecl: ProgramDecl = new ProgramDecl(".");
         programDecl.parse(tokenizer);
-        programDecl.typeCheck();
+        programDecl.accept(typeChecker);
         programDecl.evaluate();
     });
 
@@ -16,7 +18,7 @@ describe("Top-level TypeScript DSL tests", () => {
         const tokenizer: Tokenizer = new Tokenizer("simpleProgramClass.txt", "./test/testFiles");
         let programDecl: ProgramDecl = new ProgramDecl(".");
         programDecl.parse(tokenizer);
-        programDecl.typeCheck();
+        programDecl.accept(typeChecker);
         programDecl.evaluate();
     });
 });

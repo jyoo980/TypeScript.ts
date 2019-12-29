@@ -6,6 +6,7 @@
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
 import {TypeCheckError} from "./symbols/TypeTable";
+import Visitor from "../codegen/Visitor";
 
 export class ExtendsDecl extends AstNode {
     parentName: string;
@@ -21,14 +22,7 @@ export class ExtendsDecl extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        const wasDeclared: boolean = this.typeTable.isValidType(this.parentName);
-        if (!wasDeclared) {
-            throw new TypeCheckError(`Type: ${this.parentName} was not defined`);
-        }
-    }
-
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitExtendsDecl(this);
     }
 }

@@ -3,6 +3,8 @@ import {ParseError, Tokenizer, TokenizerError} from "../../src/util/Tokenizer";
 import {InterfaceDecl} from "../../src/ast/InterfaceDecl";
 import {TypeTable} from "../../src/ast/symbols/TypeTable";
 import {ValidationError} from "../../src/ast/errors/ASTErrors";
+import InheritanceVisitor from "../../src/codegen/InheritanceVisitor";
+import TypeCheckVisitor from "../../src/codegen/TypeCheckVisitor";
 
 describe("InterfaceDecl parse test", () => {
     it("parses single-line, simple interface definition", () => {
@@ -53,7 +55,8 @@ describe("InterfaceDecl parse test", () => {
         tokenizer = new Tokenizer("interfaceDeclExtendsSimple.txt", "./test/testFiles");
         let childDec: InterfaceDecl = new InterfaceDecl(".");
         childDec.parse(tokenizer);
-        childDec.fulfillContract();
+        const inheritanceVisitor: InheritanceVisitor = new InheritanceVisitor();
+        childDec.accept(inheritanceVisitor);
         expect(childDec.comments).to.be.undefined;
         expect(childDec.fieldDecl).to.be.undefined;
         expect(childDec.functions.length).to.equal(2);
@@ -68,12 +71,15 @@ describe("InterfaceDecl evaluate test", () => {
 });
 
 describe("InterfaceDecl typeCheck test", () => {
+
+    const typeChecker: TypeCheckVisitor = new TypeCheckVisitor();
+
     it("throws a validation error when the modifier for an interface is not public", () => {
         let tokenizer: Tokenizer = new Tokenizer("interfaceDeclInvalidFieldMod.txt", "./test/testFiles");
         let intDec: InterfaceDecl = new InterfaceDecl(".");
         intDec.parse(tokenizer);
         expect(() => {
-            intDec.typeCheck()
+            intDec.accept(typeChecker);
         }).to.throw(ValidationError);
     });
 
@@ -82,7 +88,7 @@ describe("InterfaceDecl typeCheck test", () => {
         let intDec: InterfaceDecl = new InterfaceDecl(".");
         intDec.parse(tokenizer);
         expect(() => {
-            intDec.typeCheck()
+            intDec.accept(typeChecker);
         }).to.not.throw(ValidationError);
 
     });
@@ -92,7 +98,7 @@ describe("InterfaceDecl typeCheck test", () => {
         let intDec: InterfaceDecl = new InterfaceDecl(".");
         intDec.parse(tokenizer);
         expect(() => {
-            intDec.typeCheck()
+            intDec.accept(typeChecker);
         }).to.not.throw(ValidationError);
 
     });

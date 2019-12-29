@@ -9,6 +9,7 @@ import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
 import {ParseError, Tokenizer} from "../util/Tokenizer";
+import Visitor from "../codegen/Visitor";
 
 /**
  * Represents an Interface a TypeScript project may have.
@@ -86,43 +87,6 @@ export class InterfaceDecl extends Content {
         this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsFileStr);
     }
 
-    public typeCheck(): void {
-        if (this.extendsNodes !== undefined) {
-            this.extendsNodes.typeCheck();
-        }
-        if(this.extendsNodes) {
-            this.extendsNodes.typeCheck();
-        }
-        if(this.fieldDecl) {
-            this.fieldDecl.typeCheck();
-        }
-        this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
-    }
-
-    public fulfillContract(): void {
-        if (this.extendsNodes !== undefined) {
-            const parentNode: InterfaceDecl =
-                NodeTable.getInstance().getNode(this.extendsNodes.parentName) as InterfaceDecl;
-            this.addParentFunctions(parentNode);
-            this.addParentFields(parentNode);
-
-        }
-    }
-
-    private addParentFunctions(parentNode: InterfaceDecl): void {
-        this.functions = this.functions.concat(parentNode.functions)
-    }
-
-    private addParentFields(parentNode: InterfaceDecl): void {
-        if (parentNode.fieldDecl !== undefined) {
-            if (this.fieldDecl === undefined) {
-                this.fieldDecl = new FieldDecl();
-                this.fieldDecl.fields = new VarList();
-            }
-            this.fieldDecl.fields.appendVarList(parentNode.fieldDecl.fields);
-        }
-    }
-      
     public getImportPath(): string {
         return `${this.parentPath}/${this.interfaceName}`;
     }
@@ -158,5 +122,9 @@ export class InterfaceDecl extends Content {
         funcSetter.params.addPair(name, type);
         funcSetter.comments = new CommentDecl();
         return funcSetter;
+    }
+
+    public accept(v: Visitor): void {
+        v.visitInterfaceDecl(this);
     }
 }

@@ -5,6 +5,7 @@
  */
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
+import Visitor from "../codegen/Visitor";
 
 export class ImplementsDecl extends AstNode {
     parentNames: string[];
@@ -26,14 +27,7 @@ export class ImplementsDecl extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        const allValidTypes: boolean = this.typeTable.areValidTypes(this.parentNames);
-        if (!allValidTypes) {
-            throw new TypeError(`At least one type from: ${this.parentNames} was not declared`);
-        }
-    }
-
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitImplementsDecl(this);
     }
 }

@@ -1,6 +1,7 @@
 import {AstNode} from "./AstNode";
 import {VarList} from "./VarList";
 import {Tokenizer} from "../util/Tokenizer";
+import Visitor from "../codegen/Visitor";
 
 /**
  * This represents a constructor as a node in our AST
@@ -29,11 +30,7 @@ export default class ConstructorDecl extends AstNode {
         // TODO: implement this.
     }
 
-    public typeCheck(): void {
-        this.params.typeCheck();
-    }
-
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitConstructorDecl(this);
     }
 }

@@ -8,6 +8,7 @@ import {Tokenizer} from "../util/Tokenizer";
 import {ClassDecl} from "./ClassDecl";
 import {InterfaceDecl} from "./InterfaceDecl";
 import {AstNode} from "./AstNode";
+import Visitor from "../codegen/Visitor";
 
 export class DirDecl extends Content {
     directoryName: string;
@@ -65,11 +66,7 @@ export class DirDecl extends Content {
         return this.parentPath + "/" + this.directoryName;
     }
 
-    public typeCheck(): void {
-        this.contents.forEach((content: AstNode) => content.typeCheck());
-    }
-
-    public fulfillContract(): void {
-        this.contents.forEach((content: AstNode) => content.fulfillContract());
+    public accept(v: Visitor): void {
+        v.visitDirDecl(this);
     }
 }

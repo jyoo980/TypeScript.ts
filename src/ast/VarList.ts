@@ -1,6 +1,7 @@
 import { AstNode } from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
 import {TypeCheckError} from "./symbols/TypeTable";
+import Visitor from "../codegen/Visitor";
 
 /**
  * Represents a list of fields and their corresponding type. Used in declaring fields.
@@ -36,18 +37,6 @@ export class VarList extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        const fieldTypes: string[] = Array.from(this.nameTypeMap.values())
-            .map((fieldType) => {
-                // filter out [] from type before checking against typeTable
-                return fieldType.replace(/[\[\]]/g, "");
-        });
-        const allValidTypes: boolean = this.typeTable.areValidTypes(fieldTypes);
-        if (!allValidTypes) {
-            throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
-        }
-    }
-
     public appendVarList(otherVars: VarList): void {
         const fieldsAsList: [string, string][] = Array.from(otherVars.nameTypeMap.entries());
         fieldsAsList.forEach((nameTypePair) => {
@@ -55,7 +44,7 @@ export class VarList extends AstNode {
         });
     }
 
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitVarList(this);
     }
 }

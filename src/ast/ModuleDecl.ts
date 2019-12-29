@@ -6,6 +6,7 @@
 import { AstNode } from "./AstNode";
 import { Tokenizer } from "../util/Tokenizer";
 import PackageJson from "../util/PackageJson";
+import Visitor from "../codegen/Visitor";
 
 export class ModuleDecl extends AstNode {
 
@@ -42,19 +43,15 @@ export class ModuleDecl extends AstNode {
         return packageJson.addModules(this.modules);
     }
 
-    public typeCheck(): void {
-        // Not needed.
-    }
-
-    public fulfillContract(): void {
-        // Not needed.
-    }
-
     public setProjectName(name: string) {
         this.projectName = name;
     }
 
     public setPath(path: string) {
         this.path = path;
+    }
+
+    public accept(v: Visitor): void {
+        v.visitModuleDecl(this);
     }
 }
