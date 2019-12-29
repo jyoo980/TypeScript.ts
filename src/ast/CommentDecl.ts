@@ -1,5 +1,6 @@
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
+import Visitor from "../codegen/Visitor";
 
 /**
  * Represents the comments that a class, interface, or method may have
@@ -35,8 +36,8 @@ export default class CommentDecl extends AstNode {
         // Not needed.
     }
 
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitCommentDecl(this);
     }
 
 }

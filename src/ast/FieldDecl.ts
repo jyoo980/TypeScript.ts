@@ -2,6 +2,7 @@ import {VarList} from "./VarList";
 import {ParseError, Tokenizer} from "../util/Tokenizer";
 import {ValidationError} from "./errors/ASTErrors";
 import {AstNode} from "./AstNode";
+import Visitor from "../codegen/Visitor";
 
 /**
  * Represents a field declaration in the TypeScript DSL.
@@ -61,7 +62,7 @@ export class FieldDecl extends AstNode {
         this.fields.typeCheck();
     }
 
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitFieldDecl(this);
     }
 }

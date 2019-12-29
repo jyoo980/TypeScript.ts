@@ -5,6 +5,7 @@ import TypeScriptEngine from "../codegen/TypeScriptEngine";
 import PrintUtil from "../util/PrintUtil";
 import ts = require("typescript");
 import {PathTable} from "../util/PathTable";
+import Visitor from "../codegen/Visitor";
 
 export abstract class AstNode {
 
@@ -20,11 +21,5 @@ export abstract class AstNode {
 
     public abstract typeCheck(): void;
 
-    /**
-     * This should be run after typeCheck() to modify the AST nodes such that they correctly
-     * fulfill extends/implements contracts, i.e.
-     *  - classes which implement an interface should have the correct method signatures
-     *  - interfaces which extend other interfaces should have the correct method signatures
-     */
-    public abstract fulfillContract(): void;
+    public abstract accept(v: Visitor): void;
 }

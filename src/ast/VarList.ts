@@ -1,6 +1,7 @@
 import { AstNode } from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
 import {TypeCheckError} from "./symbols/TypeTable";
+import Visitor from "../codegen/Visitor";
 
 /**
  * Represents a list of fields and their corresponding type. Used in declaring fields.
@@ -55,7 +56,7 @@ export class VarList extends AstNode {
         });
     }
 
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitVarList(this);
     }
 }

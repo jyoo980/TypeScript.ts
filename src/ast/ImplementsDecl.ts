@@ -5,6 +5,7 @@
  */
 import {AstNode} from "./AstNode";
 import {Tokenizer} from "../util/Tokenizer";
+import Visitor from "../codegen/Visitor";
 
 export class ImplementsDecl extends AstNode {
     parentNames: string[];
@@ -33,7 +34,7 @@ export class ImplementsDecl extends AstNode {
         }
     }
 
-    public fulfillContract(): void {
-        // Not needed.
+    public accept(v: Visitor): void {
+        v.visitImplementsDecl(this);
     }
 }

@@ -11,6 +11,7 @@ import StaticDecl from "./StaticDecl";
 import AsyncDecl from "./AsyncDecl";
 import {VarList} from "./VarList";
 import {ParseError, Tokenizer} from "../util/Tokenizer";
+import Visitor from "../codegen/Visitor";
 /**
  * Represents a Class a TypeScript project may have.
  *
@@ -105,26 +106,6 @@ export class ClassDecl extends Content {
         this.fields.forEach((fieldDecl: FieldDecl) => fieldDecl.typeCheck());
         this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
     }
-
-    public fulfillContract(): void {
-        const nodeTable: NodeTable = NodeTable.getInstance();
-        if (this.implementsNodes !== undefined) {
-            const interfacesToImplement: string[] = this.implementsNodes.parentNames;
-            interfacesToImplement.forEach((parentName) => {
-                const interfaceDecl: InterfaceDecl = nodeTable.getNode(parentName) as InterfaceDecl;
-                this.implementInterface(interfaceDecl);
-            });
-        }
-    }
-
-    private implementInterface(interfaceDecl: InterfaceDecl): void {
-        this.functions = this.functions.concat(interfaceDecl.functions);
-        if (interfaceDecl.fieldDecl !== undefined) {
-            this.fields.push(interfaceDecl.fieldDecl);
-        }
-
-    }
-
     public getImportPath(): string {
         return `${this.parentPath}/${this.className}`;
     }
@@ -157,5 +138,9 @@ export class ClassDecl extends Content {
         funcSetter.params.addPair(name, type);
         funcSetter.comments = new CommentDecl();
         return funcSetter;
+    }
+
+    public accept(v: Visitor): void {
+        v.visitClassDecl(this);
     }
 }

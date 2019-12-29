@@ -3,6 +3,7 @@ import {ParseError, Tokenizer, TokenizerError} from "../../src/util/Tokenizer";
 import {InterfaceDecl} from "../../src/ast/InterfaceDecl";
 import {TypeTable} from "../../src/ast/symbols/TypeTable";
 import {ValidationError} from "../../src/ast/errors/ASTErrors";
+import InheritanceVisitor from "../../src/codegen/InheritanceVisitor";
 
 describe("InterfaceDecl parse test", () => {
     it("parses single-line, simple interface definition", () => {
@@ -53,7 +54,8 @@ describe("InterfaceDecl parse test", () => {
         tokenizer = new Tokenizer("interfaceDeclExtendsSimple.txt", "./test/testFiles");
         let childDec: InterfaceDecl = new InterfaceDecl(".");
         childDec.parse(tokenizer);
-        childDec.fulfillContract();
+        const inheritanceVisitor: InheritanceVisitor = new InheritanceVisitor();
+        childDec.accept(inheritanceVisitor);
         expect(childDec.comments).to.be.undefined;
         expect(childDec.fieldDecl).to.be.undefined;
         expect(childDec.functions.length).to.equal(2);
