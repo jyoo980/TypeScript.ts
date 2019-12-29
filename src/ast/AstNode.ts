@@ -19,7 +19,5 @@ export abstract class AstNode {
 
     public abstract evaluate(): any;
 
-    public abstract typeCheck(): void;
-
     public abstract accept(v: Visitor): void;
 }

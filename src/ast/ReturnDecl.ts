@@ -23,13 +23,6 @@ export default class ReturnDecl extends AstNode {
 
     }
 
-    public typeCheck(): void {
-        const wasDeclared: boolean = this.typeTable.isValidType(this.returnType.replace(/[\[\]]/g, ""));
-        if (!wasDeclared) {
-            throw new TypeCheckError(`Type: ${this.returnType} was not defined`);
-        }
-    }
-
     public accept(v: Visitor): void {
         v.visitReturnDecl(this);
     }

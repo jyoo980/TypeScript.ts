@@ -55,13 +55,6 @@ export class FieldDecl extends AstNode {
         // TODO: implement this.
     }
 
-    public typeCheck(): void {
-        if(this.isInterfaceField && this.modifier !== "public") {
-            throw new ValidationError("Interfaces cannot have non-public fields");
-        }
-        this.fields.typeCheck();
-    }
-
     public accept(v: Visitor): void {
         v.visitFieldDecl(this);
     }

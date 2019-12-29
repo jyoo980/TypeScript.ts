@@ -22,13 +22,6 @@ export class ExtendsDecl extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        const wasDeclared: boolean = this.typeTable.isValidType(this.parentName);
-        if (!wasDeclared) {
-            throw new TypeCheckError(`Type: ${this.parentName} was not defined`);
-        }
-    }
-
     public accept(v: Visitor): void {
         v.visitExtendsDecl(this);
     }

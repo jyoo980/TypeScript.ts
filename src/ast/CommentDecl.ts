@@ -32,10 +32,6 @@ export default class CommentDecl extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        // Not needed.
-    }
-
     public accept(v: Visitor): void {
         v.visitCommentDecl(this);
     }

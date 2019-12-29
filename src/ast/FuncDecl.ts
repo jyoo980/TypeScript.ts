@@ -75,11 +75,6 @@ export default class FuncDecl extends AstNode {
         // TODO: implement this.
     }
 
-    public typeCheck(): void {
-        this.params.typeCheck();
-        this.returnDecl.typeCheck();
-    }
-
     public accept(v: Visitor): void {
         v.visitFuncDecl(this);
     }

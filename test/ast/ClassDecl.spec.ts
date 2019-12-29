@@ -3,6 +3,7 @@ import {ClassDecl} from "../../src/ast/ClassDecl";
 import {ParseError, Tokenizer, TokenizerError} from "../../src/util/Tokenizer";
 import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
 import * as nodeFs from "fs-extra";
+import TypeCheckVisitor from "../../src/codegen/TypeCheckVisitor";
 
 describe("ClassDecl parse test", () => {
 
@@ -88,13 +89,14 @@ describe("ClassDecl parse test", () => {
 
 describe("ClassDecl type check test", () => {
     const DUMMY_ROOT_DIR: string = ".";
+    const typeChecker = new TypeCheckVisitor();
 
     it("should throw a TypeCheckError when it attempts to extend a undeclared class", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclSimple.txt", "./test/testFiles");
         let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
         classDec.parse(tokenizer);
         expect(() => {
-            return classDec.typeCheck();
+            return classDec.accept(typeChecker);
         }).to.throw(TypeCheckError);
     });
 
@@ -103,7 +105,7 @@ describe("ClassDecl type check test", () => {
         let classDec : ClassDecl = new ClassDecl(DUMMY_ROOT_DIR);
         classDec.parse(tokenizer);
         TypeTable.getInstance().addClass("TimeClass");
-        classDec.typeCheck();
+        classDec.accept(typeChecker);
     });
 
 });

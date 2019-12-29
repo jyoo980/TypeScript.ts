@@ -2,10 +2,12 @@ import { expect } from "chai";
 import FuncDecl from "../../src/ast/FuncDecl";
 import {Tokenizer} from "../../src/util/Tokenizer";
 import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
+import TypeCheckVisitor from "../../src/codegen/TypeCheckVisitor";
 
 describe("FuncDecl parse tests", () => {
 
     let funcDecl: FuncDecl;
+    const typeChecker: TypeCheckVisitor = new TypeCheckVisitor();
 
     before(() => {
         funcDecl = new FuncDecl();
@@ -115,7 +117,7 @@ describe("FuncDecl parse tests", () => {
         const tokenizer: Tokenizer = new Tokenizer("funcDeclUndefinedType.txt", "./test/testFiles");
         funcDecl.parse(tokenizer);
         expect(() => {
-            return funcDecl.typeCheck();
+            return funcDecl.accept(typeChecker);
         }).to.throw(TypeCheckError);
     });
 
@@ -124,7 +126,7 @@ describe("FuncDecl parse tests", () => {
         const tokenizer: Tokenizer = new Tokenizer("funcDeclParameterized.txt", "./test/testFiles");
         funcDecl.parse(tokenizer);
         expect(() => {
-            return funcDecl.typeCheck();
+            return funcDecl.accept(typeChecker);
         }).to.throw(TypeCheckError);
     });
 

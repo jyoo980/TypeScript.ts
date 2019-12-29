@@ -2,6 +2,7 @@ import {ParseError, Tokenizer} from "../../src/util/Tokenizer";
 import {FieldDecl} from "../../src/ast/FieldDecl";
 import {expect} from "chai";
 import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
+import TypeCheckVisitor from "../../src/codegen/TypeCheckVisitor";
 
 describe("FieldDecl tokenizer test", () => {
 
@@ -50,7 +51,8 @@ describe("FieldDecl tokenizer test", () => {
         TypeTable.getInstance().resetTypeTable();
         fieldDecl.parse(tokenizer);
         expect(() => {
-            return fieldDecl.typeCheck();
+            const typeChecker: TypeCheckVisitor = new TypeCheckVisitor();
+            return fieldDecl.accept(typeChecker);
         }).to.throw(TypeCheckError);
     });
 });

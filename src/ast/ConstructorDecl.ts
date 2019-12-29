@@ -30,10 +30,6 @@ export default class ConstructorDecl extends AstNode {
         // TODO: implement this.
     }
 
-    public typeCheck(): void {
-        this.params.typeCheck();
-    }
-
     public accept(v: Visitor): void {
         v.visitConstructorDecl(this);
     }

@@ -43,10 +43,6 @@ export class ModuleDecl extends AstNode {
         return packageJson.addModules(this.modules);
     }
 
-    public typeCheck(): void {
-        // Not needed.
-    }
-
     public setProjectName(name: string) {
         this.projectName = name;
     }

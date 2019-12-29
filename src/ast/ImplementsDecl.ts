@@ -27,13 +27,6 @@ export class ImplementsDecl extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        const allValidTypes: boolean = this.typeTable.areValidTypes(this.parentNames);
-        if (!allValidTypes) {
-            throw new TypeError(`At least one type from: ${this.parentNames} was not declared`);
-        }
-    }
-
     public accept(v: Visitor): void {
         v.visitImplementsDecl(this);
     }

@@ -66,10 +66,6 @@ export class DirDecl extends Content {
         return this.parentPath + "/" + this.directoryName;
     }
 
-    public typeCheck(): void {
-        this.contents.forEach((content: AstNode) => content.typeCheck());
-    }
-
     public accept(v: Visitor): void {
         v.visitDirDecl(this);
     }

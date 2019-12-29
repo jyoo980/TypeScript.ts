@@ -87,19 +87,6 @@ export class InterfaceDecl extends Content {
         this.fileSystem.generateFile(this.interfaceName, this.parentPath, tsFileStr);
     }
 
-    public typeCheck(): void {
-        if (this.extendsNodes !== undefined) {
-            this.extendsNodes.typeCheck();
-        }
-        if(this.extendsNodes) {
-            this.extendsNodes.typeCheck();
-        }
-        if(this.fieldDecl) {
-            this.fieldDecl.typeCheck();
-        }
-        this.functions.forEach((funcDecl: FuncDecl) => funcDecl.typeCheck());
-    }
-      
     public getImportPath(): string {
         return `${this.parentPath}/${this.interfaceName}`;
     }

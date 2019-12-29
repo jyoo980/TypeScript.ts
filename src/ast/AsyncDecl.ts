@@ -20,10 +20,6 @@ export default class AsyncDecl extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        // Not needed.
-    }
-
     public accept(v: Visitor): void {
         v.visitAsyncDecl(this);
     }

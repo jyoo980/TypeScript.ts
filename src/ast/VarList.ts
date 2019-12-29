@@ -37,18 +37,6 @@ export class VarList extends AstNode {
         // Not needed.
     }
 
-    public typeCheck(): void {
-        const fieldTypes: string[] = Array.from(this.nameTypeMap.values())
-            .map((fieldType) => {
-                // filter out [] from type before checking against typeTable
-                return fieldType.replace(/[\[\]]/g, "");
-        });
-        const allValidTypes: boolean = this.typeTable.areValidTypes(fieldTypes);
-        if (!allValidTypes) {
-            throw new TypeCheckError(`At least one type from: ${fieldTypes} was not declared`);
-        }
-    }
-
     public appendVarList(otherVars: VarList): void {
         const fieldsAsList: [string, string][] = Array.from(otherVars.nameTypeMap.entries());
         fieldsAsList.forEach((nameTypePair) => {
