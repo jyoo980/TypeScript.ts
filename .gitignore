@@ -18,5 +18,5 @@ test/*.map
 
 .idea/*
 package-lock.json
-codegen/
 *.js
+codegen/
