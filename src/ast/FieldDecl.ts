@@ -51,10 +51,6 @@ export class FieldDecl extends AstNode {
         }
     }
 
-    public evaluate(): any {
-        // TODO: implement this.
-    }
-
     public accept(v: Visitor): void {
         v.visitFieldDecl(this);
     }

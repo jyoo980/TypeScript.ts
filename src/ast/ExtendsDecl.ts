@@ -18,10 +18,6 @@ export class ExtendsDecl extends AstNode {
         return this;
     }
 
-    public evaluate(): any {
-        // Not needed.
-    }
-
     public accept(v: Visitor): void {
         v.visitExtendsDecl(this);
     }

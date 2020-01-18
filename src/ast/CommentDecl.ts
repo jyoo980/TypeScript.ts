@@ -28,10 +28,6 @@ export default class CommentDecl extends AstNode {
         }
     }
 
-    public evaluate(): any {
-        // Not needed.
-    }
-
     public accept(v: Visitor): void {
         v.visitCommentDecl(this);
     }

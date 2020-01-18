@@ -4,6 +4,7 @@ import {ProgramDecl} from "../../src/ast/ProgramDecl";
 import {DirDecl} from "../../src/ast/DirDecl";
 import * as nodeFs from "fs-extra";
 import FileSystem from "../../src/util/FileSystem";
+import EvalVisitor from "../../src/codegen/EvalVisitor";
 
 describe("ProgramDecl should have its appropriate contents", () => {
     it("Tokenizes projectstructureex and parses inside ProgramDecl", () => {
@@ -19,9 +20,11 @@ describe("DirDecl evaluate should write directories", () => {
     const testDir: string = "./testOutput";
     let dirs: DirDecl[] = []
     let fs: FileSystem;
+    let evalVisitor: EvalVisitor;
 
     before(() => {
         fs = new FileSystem();
+        evalVisitor = new EvalVisitor();
     });
 
     after(async () => {
@@ -54,7 +57,7 @@ describe("DirDecl evaluate should write directories", () => {
         srcDir.contents = [astDir, utilDir];
         rootDir.contents = [srcDir];
 
-        rootDir.evaluate();
+        rootDir.accept(evalVisitor);
 
         for (let dir of dirs) {
             expect(fs.pathExists(dir.getAbsolutePath()));

@@ -23,10 +23,6 @@ export class ImplementsDecl extends AstNode {
         return this;
     }
 
-    public evaluate(): any {
-        // Not needed.
-    }
-
     public accept(v: Visitor): void {
         v.visitImplementsDecl(this);
     }

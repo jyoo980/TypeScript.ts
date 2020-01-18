@@ -16,10 +16,6 @@ export default class StaticDecl extends AstNode {
         }
     }
 
-    public evaluate(): any {
-        // Not needed.
-    }
-
     public accept(v: Visitor): void {
         v.visitStaticDecl(this);
     }

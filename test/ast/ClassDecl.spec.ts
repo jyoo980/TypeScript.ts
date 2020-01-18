@@ -4,6 +4,7 @@ import {ParseError, Tokenizer, TokenizerError} from "../../src/util/Tokenizer";
 import {TypeCheckError, TypeTable} from "../../src/ast/symbols/TypeTable";
 import * as nodeFs from "fs-extra";
 import TypeCheckVisitor from "../../src/codegen/TypeCheckVisitor";
+import EvalVisitor from "../../src/codegen/EvalVisitor";
 
 describe("ClassDecl parse test", () => {
 
@@ -114,6 +115,7 @@ describe ("ClassDecl evaluate test", () => {
 
     const OUTPUT_DIR: string = "./codegen/test";
     const createdFiles: string[] = [];
+    let evalVisitor: EvalVisitor = new EvalVisitor();
 
     after(async () => {
         try {
@@ -128,7 +130,7 @@ describe ("ClassDecl evaluate test", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclSimple.txt", "./test/testFiles");
         let classDec : ClassDecl = new ClassDecl(OUTPUT_DIR);
         classDec.parse(tokenizer);
-        classDec.evaluate();
+        classDec.accept(evalVisitor);
         createdFiles.push(OUTPUT_DIR  + "/Time.ts");
     });
 
@@ -136,7 +138,7 @@ describe ("ClassDecl evaluate test", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclComplex.txt", "./test/testFiles");
         let classDec : ClassDecl = new ClassDecl(OUTPUT_DIR);
         classDec.parse(tokenizer);
-        classDec.evaluate();
+        classDec.accept(evalVisitor);
         createdFiles.push(OUTPUT_DIR  + "/Time.ts");
     });
 
@@ -144,7 +146,7 @@ describe ("ClassDecl evaluate test", () => {
         let tokenizer : Tokenizer = new Tokenizer("classDeclAbstract.txt", "./test/testFiles");
         let classDec : ClassDecl = new ClassDecl(OUTPUT_DIR);
         classDec.parse(tokenizer);
-        classDec.evaluate();
+        classDec.accept(evalVisitor);
         // createdFiles.push(OUTPUT_DIR  + "/Time.ts");
     })
 

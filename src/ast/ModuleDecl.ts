@@ -38,11 +38,6 @@ export class ModuleDecl extends AstNode {
         context.getAndCheckNext('\\]');
     }
 
-    public evaluate(): Promise<any> {
-        const packageJson: PackageJson = new PackageJson(this.path, this.projectName);
-        return packageJson.addModules(this.modules);
-    }
-
     public setProjectName(name: string) {
         this.projectName = name;
     }

@@ -92,13 +92,6 @@ export class ClassDecl extends Content {
         return this;
     }
 
-    public evaluate(): any {
-        const importStr: string = ImportStringBuilder.getImportsString(this);
-        const tsNodeStr: string = this.printer.tsNodeToString(this.engine.createClass(this));
-        const tsFileStr: string = importStr === "" ? `${tsNodeStr}` : `${importStr}\n${tsNodeStr}`;
-        this.fileSystem.generateFile(this.className, this.parentPath, tsFileStr);
-    }
-
     public getImportPath(): string {
         return `${this.parentPath}/${this.className}`;
     }

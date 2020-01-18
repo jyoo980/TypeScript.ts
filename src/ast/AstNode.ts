@@ -17,7 +17,5 @@ export abstract class AstNode {
 
     public abstract parse(context: Tokenizer): any;
 
-    public abstract evaluate(): any;
-
     public abstract accept(v: Visitor): void;
 }
