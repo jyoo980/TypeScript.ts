@@ -5,6 +5,7 @@ import {TypeTable} from "../../src/ast/symbols/TypeTable";
 import {ValidationError} from "../../src/ast/errors/ASTErrors";
 import InheritanceVisitor from "../../src/codegen/InheritanceVisitor";
 import TypeCheckVisitor from "../../src/codegen/TypeCheckVisitor";
+import EvalVisitor from "../../src/codegen/EvalVisitor";
 
 describe("InterfaceDecl parse test", () => {
     it("parses single-line, simple interface definition", () => {
@@ -63,10 +64,11 @@ describe("InterfaceDecl parse test", () => {
 
 describe("InterfaceDecl evaluate test", () => {
     it("should write a complex interface definition to disk", () => {
+        let evalVisitor: EvalVisitor = new EvalVisitor();
         let tokenizer : Tokenizer = new Tokenizer("interfaceDeclComplex.txt", "./test/testFiles");
         let intDec : InterfaceDecl = new InterfaceDecl("./codegen/test");
         intDec.parse(tokenizer);
-        intDec.evaluate();
+        intDec.accept(evalVisitor);
     });
 });
 

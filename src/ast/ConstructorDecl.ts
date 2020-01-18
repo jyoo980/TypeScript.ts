@@ -26,10 +26,6 @@ export default class ConstructorDecl extends AstNode {
         this.params.parse(context);
     }
 
-    public evaluate(): any {
-        // TODO: implement this.
-    }
-
     public accept(v: Visitor): void {
         v.visitConstructorDecl(this);
     }

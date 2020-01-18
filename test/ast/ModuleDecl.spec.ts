@@ -3,6 +3,7 @@ import {ModuleDecl} from "../../src/ast/ModuleDecl";
 import {expect} from "chai";
 import * as fs from 'fs';
 import * as nodeFs from "fs-extra";
+import EvalVisitor from "../../src/codegen/EvalVisitor";
 
 describe("ModuleDecl parse() test", () => {
 
@@ -62,8 +63,10 @@ describe("ModuleDecl parse() test", () => {
 describe('ModuleDecl evaluate() test', () => {
     let moduleDecl: ModuleDecl;
     const dir: string = 'packageModulesTest';
+    let evalVisitor: EvalVisitor;
 
-    before(() => {	
+    before(() => {
+        evalVisitor = new EvalVisitor();
         if (!fs.existsSync(dir)){
             fs.mkdirSync(dir);
         }
@@ -85,7 +88,7 @@ describe('ModuleDecl evaluate() test', () => {
     it('should add a package.json file at ./packageTest with "project1" as project name', async () => {
         moduleDecl.setPath(dir);
         moduleDecl.setProjectName('project1');
-        await moduleDecl.evaluate();
+        await moduleDecl.accept(evalVisitor);
         expect(fs.existsSync(dir + '/package.json')).to.be.true;
         const packageContents: any = readPackageJson(dir);
         expect(packageContents.name).to.equal('project1');

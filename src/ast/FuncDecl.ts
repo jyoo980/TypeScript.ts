@@ -71,10 +71,6 @@ export default class FuncDecl extends AstNode {
         }
     }
 
-    public evaluate(): any {
-        // TODO: implement this.
-    }
-
     public accept(v: Visitor): void {
         v.visitFuncDecl(this);
     }

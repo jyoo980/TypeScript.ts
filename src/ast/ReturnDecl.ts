@@ -19,10 +19,6 @@ export default class ReturnDecl extends AstNode {
         }
     }
 
-    public evaluate(): any {
-
-    }
-
     public accept(v: Visitor): void {
         v.visitReturnDecl(this);
     }

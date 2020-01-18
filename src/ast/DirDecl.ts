@@ -54,14 +54,6 @@ export class DirDecl extends Content {
         }
     }
 
-    public evaluate(): any {
-        this.fileSystem.writeDirectory(this.getAbsolutePath());
-
-        for (let content of this.contents) {
-            content.evaluate();
-        }
-    }
-
     public getAbsolutePath(): string {
         return this.parentPath + "/" + this.directoryName;
     }
