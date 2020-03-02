@@ -13,7 +13,7 @@
     "npmi": "^4.0.0"
   },
   "scripts": {
-    "build": "tsc src/**/*.ts test/**/*.ts",
+    "build": "tsc src/**/*.ts test/**/*.ts --downlevelIteration",
     "test": "yarn build && mocha --require ts-node/register test/*.ts test/**/*.ts"
   },
   "devDependencies": {

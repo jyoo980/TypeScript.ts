@@ -78,7 +78,7 @@ export default class TypeCheckVisitor extends Visitor {
     }
 
     public visitVarList(node: VarList): void {
-        const fieldTypes: string[] = Array.from(node.nameTypeMap.values())
+        const fieldTypes: string[] = [...node.nameTypeMap.values()]
             .map((fieldType) => {
                 // filter out [] from type before checking against typeTable
                 return fieldType.replace(/[\[\]]/g, "");

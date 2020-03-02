@@ -32,9 +32,9 @@ export class VarList extends AstNode {
         }
         context.getNext();
     }
-    
+
     public appendVarList(otherVars: VarList): void {
-        const fieldsAsList: [string, string][] = Array.from(otherVars.nameTypeMap.entries());
+        const fieldsAsList: [string, string][] = [...otherVars.nameTypeMap.entries()];
         fieldsAsList.forEach((nameTypePair) => {
             this.nameTypeMap.set(nameTypePair[0], nameTypePair[1]);
         });

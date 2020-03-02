@@ -192,14 +192,14 @@ export default class TypeScriptEngine {
     }
 
     private fieldsToTypeElement(fields: VarList): TypeElement[] {
-        const fieldsAsList: [string, string][] = Array.from(fields.nameTypeMap.entries());
+        const fieldsAsList: [string, string][] = [...fields.nameTypeMap.entries()];
         return fieldsAsList.map((nameTypePair) => {
             return this.makePropertySignature(nameTypePair[0], nameTypePair[1]);
         });
     }
 
     private fieldsToClassElement(fields: VarList, modifier: string): ClassElement[] {
-        const fieldsAsList: [string, string][] = Array.from(fields.nameTypeMap.entries());
+        const fieldsAsList: [string, string][] = [...fields.nameTypeMap.entries()];
         return fieldsAsList.map((nameTypePair) => {
             return this.makeProperty(nameTypePair[0], nameTypePair[1], modifier);
         });
@@ -232,7 +232,7 @@ export default class TypeScriptEngine {
     }
 
     private varsToParamDecl(vars: VarList): ParameterDeclaration[] {
-        const varsAsList: [string, string][] = Array.from(vars.nameTypeMap.entries());
+        const varsAsList: [string, string][] = [...vars.nameTypeMap.entries()];
         return varsAsList.map((nameTypePair) => {
             return this.makeParamDecl(nameTypePair[0], nameTypePair[1]);
         });

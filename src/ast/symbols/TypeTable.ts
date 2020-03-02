@@ -70,7 +70,7 @@ export class TypeTable {
     }
 
     public isValidType(candidate: string): boolean {
-        const containedTypes: String[] = Array.from(this.table.keys());
+        const containedTypes: String[] = [...this.table.keys()];
         return containedTypes.includes(candidate);
     }
 
