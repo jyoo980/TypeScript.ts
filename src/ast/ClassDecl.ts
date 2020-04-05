@@ -100,7 +100,7 @@ export class ClassDecl extends Content {
         return `${this.parentPath}/${this.className}.ts`;
     }
 
-    private createGetter(name: string, type: string): FuncDecl {
+    public createGetter(name: string, type: string): FuncDecl {
         let funcGetter: FuncDecl = new FuncDecl();
         funcGetter.name = "get" + name.charAt(0).toUpperCase() + name.slice(1);
         funcGetter.returnDecl.returnType = type;
@@ -112,7 +112,7 @@ export class ClassDecl extends Content {
         return funcGetter;
     }
 
-    private createSetter(name: string, type: string): FuncDecl {
+    public createSetter(name: string, type: string): FuncDecl {
         let funcSetter: FuncDecl = new FuncDecl();
         // setName
         funcSetter.name = "set" + name.charAt(0).toUpperCase() + name.slice(1);
